@@ -2,14 +2,14 @@ import time
 import threading
 import multiprocessing
 from datetime import datetime, timedelta
-from Global.Constant import TASKMANAGER_CHECK_INTERVAL
+from Global.Constant import TASKMANAGER_CHECK_INTERVAL,TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY
 
 class Task:
     def __init__(
             self, 
             Name : str,
             Action_time = datetime.now() , 
-            Timeout = datetime.now() + timedelta(days=365)
+            Timeout = datetime.now() + timedelta(days=TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY)
             ) -> None:
         
         self.Name = Name
@@ -22,17 +22,17 @@ class Task:
         self.Process = None
         self.Status = None
 
-    def Set_Action(self, Action, *Args, **KWargs) -> None:
-        self.Args = Args
-        self.KWargs = KWargs
-        self.Action = Action
-        self.Status = 'Set'
-
     def Delay_Action(self,Added_Time : timedelta) -> None:
         self.Action_time += Added_Time
 
     def Delay_Timeout(self,Added_Timeout : timedelta) -> None:
         self.Timeout += Added_Timeout
+
+    def Set_Action(self, Action, *Args, **KWargs) -> None:
+        self.Args = Args
+        self.KWargs = KWargs
+        self.Action = Action
+        self.Status = 'Ready'
 
     def Pend(self) -> None:
         self.Status = 'Pending'
@@ -62,7 +62,7 @@ class Task:
         return datetime.now() >= self.Timeout
 
     def __bool__(self) -> bool:
-        return True if self.Status not in ['Expired','Terminated']
+        return self.Status not in ['Expired','Terminated',None]
 
     def __str__(self) -> str:
         return f'<Task Name : {self.Name} | Task Status : {self.Status}>'
