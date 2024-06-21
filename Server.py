@@ -1,5 +1,4 @@
 if __name__ == '__main__' :
-
 ## Prepair
     import sys
     from Global.Constant     import GlobalManager
@@ -34,4 +33,3 @@ if __name__ == '__main__' :
     GlobalManager.Logger('Closing Logging')
     for Instance  in Logger._Instances : Instance.Stop()
     sys.exit(0)
-
