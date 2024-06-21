@@ -1,5 +1,4 @@
 if __name__ == '__main__' :
-
 ## Prepair
     import sys
     from Global.Constant     import GlobalManager
