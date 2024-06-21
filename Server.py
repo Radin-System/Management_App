@@ -35,4 +35,3 @@ if __name__ == '__main__' :
     for Instance  in Logger._Instances : Instance.Stop()
     sys.exit(0)
 
-print()
