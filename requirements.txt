@@ -4,7 +4,6 @@ cryptography
 mysqlclient
 flask_login
 sqlalchemy
-pytidylib
 pyOpenSSL
 paramiko
 psycopg2
