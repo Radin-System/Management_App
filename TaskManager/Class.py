@@ -113,36 +113,3 @@ class TaskManager:
         if self.Running:
             self.Running = False
             self.Thread.join()
-
-def example_function(task_name):
-    print(f"############## Task {task_name} is running ##############")
-# Example usage
-if __name__ == "__main__":
-
-    task_manager = TaskManager()
-
-    task1 = Task(
-        Name="Task 1",
-        Action_time=datetime.now() + timedelta(seconds=5),
-        Timeout=datetime.now() + timedelta(seconds=10)
-    )
-    task1.Set_Action(example_function, "Task 1")
-
-    task2 = Task(
-        Name="Task 2",
-        Action_time=datetime.now() + timedelta(seconds=10),
-        Timeout=datetime.now() + timedelta(seconds=15)
-    )
-    task2.Set_Action(example_function, "Task 2")
-
-    task_manager.Add(task1)
-    task_manager.Add(task2)
-
-    task_manager.Start()
-
-    try:
-        while True:
-            time.sleep(20)
-    except KeyboardInterrupt:
-        task_manager.Stop()
-        print("Task Manager stopped.")
