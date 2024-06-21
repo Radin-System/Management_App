@@ -2,6 +2,7 @@ import time
 import threading
 import multiprocessing
 from datetime import datetime, timedelta
+from Global.Constant import TASKMANAGER_CHECK_INTERVAL
 
 class Task:
     def __init__(
@@ -60,6 +61,9 @@ class Task:
     def Is_Expired(self) -> bool:
         return datetime.now() >= self.Timeout
 
+    def __bool__(self) -> bool:
+        return True if self.Status not in ['Expired','Terminated']
+
     def __str__(self) -> str:
         return f'<Task Name : {self.Name} | Task Status : {self.Status}>'
 
@@ -100,7 +104,7 @@ class TaskManager:
     def Main_Loop(self) -> None:
         while self.Running:
             self.Check_Tasks()
-            time.sleep(1)
+            time.sleep(TASKMANAGER_CHECK_INTERVAL)
 
     def Start(self) -> None:
         if not self.Running:
