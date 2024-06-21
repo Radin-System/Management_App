@@ -1,0 +1,4 @@
+.configfiles/
+.log/
+.venv/
+.git/

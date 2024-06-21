@@ -1,0 +1,16 @@
+mysql-connector-python
+Flask-HTMLmin
+cryptography
+mysqlclient
+flask_login
+sqlalchemy
+pytidylib
+pyOpenSSL
+paramiko
+psycopg2
+pymysql
+pyodbc
+pillow
+ldap3
+pyler
+flask
