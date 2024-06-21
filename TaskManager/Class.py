@@ -79,18 +79,17 @@ class TaskManager:
 
     def Check_Tasks(self) -> None:
         for Current_Task in list(self.Tasks):
-            if Current_Task.Process and Current_Task.Process.is_alive() :
-                if Current_Task.Is_Expired():
-                    Current_Task.Expire()
-                    Current_Task.Terminate()
+            if Current_Task.Process :
+                if Current_Task.Process.is_alive() :
+                    if Current_Task.Is_Expired():
+                        Current_Task.Expire()
+                        Current_Task.Terminate()
+                        self.Remove(Current_Task)
+                    elif Current_Task.Should_Run() : 
+                        continue
+                else :
+                    Current_Task.Complete()
                     self.Remove(Current_Task)
-                elif Current_Task.Should_Run() : 
-                    continue
-
-            elif Current_Task.Process and not Current_Task.Process.is_alive() :
-                Current_Task.Complete()
-                self.Remove(Current_Task)
-
             else :
                 if Current_Task.Is_Expired():
                     Current_Task.Expire()
