@@ -27,19 +27,19 @@ class Task:
         self.Action = Action
         self.Status = 'Set'
 
-    def Delay_Action(self,Added_Time : timedelta) -> None :
+    def Delay_Action(self,Added_Time : timedelta) -> None:
         self.Action_time += Added_Time
 
-    def Delay_Timeout(self,Added_Timeout : timedelta) -> None :
+    def Delay_Timeout(self,Added_Timeout : timedelta) -> None:
         self.Timeout += Added_Timeout
 
-    def Pend(self) -> None :
+    def Pend(self) -> None:
         self.Status = 'Pending'
 
-    def Complete(self) -> None :
+    def Complete(self) -> None:
         self.Status = 'Completed'
 
-    def Expire(self) -> None :
+    def Expire(self) -> None:
         self.Status = 'Expired'
 
     def Terminate(self) -> None:
@@ -78,14 +78,13 @@ class TaskManager:
             self.Tasks.remove(Task)
 
     def Check_Tasks(self) -> None:
-        for Current_Task in list(self.Tasks):
+        for Current_Task in self.Tasks:
             if Current_Task.Process :
-                if Current_Task.Process.is_alive() :
+                if Current_Task.Process.is_alive():
                     if Current_Task.Is_Expired():
-                        Current_Task.Expire()
                         Current_Task.Terminate()
                         self.Remove(Current_Task)
-                    elif Current_Task.Should_Run() : 
+                    elif Current_Task.Should_Run():
                         continue
                 else :
                     Current_Task.Complete()
@@ -94,7 +93,7 @@ class TaskManager:
                 if Current_Task.Is_Expired():
                     Current_Task.Expire()
                     self.Remove(Current_Task)
-                elif Current_Task.Should_Run() : 
+                elif Current_Task.Should_Run(): 
                     Current_Task.Start()
                     self.Remove(Current_Task)
 
