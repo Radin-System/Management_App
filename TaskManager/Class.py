@@ -2,13 +2,14 @@ import time
 import threading
 import multiprocessing
 from datetime import datetime, timedelta
+from Global.Constant import TASKMANAGER_CHECK_INTERVAL,TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY
 
 class Task:
     def __init__(
             self, 
             Name : str,
             Action_time = datetime.now() , 
-            Timeout = datetime.now() + timedelta(days=365)
+            Timeout = datetime.now() + timedelta(days=TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY)
             ) -> None:
         
         self.Name = Name
@@ -21,25 +22,25 @@ class Task:
         self.Process = None
         self.Status = None
 
+    def Delay_Action(self,Added_Time : timedelta) -> None:
+        self.Action_time += Added_Time
+
+    def Delay_Timeout(self,Added_Timeout : timedelta) -> None:
+        self.Timeout += Added_Timeout
+
     def Set_Action(self, Action, *Args, **KWargs) -> None:
         self.Args = Args
         self.KWargs = KWargs
         self.Action = Action
-        self.Status = 'Set'
+        self.Status = 'Ready'
 
-    def Delay_Action(self,Added_Time : timedelta) -> None :
-        self.Action_time += Added_Time
-
-    def Delay_Timeout(self,Added_Timeout : timedelta) -> None :
-        self.Timeout += Added_Timeout
-
-    def Pend(self) -> None :
+    def Pend(self) -> None:
         self.Status = 'Pending'
 
-    def Complete(self) -> None :
+    def Complete(self) -> None:
         self.Status = 'Completed'
 
-    def Expire(self) -> None :
+    def Expire(self) -> None:
         self.Status = 'Expired'
 
     def Terminate(self) -> None:
@@ -60,6 +61,9 @@ class Task:
     def Is_Expired(self) -> bool:
         return datetime.now() >= self.Timeout
 
+    def __bool__(self) -> bool:
+        return self.Status not in ['Expired','Terminated',None]
+
     def __str__(self) -> str:
         return f'<Task Name : {self.Name} | Task Status : {self.Status}>'
 
@@ -78,31 +82,29 @@ class TaskManager:
             self.Tasks.remove(Task)
 
     def Check_Tasks(self) -> None:
-        for Current_Task in list(self.Tasks):
-            if Current_Task.Process and Current_Task.Process.is_alive() :
-                if Current_Task.Is_Expired():
-                    Current_Task.Expire()
-                    Current_Task.Terminate()
+        for Current_Task in self.Tasks:
+            if Current_Task.Process :
+                if Current_Task.Process.is_alive():
+                    if Current_Task.Is_Expired():
+                        Current_Task.Terminate()
+                        self.Remove(Current_Task)
+                    elif Current_Task.Should_Run():
+                        continue
+                else :
+                    Current_Task.Complete()
                     self.Remove(Current_Task)
-                elif Current_Task.Should_Run() : 
-                    continue
-
-            elif Current_Task.Process and not Current_Task.Process.is_alive() :
-                Current_Task.Complete()
-                self.Remove(Current_Task)
-
             else :
                 if Current_Task.Is_Expired():
                     Current_Task.Expire()
                     self.Remove(Current_Task)
-                elif Current_Task.Should_Run() : 
+                elif Current_Task.Should_Run(): 
                     Current_Task.Start()
                     self.Remove(Current_Task)
 
     def Main_Loop(self) -> None:
         while self.Running:
             self.Check_Tasks()
-            time.sleep(1)
+            time.sleep(TASKMANAGER_CHECK_INTERVAL)
 
     def Start(self) -> None:
         if not self.Running:
@@ -113,36 +115,3 @@ class TaskManager:
         if self.Running:
             self.Running = False
             self.Thread.join()
-
-def example_function(task_name):
-    print(f"############## Task {task_name} is running ##############")
-# Example usage
-if __name__ == "__main__":
-
-    task_manager = TaskManager()
-
-    task1 = Task(
-        Name="Task 1",
-        Action_time=datetime.now() + timedelta(seconds=5),
-        Timeout=datetime.now() + timedelta(seconds=10)
-    )
-    task1.Set_Action(example_function, "Task 1")
-
-    task2 = Task(
-        Name="Task 2",
-        Action_time=datetime.now() + timedelta(seconds=10),
-        Timeout=datetime.now() + timedelta(seconds=15)
-    )
-    task2.Set_Action(example_function, "Task 2")
-
-    task_manager.Add(task1)
-    task_manager.Add(task2)
-
-    task_manager.Start()
-
-    try:
-        while True:
-            time.sleep(20)
-    except KeyboardInterrupt:
-        task_manager.Stop()
-        print("Task Manager stopped.")
