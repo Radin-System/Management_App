@@ -34,3 +34,5 @@ if __name__ == '__main__' :
     GlobalManager.Logger('Closing Logging')
     for Instance  in Logger._Instances : Instance.Stop()
     sys.exit(0)
+
+print()
