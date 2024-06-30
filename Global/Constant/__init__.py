@@ -10,8 +10,6 @@ class ConstantManager :
         self.Init_Environ()
         self.Init_Globals()
         from Global.Class.Logger import Logger
-        self.Logger = Logger('Main' , '.Log/Main.log' , True)
-        self.Log_Defined()
 
     def Init_Globals(self) : 
         for Section in self.Parser :
@@ -28,10 +26,6 @@ class ConstantManager :
     def Init_Environ(self) :
         for Key , Value in self.Parser['ENVIRON'].items() :
             os.environ.setdefault(str(Key) , str(Value))
-
-    def Log_Defined (self) :
-        for Key , Value in self.Defined.items() :
-            self.Logger(f'Constant Defined - {Key} = {Value}')
 
 NAME          = 'RSTO'
 SCRIPT_NAME   = os.path.basename(sys.argv[0]) if len(sys.argv) > 0 else None
@@ -109,14 +103,6 @@ PORT_TYPE_MAP = {
     'TCP'  : {'Name' : 'Transmission Control Protocol'} ,
     'SCTP' : {'Name' : 'Stream Control Transmission Protocol'} , 
     'ICMP' : {'Name' : 'Internet Control Message Protocol'} ,
-}
-
-COLOUR_MAP = {
-            'log'        : '' ,              # None
-            'information': '\033[1;34m' ,    # blue
-            'warning'    : '\033[1;33m' ,    # yellow
-            'error'      : '\033[1;31m' ,    # red
-            'critical'   : '\033[1;41;37m' , # white on red background
 }
 
 GlobalManager = ConstantManager(SERVERFILE)
