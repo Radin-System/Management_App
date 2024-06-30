@@ -22,11 +22,10 @@ class FlaskWebServer :
 
     @Do_Log('Registering Blueprints...','Done!')
     def Init_Blueprints(self , Blueprints : list) -> None:
-        if self.Valid :
-            for Item in Blueprints :
-                self.Logger(f'Registering : {Item.__Prefix__}')
-                try    : self.App.register_blueprint(Item , url_prefix = Item.__Prefix__)
-                except Exception as e : self.Logger(f'Unable to Register {Item} : {e}')
+        for Item in Blueprints :
+            self.Logger(f'Registering : {Item.__Prefix__}')
+            try    : self.App.register_blueprint(Item , url_prefix = Item.__Prefix__)
+            except Exception as e : self.Logger(f'Unable to Register {Item} : {e}')
 
     @Do_Log('Initiating Flask Main Loop...')
     def Start(self) -> None :

@@ -4,6 +4,8 @@ if __name__ == '__main__' :
     from Global.Constant     import GlobalManager
     from Global.Class.Logger import Logger
 
+    GlobalManager.Logger = Logger('Main','Main.log',True)
+
 ## Componnets
     from WebServer    import WebServer
     from SQLManager   import SQLManager
