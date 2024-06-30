@@ -1,5 +1,6 @@
 import os , re , hashlib
 from Global.Constant     import ENCODE , MAC_PATTERN_MAP , CIDR_MAP , MASK_MAP , PORT_MAP , PORT_TYPE_MAP , MAX_HOST_RANGE_SUBNET
+from Global.Decorator    import Return_False_On_Exception
 from cryptography.fernet import Fernet
 
 def Pass () : pass
@@ -7,32 +8,32 @@ def Pass () : pass
 class Validate :
 
     @staticmethod
+    @Return_False_On_Exception
     def Mac (Mac) -> bool :
         for Pattern in MAC_PATTERN_MAP.values() :
             if re.match(Pattern , Mac) : return True
         return False
     
     @staticmethod
+    @Return_False_On_Exception
     def Vlan (Number : int , Name : str) -> bool : # Not Compleated
-        if ' ' not in Name :
-            return 0 < Number < 1023 
-        return False
+        return ' ' not in Name and 0 < Number < 1023
 
     @staticmethod
+    @Return_False_On_Exception
     def IPv4 (IP : str) -> bool :
         """
         What makes a valid IPv4 address?
         An IPv4 address has the following format: x . x . x . x where x is called an octet and must be a decimal value between 0 and 255.
         """
-        Octets = IP.split('.')
-        if len(Octets) != 4 : return False
-        for Octet in Octets :
-            if not Octet.isdigit() : return False
-            Octet_Value = int(Octet)
-            if 0 >= Octet_Value >= 255 : return False
+        Octets = Get.Octets(IP)
+        if not Octets : return False
+        for Octet in Octets : 
+            if not Octet.isdigit() and 0 >= int(Octet) >= 255 : return False
         return True
 
     @staticmethod
+    @Return_False_On_Exception
     def Mask(Mask : str) -> bool :
         """
         What is Valid Subnet Mask ?
@@ -46,6 +47,7 @@ class Validate :
         return False
 
     @staticmethod
+    @Return_False_On_Exception
     def CIDR(CIDR : str) -> bool :
         """
         What is Valid CIDR ?
@@ -57,12 +59,14 @@ class Validate :
         return 0 <= Subnet_Bits <= 32
 
     @staticmethod
+    @Return_False_On_Exception
     def Port (Portnumber : int) -> bool :
         if isinstance(Portnumber,int) :
             return 1 < Portnumber < 65535
         return False
     
     @staticmethod
+    @Return_False_On_Exception
     def Protocol (Protocol : str) -> bool :
         Valid = list(PORT_MAP.keys())
         Valid.extend(list(PORT_TYPE_MAP.keys()))
@@ -70,6 +74,7 @@ class Validate :
         
     
     @staticmethod
+    @Return_False_On_Exception
     def DefaultProtocol (Portnumber : int , Protocol : str) -> bool :
         if Validate.Protocol(Protocol) and Validate.Port(Portnumber) :
             Default = PORT_MAP.get(Protocol.upper(),{})
@@ -79,12 +84,14 @@ class Validate :
         return False
 
     @staticmethod
+    @Return_False_On_Exception
     def WellKhown (Portnumber : int) -> bool :
         if Validate.Port(Portnumber) :
             return bool(1 <= Portnumber <= 1023)
         return False
     
     @staticmethod
+    @Return_False_On_Exception
     def Addr (Addr : str) -> bool :
         if ':' in Addr :
             IP , Protocol = Addr.split(':',1)
@@ -92,6 +99,7 @@ class Validate :
         return False
 
     @staticmethod
+    @Return_False_On_Exception
     def User (Username) -> bool :
         """
         What is the valid username ?
@@ -109,15 +117,18 @@ class Validate :
             and not Username.isdigit() )
 
     @staticmethod
+    @Return_False_On_Exception
     def MD5(Password : str) -> bool :
         MD5_Pattern = re.compile(r'^[0-9a-fA-F]{32}$')
         return bool(MD5_Pattern.match(Password))
 
     @staticmethod
+    @Return_False_On_Exception
     def Crypted(Passwprd) -> bool :
         pass
 
     @staticmethod
+    @Return_False_On_Exception
     def Domain(Domain) -> bool : # Has Problems
         """
         How do I create a valid domain ?
@@ -136,6 +147,7 @@ class Validate :
         return True
     
     @staticmethod
+    @Return_False_On_Exception
     def Email (Email_Address) -> bool :
         """
         Email addresses are commonly used for electronic mail communication and are structured in this way to uniquely identify recipients and their email providers. 
@@ -149,6 +161,8 @@ class Validate :
             if Validate.User(Username) and Validate.Domain(DomainName) and ' ' not in Username : return True
         return False
 
+    @staticmethod
+    @Return_False_On_Exception
     def Phone(Phone_Number):
         # Regular expression to match a phone number starting with '+'
         Pattern = r'^(\+(?:[0-9] ?){6,14}[0-9]|0[0-9]{2} ?(?:[0-9] ?){8,10})$'
@@ -163,10 +177,9 @@ class Get :
         return ''
 
     @staticmethod
-    def Octets(String : str) -> list :
+    def Octets(String : str) -> list[str] :
         Octets = String.split('.')
         return Octets if len(Octets) == 4 else []
-        
 
     @staticmethod
     def Position(IP : str , Subnet : str) -> int : # Not Compleated
