@@ -1,7 +1,8 @@
 import ssl , ldap3
 from .Network import Port
-from Global.Constant     import ENCODE , SPECIAL_CHARS , LDAPUSER_USE_SSL , LDAPUSER_VALIDATE_SSL
-from Global.Function     import Validate , Get , Crypto
+from Global.Function import Validate , Get , Crypto
+
+SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
 class User :
     def __init__(self , Input : str) -> None : 
@@ -40,8 +41,8 @@ class Password :
             self.Crypted = Crypto.Encrypt(self.Input)
             self.Raw     = self.Input
         elif self.Method == 'Crypted' :
-            self.MD5     = Crypto.MD5(Crypto.Decrypt(self.Input.encode(ENCODE)))
-            self.Crypted = self.Input.encode(ENCODE)
+            self.MD5     = Crypto.MD5(Crypto.Decrypt(self.Input.encode('utf-8')))
+            self.Crypted = self.Input.encode('utf-8')
             self.Raw     = Crypto.Decrypt(self.Input)
 
         self.Validate()
@@ -77,7 +78,7 @@ class MD5 :
 class Crypted :
     def __init__(self , Input : str) -> None:
         self.Input = Input.strip()
-        if isinstance(self.Input,str)   : self.Crypted = self.Input.encode(ENCODE)
+        if isinstance(self.Input,str)   : self.Crypted = self.Input.encode('utf-8')
         if isinstance(self.Input,bytes) : self.Crypted = self.Input
         self.Validate()
         if not self.Valid : self.Crypted = b''
@@ -139,11 +140,12 @@ class Phone :
 userPrincipal = Email
 
 class LDAPUser :
-    def __init__(self, userPrincipal : userPrincipal, Password : Password, LDAP_Port : Port = None, Use_SSL = LDAPUSER_USE_SSL) :
+    def __init__(self, userPrincipal : userPrincipal, Password : Password, LDAP_Port : Port = None, Use_SSL = None , Validate_SSL = None) :
         self.Exceptions     = []
         self.userPrincipal  = userPrincipal
         self.Password       = Password
         self.Use_SSL        = Use_SSL
+        self.Validate_SSL   = Validate_SSL
         self.Port           = LDAP_Port
         if not self.Port : self.Port = Port('LDAPS') if self.Use_SSL else Port('LDAP')
         self.Validate()
@@ -158,7 +160,7 @@ class LDAPUser :
             Server = ldap3.Server(self.userPrincipal.Domain.LDAP_Endpoint ,
                 port = self.Port.Number , 
                 use_ssl = self.Use_SSL , 
-                tls = ldap3.Tls(validate = ssl.CERT_REQUIRED if LDAPUSER_VALIDATE_SSL else ssl.CERT_NONE) , 
+                tls = ldap3.Tls(validate = ssl.CERT_REQUIRED if self.Validate_SSL else ssl.CERT_NONE) , 
                 get_info = ldap3.ALL
                 )
             self.Conn = ldap3.Connection(Server , user = self.userPrincipal.userPrincipal , password = self.Password.Raw , auto_bind = True)

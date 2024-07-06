@@ -1,6 +1,7 @@
 import os,json
 from typing import Dict,Any
 from configparser import ConfigParser
+from Global.Function import Convert
 
 class Empty :
     def __init__(self) -> None:
@@ -26,11 +27,6 @@ class Config:
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
         'log_max_size': '10MB'
-    }
-
-    DEFAULT['NETWORK'] = {
-        'max_host_range_subnet': '/16',
-        'max_buffer' : 65535,
     }
 
     DEFAULT['TASKMANAGER'] ={
@@ -73,7 +69,7 @@ class Config:
         'password': None,
         'timeout': 10,
         'max_actionid': 2048,
-        'event_whitelist': ['AgentConnect','AgentComplete'],
+        'event_whitelist_csv': 'AgentConnect,AgentComplete',
         }
 
     def __init__(self, Config_File : str) -> None:
@@ -123,8 +119,8 @@ class Config:
 
         try: return int(Value)
         except ValueError:
-            if Section.endswith('_CSV') :
-                try: return json.loads(Value)  # Attempt to parse as JSON for list or dict
+            if Section.endswith('_csv') :
+                try: return Convert.CSVToList(Value)
                 except json.JSONDecodeError: return Value
             else : return Value
             
