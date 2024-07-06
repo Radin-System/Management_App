@@ -1,49 +1,10 @@
-import sys , os , re
-from configparser import ConfigParser
+import os , re
+from Global.Class import Config
 
-class ConstantManager : 
-    def __init__(self,File):
-        self.File = File
-        self.Parser = ConfigParser()
-        self.Parser.read(File , encoding='UTF-8')
-        self.Defined = {}
-        self.Init_Environ()
-        self.Init_Globals()
-        from Global.Class.Logger import Logger
-
-    def Init_Globals(self) : 
-        for Section in self.Parser :
-            if Section == 'ENVIRON' : continue
-            Prefix = f'{Section}_' if not str(Section) == 'GLOBALS' else ''
-            for Key , Value in self.Parser[Section].items():
-                KEY = Prefix.upper()+Key.upper()
-                try : globals()[KEY] = self.Parser.getint(Section, Key)
-                except ValueError:
-                    try : globals()[KEY] = self.Parser.getboolean(Section, Key)
-                    except ValueError : globals()[KEY] = Value
-                self.Defined[KEY] = Value
-
-    def Init_Environ(self) :
-        for Key , Value in self.Parser['ENVIRON'].items() :
-            os.environ.setdefault(str(Key) , str(Value))
-
-NAME          = 'RSTO'
-SCRIPT_NAME   = os.path.basename(sys.argv[0]) if len(sys.argv) > 0 else None
-ROOT          = os.getcwd()
-VERSION       = '1.1b'
-LANGUAGE      = 'fa'
-SERVERFILE    = '.configfiles/server.ini'
-ENCODE        = 'utf-8'
+ROOT       = os.getcwd()
+ENCODE     = 'utf-8'
+CONFIGFILE = '.configfiles/server.ini'
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
-
-LOG_TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-LOG_HEADER      = '<>'
-LOG_MAX_SIZE    = '10MB'
-
-TASKMANAGER_CHECK_INTERVAL = 5
-TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY = 365
-
-MAX_BUFFER = 65535
 
 RESERVED_USERS = [
 'Admin',
@@ -105,4 +66,4 @@ PORT_TYPE_MAP = {
     'ICMP' : {'Name' : 'Internet Control Message Protocol'} ,
 }
 
-GlobalManager = ConstantManager(SERVERFILE)
+Config_Manager = Config(CONFIGFILE)
