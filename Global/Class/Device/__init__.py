@@ -1,5 +1,4 @@
 import time,paramiko
-from Global.Constant      import MAX_BUFFER
 from Global.Class.Auth    import User,Password
 from Global.Class.Network import Hostname,IPv4,Port
 
@@ -42,7 +41,7 @@ class Device :
         if self.Connected() :
             if self.Connection_Type == 'SSH' :
                 if self.Shell.recv_ready() :
-                    return self.Shell.recv(MAX_BUFFER).decode('utf-8')
+                    return self.Shell.recv(65536).decode('utf-8')
             else : return None
         else : raise ConnectionError('Not Connected to the Device')
 
@@ -50,7 +49,7 @@ class Device :
         if not Message.endswith('\n') : Message += '\n'
         if self.Connected() :
             if self.Connection_Type == 'SSH' :
-                Stdin, Stdout , Stderr = self.Connection.exec_command(Message)
+                _ , Stdout , _ = self.Connection.exec_command(Message)
                 time.sleep(Wait)
                 Response = Stdout.read().decode('utf-8')
                 self.Terminal += Message
@@ -77,7 +76,7 @@ class Device :
         return self.Send(' ')
 
     def Disconnect (self) -> None :
-        if   self.Connection_Type == 'SSH' and self.Connected() :
+        if self.Connection_Type == 'SSH' and self.Connected() :
             self.Shell.close()
             self.Connection.close()
             self.Connection = None

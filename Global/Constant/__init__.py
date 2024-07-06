@@ -2,6 +2,6 @@ import os
 from Global.Class import Config
 
 ROOT       = os.getcwd()
-CONFIGFILE = '.configfiles/server.ini'
+CONFIGFILE = '.configfiles/config.ini'
 
 Config_Manager = Config(CONFIGFILE)
