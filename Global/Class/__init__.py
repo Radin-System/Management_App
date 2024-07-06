@@ -1,12 +1,8 @@
 import os,json
-from typing import Dict,Any
-from configparser import ConfigParser
-from Global.Function import Convert
+from typing          import Dict,Any
 from datetime        import datetime
-
-class Empty :
-    def __init__(self) -> None:
-        pass
+from configparser    import ConfigParser
+from Global.Function import Convert
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -17,7 +13,7 @@ class Config:
     
     DEFAULT['GLOBALS'] = {
         'debug': True,
-        'log_file': '.Log/main.txt',
+        'log_file': '.log/main.txt',
         'name' : 'RSTO',
         'version' : '1.1b',
         'language': 'fa',
@@ -110,7 +106,7 @@ class Config:
             self.Config.write(Config_File)
 
     def Get(self, Section:str, Key:Any, Fallback:Any=None) -> Any:
-        if not self.Config.has_section : raise KeyError('Provided config does not have this section :',Section)
+        if not self.Config.has_section : raise KeyError('Provided config file does not have this section :',Section)
         if not self.Config.has_option(Section, Key): return Fallback
         
         Value = self.Config.get(Section,Key)
