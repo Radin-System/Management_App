@@ -1,24 +1,31 @@
 import threading , socket , time
-from Global.Constant     import AMIMANAGER_DEBUG , AMIMANAGER_LOG , AMIMANAGER_EVENT_WHITELIST , AMIMANAGER_TIMEOUT , AMIMANAGER_MAX_ACTIONID
-from Global.Class.Logger import Logger
 
 class AsteriskAMIManager:
-    def __init__(self, Host , Port , Username , Secret ) -> None:
-        self.Logger = Logger('AMI Manager' , AMIMANAGER_LOG , AMIMANAGER_DEBUG)
+    def __init__(self, Name:str, *,
+            Host,
+            Port,
+            Username,
+            Password,
+            Event_Whitelist:list,
+            Timeout:int,
+            Max_ActionID:int,
+            ) -> None:
         
-        self.Host    = Host
-        self.Port    = Port
-        self.Usename = Username
-        self.Secret  = Secret
-        
+        self.Name         = Name
+        self.Host         = Host
+        self.Port         = Port
+        self.Usename      = Username
+        self.Password       = Password
+        self.Whitelist    = Event_Whitelist
+        self.Timeout      = Timeout
+        self.Max_ActionID = Max_ActionID
+
         self.Client_Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
         self.ActionId = 0
 
-        self.Whitelist = AMIMANAGER_EVENT_WHITELIST.split(',')
-
-        self.Connected = None
-        self.Running   = None
+        self.Connected     = None
+        self.Running       = None
         self.Authenticated = None
 
     def Connect(self) -> None :
@@ -36,7 +43,7 @@ class AsteriskAMIManager:
 
     def Login(self) -> None :
         if not self.Authenticated :
-            Response = self.Send_Action( 'Login' , Username = self.Usename , Secret = self.Secret )
+            Response = self.Send_Action( 'Login' , Username = self.Usename , Secret = self.Password )
             if Response :
                 if 'Success' in Response.get('Response') :
                     self.Authenticated = True
@@ -87,7 +94,7 @@ class AsteriskAMIManager:
         except Exception as e : self.Logger(f'Unable to react to the Event : {e}')
 
     def Send_Action(self , Act , **kwargs) -> dict | None:
-        if     self.ActionId > AMIMANAGER_MAX_ACTIONID : self.ActionId = 1
+        if     self.ActionId > self.Max_ActionID : self.ActionId = 1
         else : self.ActionId += 1
         Action = f'Action: {Act}\r\n'
         Action += f'ActionID: {self.ActionId}\r\n'
@@ -96,7 +103,7 @@ class AsteriskAMIManager:
         self.Client_Socket.sendall(Action.encode())
         self.Logger(f'Action Sent : {Act} - {self.ActionId}')
         Start = time.time()
-        while time.time() - Start < AMIMANAGER_TIMEOUT :
+        while time.time() - Start < self.Timeout :
             Response = next((r for r in self.Responses if r.get('ActionID') == str(self.ActionId)), None)
             if Response:
                 self.Logger(f'Response of Action-{self.ActionId} : {Response}')

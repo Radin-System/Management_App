@@ -1,10 +1,11 @@
 from .Class          import AsteriskAMIManager
-from Global.Constant import AMIMANAGER_HOST , AMIMANAGER_PORT , AMIMANAGER_USERNAME , AMIMANAGER_PASSWORD
+from Global import Main_Config
 
-AMIManager = AsteriskAMIManager(
-                                Host     = AMIMANAGER_HOST , 
-                                Port     = AMIMANAGER_PORT , 
-                                Username = AMIMANAGER_USERNAME , 
-                                Secret   = AMIMANAGER_PASSWORD ,
-                                )
-AMIManager.Name = 'AMIManager'
+AMIManager = AsteriskAMIManager('AMIManager',
+    Host     = Main_Config.Get('AMIMANAGER','host'),
+    Port     = Main_Config.Get('AMIMANAGER','port'),
+    Username = Main_Config.Get('AMIMANAGER','username'),
+    Password = Main_Config.Get('AMIMANAGER','password'),
+    Event_Whitelist = Main_Config.Get('AMIMANAGER','event_whitelist_csv'),
+    Timeout  =  Main_Config.Get('AMIMANAGER','timeout'),
+    )
