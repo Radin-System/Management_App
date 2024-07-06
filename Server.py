@@ -1,23 +1,6 @@
 if __name__ == '__main__' :
-## Prepair
-    import sys
-
-## Componnets
-    from SQLManager   import SQLManager
-    from AMIManager   import AMIManager
-
-    Components = [
-    SQLManager ,
-    AMIManager ,
-]
-
-## Runtime
-    try :
-        for Component in Components : Component.Start()
-    except Exception as e :
-        for Component in Components        : Component.Stop()
-        sys.exit(1)
-
-## Exiting
-    for Component in Components        : Component.Stop()
-    sys.exit(0)
+    from Global import Main_Logger,Main_Config
+    
+    Main_Logger('Configs and Logging system Loaded')
+    Main_Logger('App Works Fine')
+    Main_Logger(Main_Config.__dict__)

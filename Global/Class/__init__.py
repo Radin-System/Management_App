@@ -17,23 +17,23 @@ class Config:
     
     DEFAULT['GLOBALS'] = {
         'debug': True,
-        'log_path': '.Log/',
+        'log_file': '.Log/main.txt',
         'name' : 'RSTO',
         'version' : '1.1b',
         'language': 'fa',
-        
         }
     
     DEFAULT['LOG'] = {
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
         'log_max_size': '10MB'
-    }
+        }
 
     DEFAULT['TASKMANAGER'] ={
         'chck_interval': 5,
         'task_timeout': 365
-    }
+        }
+
     DEFAULT['LDAPUSER'] = {
         'use_ssl': False,
         'validate_ssl': False,
@@ -109,7 +109,8 @@ class Config:
         with open(self.Config_File, 'w') as Config_File:
             self.Config.write(Config_File)
 
-    def Get(self, Section:str, Key:Any, Fallback:Any=None) -> None:
+    def Get(self, Section:str, Key:Any, Fallback:Any=None) -> Any:
+        if not self.Config.has_section : raise KeyError('Provided config does not have this section :',Section)
         if not self.Config.has_option(Section, Key): return Fallback
         
         Value = self.Config.get(Section,Key)
@@ -133,48 +134,30 @@ class Config:
 class Logger :
     def __init__(self,*,
                  Name:str,
-                 LogFile:str,
+                 Log_File:str,
                  Debug_Condition:bool,
                  Header:str,
                  Time_Format:str,) -> None :
         self.Name        = Name
-        self.LogFile     = LogFile
+        self.Log_File    = Log_File
         self.Condition   = Debug_Condition
         self.Header      = Header
         self.Time_Format = Time_Format
 
-        self.Active      = False
-
         self.Check_Folder()
-        self.Start()
 
     def Check_Folder(self) -> None :
-        os.mkdir(os.path.dirname(self.LogFile)) if not os.path.exists(self.LogFile) else ...
+        try :
+            if  not os.path.exists(self.Log_File) :
+                os.mkdir(os.path.dirname(self.Log_File))
+                self(f'Created The Log Folder and File : {self.Log_File}')
+        except FileExistsError : pass
 
-    def Start(self) -> None :
-        if not self.Active :
-            self.Active = True
-
-    def Stop(self) -> None :
-        if self.Active :
-            self.Active = False
-
-    def Log(self, Text:str) -> None :
-        self(Text, Colour = 'log')
-
-    def __call__(self, Text : str , Colour = '' , Formated = True) -> None :
-        if self.Active :
-            Time = datetime.now()
-            LogText = f'{self.Header[0]} {Time.strftime(self.Time_Format)} - {self.Name} : {Text} {self.Header[1]}'.replace('\n','')+'\n' if Formated else Text
-            with open(self.LogFile , mode = 'a') as File : File.write(LogText)
-            if self.Condition :
-                print(LogText , end='')
-
-    def __str__(self) -> str :
-        return f"<{self.Name} - Debug : {'On' if self.Condition else 'Off'}>"
-
-    def __bool__(self) -> bool :
-        return self.Active
+    def __call__(self, Text:str, Formated = True) -> None :
+        Time = datetime.now()
+        LogText = f'{self.Header[0]} {Time.strftime(self.Time_Format)} - {self.Name} : {Text} {self.Header[1]}'.replace('\n','')+'\n' if Formated else Text
+        with open(self.Log_File , mode = 'a') as File : File.write(LogText)
+        if self.Condition : print(LogText , end='')
 
 class Component :
     def __init__(self) -> None:
