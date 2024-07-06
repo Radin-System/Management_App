@@ -37,6 +37,10 @@ This project is a Flask web application designed to manage various aspects of ou
     pip install -r requirements.txt
     ```
 
+## Change Configs
+
+ Make sure to change the configurations on the config.ini in .configfiles folder after running the app once.
+
 ## Contributing
 
 We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
