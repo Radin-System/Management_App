@@ -7,13 +7,11 @@ if __name__ == '__main__' :
     GlobalManager.Logger = Logger('Main','Main.log',True)
 
 ## Componnets
-    from WebServer    import WebServer
     from SQLManager   import SQLManager
     from AMIManager   import AMIManager
 
     Components = [
     SQLManager ,
-    WebServer ,
     AMIManager ,
 ]
 

@@ -30,7 +30,7 @@ class SQLAlchemyManager :
         elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'        ,echo=SQLMANAGER_VERBOSE)
         elif self.Mode == 'POSTGRE' : self.Engine = sqlalchemy.create_engine(f'postgresql+psycopg2://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}' ,echo=SQLMANAGER_VERBOSE)
         elif self.Mode == 'MARIADB' : self.Engine = sqlalchemy.create_engine(f'mysql+pymysql://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'       ,echo=SQLMANAGER_VERBOSE)
-        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(SQLMANAGER_SQLITE_PATH,self.DataBase)}.db'                                                                                            ,echo=SQLMANAGER_VERBOSE)
+        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(SQLMANAGER_SQLITE_PATH,self.DataBase)}.db'                                                      ,echo=SQLMANAGER_VERBOSE)
         if self.Connected() : self.Base.metadata.create_all(self.Engine)
         else                : self.Logger('Engine Faild')
     
