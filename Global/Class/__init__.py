@@ -131,20 +131,25 @@ class Config:
         self.Save_Config()
 
 class Logger :
-    _Instances = []
+    def __init__(self,*,
+                 Name:str,
+                 LogFile:str,
+                 Debug_Condition:bool,
+                 Header:str,
+                 Time_Format:str,) -> None :
+        self.Name        = Name
+        self.LogFile     = LogFile
+        self.Condition   = Debug_Condition
+        self.Header      = Header
+        self.Time_Format = Time_Format
 
-    def __init__(self , Name : str , LogFile : str , Debug_Condition : bool) -> None :
-        self.Name      = Name
-        self.Condition = Debug_Condition
-        self.LogFile   = LogFile
-        self.Active    = False
+        self.Active      = False
+
         self.Check_Folder()
         self.Start()
-        Logger._Instances.append(self)
 
     def Check_Folder(self) -> None :
-        try : os.mkdir(LOG_PATH) if not os.path.exists(os.path.join(LOG_PATH,self.LogFile)) else ...
-        except FileExistsError : pass
+        os.mkdir(os.path.dirname(self.LogFile)) if not os.path.exists(self.LogFile) else ...
 
     def Start(self) -> None :
         if not self.Active :
@@ -160,9 +165,9 @@ class Logger :
     def __call__(self, Text : str , Colour = '' , Formated = True) -> None :
         if self.Active :
             Time = datetime.now()
-            LogText = f'{LOG_HEADER[0]} {Time.strftime(LOG_TIME_FORMAT)} - {self.Name} : {Text} {LOG_HEADER[1]}'.replace('\n','')+'\n' if Formated else Text
-            with open(os.path.join (LOG_PATH,self.LogFile) , mode = 'a') as File : File.write(LogText)
-            if self.Condition or DEBUG :
+            LogText = f'{self.Header[0]} {Time.strftime(self.Time_Format)} - {self.Name} : {Text} {self.Header[1]}'.replace('\n','')+'\n' if Formated else Text
+            with open(self.LogFile , mode = 'a') as File : File.write(LogText)
+            if self.Condition :
                 print(LogText , end='')
 
     def __str__(self) -> str :
