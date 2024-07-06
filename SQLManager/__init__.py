@@ -1,19 +1,18 @@
 from .Class               import SQLAlchemyManager
 from .Models              import Base,Models
-from sqlalchemy.exc       import IntegrityError
-from Global.Constant      import SQLMANAGER_HOST , SQLMANAGER_PORT , SQLMANAGER_USERNAME  , SQLMANAGER_PASSWORD , SQLMANAGER_DATABASE
+from Global               import Main_Config
 from Global.Class.Auth    import User , Password
 from Global.Class.Network import IPv4 , Port
 
-
-SQLManager = SQLAlchemyManager(
-    Host     = IPv4(SQLMANAGER_HOST),
-    Port     = Port(SQLMANAGER_PORT), 
-    Username = User(SQLMANAGER_USERNAME), 
-    Password = Password(SQLMANAGER_PASSWORD), 
-    DataBase = SQLMANAGER_DATABASE 
-    )
-SQLManager.Name = 'SQLManager'
+SQLManager = SQLAlchemyManager('SQLManager',
+    Host        = IPv4(Main_Config.Get('SQLMANAGER','host')),
+    Port        = Port(Main_Config.Get('SQLMANAGER','port')), 
+    Username    = User(Main_Config.Get('SQLMANAGER','username')), 
+    Password    = Password(Main_Config.Get('SQLMANAGER','password')),
+    DataBase    = Main_Config.Get('SQLMANAGER','database'),
+    Mode        = Main_Config.Get('SQLMANAGER','mode'),
+    SQLite_Path = Main_Config.Get('SQLMANAGER','sqlite_path'),
+    Verbose     = Main_Config.Get('SQLMANAGER','verbose') ,)
 SQLManager.Init_Base(Base = Base)
 SQLManager.Create_Engine()
 SQLManager.Init_Models(Models = Models)
