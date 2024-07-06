@@ -23,7 +23,7 @@ class Config:
         }
     
     DEFAULT['LOG'] = {
-        'log_time_format': '%Y-%m-%d %H:%M:%S',
+        'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
         'log_max_size': '10MB'
     }
