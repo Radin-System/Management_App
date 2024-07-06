@@ -1,15 +1,15 @@
 import time
 import threading
 import multiprocessing
-from datetime import datetime, timedelta
-from Global.Constant import TASKMANAGER_CHECK_INTERVAL,TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY
+from datetime     import datetime, timedelta
+from Global.Class import Component
 
 class Task:
     def __init__(
             self, 
             Name : str,
-            Action_time = datetime.now() , 
-            Timeout = datetime.now() + timedelta(days=TASKMANAGER_TASK_DEFAULT_TIMEOUT_DAY)
+            Action_time:datetime, 
+            Timeout:datetime,
             ) -> None:
         
         self.Name = Name
@@ -68,7 +68,13 @@ class Task:
         return f'<Task Name : {self.Name} | Task Status : {self.Status}>'
 
 class TaskManager:
-    def __init__(self) -> None:
+    def __init__(self, Name:str, *,
+            Check_Interval:int|float
+            ) -> None:
+        
+        self.Name = Name
+        self.Check_Interval = Check_Interval
+        
         self.Tasks : list[Task] = []
         self.Running = False
         self.Thread = threading.Thread(target=self.Main_Loop)
@@ -104,7 +110,7 @@ class TaskManager:
     def Main_Loop(self) -> None:
         while self.Running:
             self.Check_Tasks()
-            time.sleep(TASKMANAGER_CHECK_INTERVAL)
+            time.sleep(self.Check_Interval)
 
     def Start(self) -> None:
         if not self.Running:

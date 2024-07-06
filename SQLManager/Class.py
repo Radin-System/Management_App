@@ -1,22 +1,31 @@
 import sqlalchemy
 import sqlalchemy.orm
 import os
-from Global.Constant      import SQLMANAGER_DEBUG , SQLMANAGER_LOG , SQLMANAGER_MODE , SQLMANAGER_VERBOSE , SQLMANAGER_SQLITE_PATH
 from Global.Decorator     import Do_Log
 from Global.Class.Auth    import User , Password
-from Global.Class.Logger  import Logger
 from Global.Class.Network import IPv4 , Port
 
 class SQLAlchemyManager :
-    def __init__(self , Host : IPv4 , Port : Port , Username : User , Password : Password , DataBase : str):
-        self.Logger = Logger('SQL Manager' , SQLMANAGER_LOG , SQLMANAGER_DEBUG)
+    def __init__(self,Name:str,*,
+            Host:IPv4,
+            Port:Port,
+            Username:User,
+            Password:Password,
+            DataBase:str,
+            Mode:str,
+            SQLite_Path:str,
+            Verbose:bool,
+            ) -> None :
 
-        self.Host     = Host
-        self.Port     = Port
-        self.Username = Username
-        self.Password = Password
-        self.DataBase = DataBase
-        self.Mode     = SQLMANAGER_MODE
+        self.Name        = Name
+        self.Host        = Host
+        self.Port        = Port
+        self.Username    = Username
+        self.Password    = Password
+        self.DataBase    = DataBase
+        self.Mode        = Mode
+        self.SQLite_Path = SQLite_Path
+        self.Verbose     = Verbose
 
     def Connected(self) -> bool:
         if self.Engine :
@@ -26,11 +35,11 @@ class SQLAlchemyManager :
 
     @Do_Log('Creating engine...','Done!')
     def Create_Engine(self) :
-        if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}',echo=SQLMANAGER_VERBOSE)
-        elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'        ,echo=SQLMANAGER_VERBOSE)
-        elif self.Mode == 'POSTGRE' : self.Engine = sqlalchemy.create_engine(f'postgresql+psycopg2://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}' ,echo=SQLMANAGER_VERBOSE)
-        elif self.Mode == 'MARIADB' : self.Engine = sqlalchemy.create_engine(f'mysql+pymysql://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'       ,echo=SQLMANAGER_VERBOSE)
-        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(SQLMANAGER_SQLITE_PATH,self.DataBase)}.db'                                                      ,echo=SQLMANAGER_VERBOSE)
+        if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}',echo=self.Verbose)
+        elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'        ,echo=self.Verbose)
+        elif self.Mode == 'POSTGRE' : self.Engine = sqlalchemy.create_engine(f'postgresql+psycopg2://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}' ,echo=self.Verbose)
+        elif self.Mode == 'MARIADB' : self.Engine = sqlalchemy.create_engine(f'mysql+pymysql://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'       ,echo=self.Verbose)
+        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(self.SQLite_Path,self.DataBase)}.db'                                                            ,echo=self.Verbose)
         if self.Connected() : self.Base.metadata.create_all(self.Engine)
         else                : self.Logger('Engine Faild')
     

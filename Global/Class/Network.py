@@ -1,6 +1,4 @@
-import os , ssl , ldap3
-from Global.Constant     import ENCODE , SPECIAL_CHARS , RESERVED_USERS , RESERVED_EMAILS , LDAPUSER_USE_SSL , LDAPUSER_VALIDATE_SSL
-from Global.Function     import Validate , Get , Convert , Crypto
+from Global.Function     import Validate , Get , Convert
 
 class MAC :
     def __init__(self , Input : str) -> None :
@@ -109,10 +107,10 @@ class Port :
             self.Default       = Validate.DefaultProtocol(self.Number , self.Protocol)
 
     def Validate (self) -> None :
-        if   self.Number == 0 and self.Protocol.upper() == 'ICMP'                  : self.Valid = True
-        elif self.Number != 0 and self.Protocol.upper() == 'ICMP'                  : self.Valid = False
+        if   self.Number == 0 and self.Protocol.upper() == 'ICMP'            : self.Valid = True
+        elif self.Number != 0 and self.Protocol.upper() == 'ICMP'            : self.Valid = False
         elif Validate.Port(self.Number) and Validate.Protocol(self.Protocol) : self.Valid = True
-        else                                                                       : self.Valid = False
+        else                                                                 : self.Valid = False
 
     def __str__ (self) -> str :
         return f'{self.Number}/{self.Protocol}' if self.Valid else self.Input
