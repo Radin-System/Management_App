@@ -2,28 +2,28 @@ from .                    import Device
 from Global.Class.Auth    import Username , Password
 from Global.Class.Network import Hostname, IPv4 , Port
 
-class Cisco (Device):
-    def __init__(self,
-                 Hostname:Hostname,
-                 ManagementIP:IPv4,
-                 ManagementPort:Port,
-                 Username:Username,
-                 Password:Password,
-                 Enable:Password,)->None:
-        self.Enable          = Enable
-        self.Logger          = print
-        super().__init__(Hostname,ManagementIP,ManagementPort,Username,Password)
+class Cisco(Device):
+    def __init__(self,*,
+            Host:IPv4,
+            Port:Port,
+            Username:Username,
+            Password:Password,
+            Enable:Password,
+            )->None:
 
-    def Prepare_Terminal(self) -> None :
-        if self.Connected() :
+        super().__init__(Host,Port,Username,Password)
+        self.Enable = Enable
+
+    def Prepare_Terminal(self) -> None:
+        if self.Connected():
             self.Set_State('privileged')
             self.Send('terminal width 0')
             self.Send('terminal length 0')
             self.Send('terminal no monitor')
 
-    def Set_State(self,State) -> None :
+    def Set_State(self, State) -> None:
         CurrentState = self.State()
-        if CurrentState and State :
+        if CurrentState and State:
             if CurrentState == 'userEXEC'   and State == 'privileged' : self.Send('enable') ; self.Send(self.Enable.Raw) ; return
             if CurrentState == 'privileged' and State == 'userEXEC'   : self.Send('disable') ; return
             if CurrentState == 'privileged' and State == 'configure'  : self.Send('configure terminal') ; return
@@ -37,7 +37,7 @@ class Cisco (Device):
             else : raise Exception(f'State {State} is not a valid Cisco State' )
         else : raise Exception(f'Invalid States : CurrentState={CurrentState} , State={State}')
 
-    def State(self) -> str :
+    def State(self) -> str:
         Command_Prompt = self.Get_Command_Prompt()
         if '(config)#' in Command_Prompt : return 'configure'
         if '(config-'  in Command_Prompt : return 'interface'
@@ -45,11 +45,11 @@ class Cisco (Device):
         if '>'         in Command_Prompt : return 'userEXEC'
         raise ValueError(f'Command_Prompt does not have correct char at the end : {Command_Prompt}')
 
-    def Get_RunningConfig(self , Mode : str = 'full' ) -> str :
+    def Get_RunningConfig(self, Mode:str = 'full') -> str:
         self.Set_State('privileged')
         return self.Send(f'show running-config {Mode}',5.5)
 
-    def Get_Hostname(self) -> str :
+    def Get_Hostname(self) -> str:
         self.Set_State('privileged')
         Command_Prompt = self.Get_Command_Prompt()
         return Command_Prompt.replace('#','').strip()
