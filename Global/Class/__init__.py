@@ -29,7 +29,6 @@ class Config:
 
     DEFAULT['TASKMANAGER'] ={
         'chck_interval': 5,
-        'task_timeout': 365
         }
 
     DEFAULT['LDAPUSER'] = {
@@ -67,8 +66,8 @@ class Config:
         'username': 'admin', # Test Username
         'password': 'asd@123', # Test Password
         'timeout': 10,
-        'max_actionid': 2048,
         'event_whitelist_csv': 'AgentConnect,AgentComplete',
+        'max_action_id': 2048,
         }
 
     def __init__(self, Config_File : str) -> None:
@@ -136,7 +135,37 @@ class Config:
         self.Config.set(Section, Parameter, str(Value))
         self.Save_Config()
 
-class Logger :
+class Component :
+    def __init__(self) -> None:
+        self.Name : str = 'Empty Component'
+        self.Running : bool = None
+
+    def Start_Actions(self) -> None :
+        raise NotImplementedError('Please provide an action for starting the componnet')
+
+    def Stop_Actions(self) -> None:
+        raise NotImplementedError('Please provide an action for stopping the componnet')
+
+    def Start(self) -> None:
+        if not self.Running :
+            self.Running = True
+            self.Start_Actions()
+
+    def Stop(self) -> None:
+        if self.Running :
+            self.Running = False
+            self.Stop_Actions()
+
+    def __bool__(self) -> bool :
+        return self.Running
+
+    def __str__(self) -> str :
+        return f'<Component :{self.Name}>'
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__}("{self.Name}",*Args,**Kwargs)'
+
+class Logger(Component):
     def __init__(self,*,
             Name:str,
             Log_File:str,
@@ -165,33 +194,9 @@ class Logger :
         LogText = f'{self.Header[0]} {Time.strftime(self.Time_Format)} - {self.Name} : {Text} {self.Header[1]}'.replace('\n','')+'\n' if Formated else Text
         with open(self.Log_File , mode = 'a') as File : File.write(LogText)
         if self.Condition : print(LogText , end='')
-
-class Component :
-    def __init__(self) -> None:
-        self.Name : str = 'Empty Component'
-        self.Running : bool = None
-
-    def Start_Actions(self) -> None :
-        raise NotImplementedError('Please provide a Action for starting the componnet')
+    
+    def Start_Actions(self) -> None:
+        pass
 
     def Stop_Actions(self) -> None:
-        raise NotImplementedError('Please provide a Action for stopping the componnet')
-
-    def Start(self) -> None:
-        if not self.Running :
-            self.Running = True
-            self.Start_Actions()
-
-    def Stop(self) -> None:
-        if self.Running :
-            self.Running = False
-            self.Stop_Actions()
-
-    def __bool__(self) -> bool :
-        return self.Running
-
-    def __str__(self) -> str :
-        return f'<Component :{self.Name}>'
-
-    def __repr__(self) -> str:
-        return ''
+        pass

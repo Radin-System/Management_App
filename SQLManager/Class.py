@@ -4,8 +4,9 @@ import os
 from Global.Decorator     import Do_Log
 from Global.Class.Auth    import Username , Password
 from Global.Class.Network import IPv4 , Port
+from Global.Class import Component
 
-class SQLAlchemyManager :
+class SQLAlchemyManager(Component):
     def __init__(self,Name:str,*,
             Host:IPv4,
             Port:Port,
@@ -150,12 +151,9 @@ class SQLAlchemyManager :
             raise e
 
     @Do_Log('Starting...','Done!')
-    def Start(self):
-        if not self.Connected() :
-            self.Running = True
+    def Start_Actions(self):
+        pass
     
     @Do_Log('Stopping...','Done!')
-    def Stop(self):
-        if self.Connected() :
-            self.Running = False
-            self.Engine = None
+    def Stop_Actions(self):
+        self.Engine = None

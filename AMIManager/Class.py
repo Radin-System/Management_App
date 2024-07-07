@@ -1,8 +1,9 @@
 import threading , socket , time
 from Global.Class.Auth    import Username,Password
 from Global.Class.Network import IPv4,Port
+from Global.Class import Component
 
-class AsteriskAMIManager:
+class AsteriskAMIManager(Component):
     def __init__(self, Name:str, *,
             Host:IPv4,
             Port:Port,
@@ -27,7 +28,6 @@ class AsteriskAMIManager:
         self.ActionId = 0
 
         self.Connected     = None
-        self.Running       = None
         self.Authenticated = None
 
     def Connect(self) -> None :
@@ -112,14 +112,10 @@ class AsteriskAMIManager:
                 return Response
         else : self.Logger(f'Timeout waiting for response with ActionID : {self.ActionId}')
 
-    def Start(self):
-        if not self.Running :
-            self.Running = True
-            self.Connect()
-            self.Login()
+    def Start_Actions(self):
+        self.Connect()
+        self.Login()
 
-    def Stop(self):
-        if self.Running :
-            self.Running = False
-            self.Logoff()
-            self.Disconnect()
+    def Stop_Actions(self):
+        self.Logoff()
+        self.Disconnect()
