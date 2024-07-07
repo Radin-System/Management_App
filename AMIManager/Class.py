@@ -1,27 +1,29 @@
 import threading , socket , time
+from Global.Class.Auth    import Username,Password
+from Global.Class.Network import IPv4,Port
 
 class AsteriskAMIManager:
     def __init__(self, Name:str, *,
-            Host,
-            Port,
-            Username,
-            Password,
+            Host:IPv4,
+            Port:Port,
+            Username:Username,
+            Password:Password,
             Event_Whitelist:list,
             Timeout:int,
             Max_ActionID:int,
             ) -> None:
-        
+
         self.Name         = Name
         self.Host         = Host
         self.Port         = Port
         self.Usename      = Username
-        self.Password       = Password
+        self.Password     = Password
         self.Whitelist    = Event_Whitelist
         self.Timeout      = Timeout
         self.Max_ActionID = Max_ActionID
 
         self.Client_Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
+
         self.ActionId = 0
 
         self.Connected     = None
@@ -30,7 +32,7 @@ class AsteriskAMIManager:
 
     def Connect(self) -> None :
         if not self.Connected :
-            self.Client_Socket.connect((self.Host, self.Port))
+            self.Client_Socket.connect((self.Host.IPv4, self.Port.Number))
             self.Connected = True
             self.Receiver_Thread = threading.Thread(target=self.Receiver)
             self.Receiver_Thread.start()
@@ -43,7 +45,7 @@ class AsteriskAMIManager:
 
     def Login(self) -> None :
         if not self.Authenticated :
-            Response = self.Send_Action( 'Login' , Username = self.Usename , Secret = self.Password )
+            Response = self.Send_Action('Login', Username = self.Usename.Username, Secret = self.Password.Raw)
             if Response :
                 if 'Success' in Response.get('Response') :
                     self.Authenticated = True

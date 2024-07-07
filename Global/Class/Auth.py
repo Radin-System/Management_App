@@ -4,9 +4,9 @@ from Global.Function import Validate , Get , Crypto
 
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
-class User :
-    def __init__(self , Input : str) -> None : 
-        self.Input = Input.strip()
+class Username :
+    def __init__(self , Input : str) -> None :
+        self.Input = Input
         self.Validate()
         self.Username = self.Input if self.Valid else ''
 
@@ -21,7 +21,7 @@ class User :
 
 class Password :
     def __init__(self , Input : str ) -> None : 
-        self.Input    = Input.strip()
+        self.Input    = Input
         self.Crypted  = None
         self.MD5      = None
         self.Raw      = None
@@ -30,7 +30,7 @@ class Password :
 
         if   Validate.MD5(self.Input)     : self.Method = 'MD5'
         elif Validate.Crypted(self.Input) : self.Method = 'Crypted'
-        else                                 : self.Method = 'Raw' 
+        else                              : self.Method = 'Raw' 
 
         if   self.Method == 'MD5'     :
             self.MD5     = self.Input
@@ -117,7 +117,7 @@ class Email:
 
         if '@' in self.Input :
             Username , DomainName = self.Input.split('@',1)
-            self.User   = User(Username)
+            self.User   = Username(Username)
             self.Domain = Domain(DomainName)
 
         self.Validate()

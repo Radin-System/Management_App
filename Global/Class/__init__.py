@@ -1,8 +1,10 @@
-import os,json
+import os
 from typing          import Dict,Any
 from datetime        import datetime
 from configparser    import ConfigParser
 from Global.Function import Convert
+from Global.Class.Network import IPv4,Port
+from Global.Class.Auth import Username,Password
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -10,7 +12,7 @@ class Config:
     DEFAULT['ENVIRON'] = {
         'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA='  # Test Key
         }
-    
+
     DEFAULT['GLOBALS'] = {
         'debug': True,
         'log_file': '.log/main.txt',
@@ -18,7 +20,7 @@ class Config:
         'version' : '1.1b',
         'language': 'fa',
         }
-    
+
     DEFAULT['LOG'] = {
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
@@ -34,7 +36,7 @@ class Config:
         'use_ssl': False,
         'validate_ssl': False,
         }
-    
+
     DEFAULT['WEBSERVER'] = {
         'debug': False,
         'FLASK_DEBUG': False,
@@ -44,26 +46,26 @@ class Config:
         'secret_key': 'd3u15q$w5if^uos*$775ig^njkf02421',  # Test Key
         'minify_html': True,
         }
-    
+
     DEFAULT['SQLManager'] = {
         'debug': True,
         'mode': 'SQLITE3',
         'host': '127.0.0.1',
         'port': '0/ICMP',
-        'username': None,
-        'password': None,
+        'username': 'admin', # Test Username
+        'password': 'asd@123', # Test Password
         'database': 'management_app',
         'sqlite_path': '.db/',
         'verbose': False,
         }
-    
+
     DEFAULT['AMIMANAGER'] = {
         'debug': False,
         'host': '127.0.0.1',
-        'port': 5038,
+        'port': '5038/TCP',
         'tls_mode': False,
-        'username': None,
-        'password': None,
+        'username': 'admin', # Test Username
+        'password': 'asd@123', # Test Password
         'timeout': 10,
         'max_actionid': 2048,
         'event_whitelist_csv': 'AgentConnect,AgentComplete',
@@ -73,6 +75,7 @@ class Config:
         self.Config_File = Config_File
         self.Config = ConfigParser()
         self.Load_Config()
+        self.Set_Enviroment()
 
     def Load_Config(self) -> None:
         Config_Dir = os.path.dirname(self.Config_File)
@@ -83,9 +86,9 @@ class Config:
         else: self.Init_Default()
 
     def Init_Default(self) -> None:
-        for Section, Params in self.DEFAULT.items():
-            Params = {K:str(V) for K,V in Params.items()}
-            self.Config[Section] = Params
+        for Section, Parameters in self.DEFAULT.items():
+            Parameters = {K:str(V) for K,V in Parameters.items()}
+            self.Config[Section] = Parameters
         self.Save_Config()
 
     def Check_Config(self) -> None :
@@ -105,35 +108,43 @@ class Config:
         with open(self.Config_File, 'w') as Config_File:
             self.Config.write(Config_File)
 
-    def Get(self, Section:str, Key:Any, Fallback:Any=None) -> Any:
-        if not self.Config.has_section : raise KeyError('Provided config file does not have this section :',Section)
-        if not self.Config.has_option(Section, Key): return Fallback
-        
-        Value = self.Config.get(Section,Key)
-        
-        if Value.lower() in ['none','null'] : return None
-        if Value.lower() in ['true','yes']  : return True
-        if Value.lower() in ['false','no']  : return False
+    def Set_Enviroment(self) -> None:
+        if self.Config.has_section('ENVIRON'):
+            for K , V in self.Config['ENVIRON'].items(): os.environ.setdefault(K,str(V))
 
-        try: return int(Value)
-        except ValueError:
-            if Section.endswith('_csv') :
-                try: return Convert.CSVToList(Value)
-                except json.JSONDecodeError: return Value
-            else : return Value
-            
-    def Set(self, Section, Key, Value) -> None:
+    def Get(self, Section:str, Parameter:str, Fallback:Any=None) -> Any:
+        if not self.Config.has_section: raise KeyError('Provided config file does not have this section :',Section)
+        if not self.Config.has_option(Section, Parameter): return Fallback
+
+        Value = self.Config.get(Section,Parameter)
+
+        if   Value.lower() in ['none','null'] : Value = None
+        elif Value.lower() in ['true','yes']  : Value = True
+        elif Value.lower() in ['false','no']  : Value = False
+        elif Value.isdigit()                  : Value = int(Value)
+
+        if   Parameter == 'host'        : return IPv4(Value)
+        elif Parameter == 'port'        : return Port(Value)
+        elif Parameter == 'username'    : return Username(Value)
+        elif Parameter == 'password'    : return Password(Value)
+        elif Parameter.endswith('_csv') : return Convert.CSVToList(Value)
+
+        else : return Value
+
+    def Set(self, Section, Parameter, Value) -> None:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
-        self.Config.set(Section, Key, str(Value))
+        self.Config.set(Section, Parameter, str(Value))
         self.Save_Config()
 
 class Logger :
     def __init__(self,*,
-                 Name:str,
-                 Log_File:str,
-                 Debug_Condition:bool,
-                 Header:str,
-                 Time_Format:str,) -> None :
+            Name:str,
+            Log_File:str,
+            Debug_Condition:bool,
+            Header:str,
+            Time_Format:str,
+            ) -> None :
+
         self.Name        = Name
         self.Log_File    = Log_File
         self.Condition   = Debug_Condition
