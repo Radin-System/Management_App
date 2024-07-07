@@ -10,7 +10,7 @@ class Config:
     DEFAULT['ENVIRON'] = {
         'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA='  # Test Key
         }
-    
+
     DEFAULT['GLOBALS'] = {
         'debug': True,
         'log_file': '.log/main.txt',
@@ -18,7 +18,7 @@ class Config:
         'version' : '1.1b',
         'language': 'fa',
         }
-    
+
     DEFAULT['LOG'] = {
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
@@ -34,7 +34,7 @@ class Config:
         'use_ssl': False,
         'validate_ssl': False,
         }
-    
+
     DEFAULT['WEBSERVER'] = {
         'debug': False,
         'FLASK_DEBUG': False,
@@ -44,7 +44,7 @@ class Config:
         'secret_key': 'd3u15q$w5if^uos*$775ig^njkf02421',  # Test Key
         'minify_html': True,
         }
-    
+
     DEFAULT['SQLManager'] = {
         'debug': True,
         'mode': 'SQLITE3',
@@ -56,7 +56,7 @@ class Config:
         'sqlite_path': '.db/',
         'verbose': False,
         }
-    
+
     DEFAULT['AMIMANAGER'] = {
         'debug': False,
         'host': '127.0.0.1',
@@ -108,9 +108,9 @@ class Config:
     def Get(self, Section:str, Key:Any, Fallback:Any=None) -> Any:
         if not self.Config.has_section : raise KeyError('Provided config file does not have this section :',Section)
         if not self.Config.has_option(Section, Key): return Fallback
-        
+
         Value = self.Config.get(Section,Key)
-        
+
         if Value.lower() in ['none','null'] : return None
         if Value.lower() in ['true','yes']  : return True
         if Value.lower() in ['false','no']  : return False
@@ -121,7 +121,7 @@ class Config:
                 try: return Convert.CSVToList(Value)
                 except json.JSONDecodeError: return Value
             else : return Value
-            
+
     def Set(self, Section, Key, Value) -> None:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
         self.Config.set(Section, Key, str(Value))
@@ -129,11 +129,13 @@ class Config:
 
 class Logger :
     def __init__(self,*,
-                 Name:str,
-                 Log_File:str,
-                 Debug_Condition:bool,
-                 Header:str,
-                 Time_Format:str,) -> None :
+            Name:str,
+            Log_File:str,
+            Debug_Condition:bool,
+            Header:str,
+            Time_Format:str,
+            ) -> None :
+
         self.Name        = Name
         self.Log_File    = Log_File
         self.Condition   = Debug_Condition
