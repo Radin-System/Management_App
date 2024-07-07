@@ -218,7 +218,7 @@ class Validate :
         return bool(re.match(Pattern, Phone_Number))
 
 class Get :
-    
+
     @staticmethod
     def MAC_Type(Mac) -> str :
         for Type , Pattern in MAC_PATTERN_MAP.items() :
@@ -312,7 +312,7 @@ class Get :
                     Carryover = Digit_Sum // 256
                 if Carryover > 0 : Result.append(Carryover)
                 return ".".join(map(str, Result[::-1]))
-            
+
             if Validate.Mask(Subnet) : Subnet = Convert.MaskToCIDR(Subnet)
             if not int(Subnet[1:]) >= 16 : raise ValueError(f'The subnet provided is too large')
             First_IP   = Get.NetID(IP,Subnet)
@@ -331,7 +331,7 @@ class Get :
             if Protocol.upper() in PORT_TYPE_MAP.keys() : return [Protocol]
             else : return PORT_MAP.get(Protocol.upper(),{}).get('Type',[])
         return []
-    
+
     @staticmethod
     def Port_Number (Name : str) -> int :
         return int(PORT_MAP.get(str(Name),{}).get('Default_Number',0))
@@ -362,7 +362,7 @@ class Convert :
         return ''
 
 class Crypto :
-    
+
     @staticmethod
     def MD5 (Raw : str) -> str :
         MD5 = hashlib.md5()
@@ -372,17 +372,17 @@ class Crypto :
     @staticmethod
     def Generate() -> bytes:
         return Fernet.generate_key()
-    
+
     @staticmethod
     def Encrypt(Phrase : str) -> bytes :
-        Key = os.environ.get('CRYPTO_KEY' , None)
-        if not Key : raise ValueError("CRYPTO_KEY environment variable not set")
+        Key = os.environ.get('crypto_key' , None)
+        if not Key : raise ValueError("crypto_key environment variable is not set")
         frenet = Fernet(Key.encode('utf-8'))
         return frenet.encrypt(Phrase.encode('utf-8'))
-    
+
     @staticmethod
     def Decrypt(Token : bytes) -> str :
-        Key = os.environ.get('CRYPTO_KEY' , None)
-        if not Key : raise ValueError("CRYPTO_KEY environment variable not set")
+        Key = os.environ.get('crypto_key' , None)
+        if not Key : raise ValueError("crypto_key environment variable is not set")
         frenet = Fernet(Key.encode('utf-8'))
         return frenet.decrypt(Token).decode('utf-8')
