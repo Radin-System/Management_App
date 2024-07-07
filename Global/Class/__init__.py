@@ -1,8 +1,10 @@
-import os,json
+import os
 from typing          import Dict,Any
 from datetime        import datetime
 from configparser    import ConfigParser
 from Global.Function import Convert
+from Global.Class.Network import IPv4,Port
+from Global.Class.Auth import Username,Password
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -105,22 +107,24 @@ class Config:
         with open(self.Config_File, 'w') as Config_File:
             self.Config.write(Config_File)
 
-    def Get(self, Section:str, Key:Any, Fallback:Any=None) -> Any:
+    def Get(self, Section:str, Key:str, Fallback:Any=None) -> Any:
         if not self.Config.has_section : raise KeyError('Provided config file does not have this section :',Section)
         if not self.Config.has_option(Section, Key): return Fallback
 
         Value = self.Config.get(Section,Key)
 
-        if Value.lower() in ['none','null'] : return None
-        if Value.lower() in ['true','yes']  : return True
-        if Value.lower() in ['false','no']  : return False
+        if   Value.lower() in ['none','null'] : Value = None
+        elif Value.lower() in ['true','yes']  : Value = True
+        elif Value.lower() in ['false','no']  : Value = False
+        elif Value.isdigit()                  : Value = int(Value)
 
-        try: return int(Value)
-        except ValueError:
-            if Section.endswith('_csv') :
-                try: return Convert.CSVToList(Value)
-                except json.JSONDecodeError: return Value
-            else : return Value
+        if   Section == 'host'        : return IPv4(Value)
+        elif Section == 'port'        : return Port(Value)
+        elif Section == 'username'    : return Username(Value)
+        elif Section == 'password'    : return Password(Value)
+        elif Section.endswith('_csv') : return Convert.CSVToList(Value)
+
+        else : return Value
 
     def Set(self, Section, Key, Value) -> None:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
