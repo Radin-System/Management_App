@@ -8,4 +8,5 @@ AMIManager = AsteriskAMIManager('AMIManager',
     Password        = Main_Config.Get('AMIMANAGER','password'),
     Event_Whitelist = Main_Config.Get('AMIMANAGER','event_whitelist_csv'),
     Timeout         = Main_Config.Get('AMIMANAGER','timeout'),
+    Max_ActionID    = Main_Config.Get('AMIMANAGER','max_action_id'),
     )

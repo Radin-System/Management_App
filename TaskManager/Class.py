@@ -67,7 +67,7 @@ class Task:
     def __str__(self) -> str:
         return f'<Task Name : {self.Name} | Task Status : {self.Status}>'
 
-class TaskManager:
+class SimpleTaskManager(Component):
     def __init__(self, Name:str, *,
             Check_Interval:int|float
             ) -> None:
@@ -76,7 +76,6 @@ class TaskManager:
         self.Check_Interval = Check_Interval
         
         self.Tasks : list[Task] = []
-        self.Running = False
         self.Thread = threading.Thread(target=self.Main_Loop)
 
     def Add(self, Task: Task) -> None:
@@ -112,12 +111,8 @@ class TaskManager:
             self.Check_Tasks()
             time.sleep(self.Check_Interval)
 
-    def Start(self) -> None:
-        if not self.Running:
-            self.Running = True
-            self.Thread.start()
+    def Start_Actions(self) -> None:
+        self.Thread.start()
 
-    def Stop(self) -> None:
-        if self.Running:
-            self.Running = False
-            self.Thread.join()
+    def Stop_Actions(self) -> None:
+        self.Thread.join()
