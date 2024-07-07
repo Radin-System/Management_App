@@ -4,7 +4,7 @@ from Global.Function import Validate , Get , Crypto
 
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
-class User :
+class Username :
     def __init__(self , Input : str) -> None : 
         self.Input = Input.strip()
         self.Validate()
@@ -117,7 +117,7 @@ class Email:
 
         if '@' in self.Input :
             Username , DomainName = self.Input.split('@',1)
-            self.User   = User(Username)
+            self.User   = Username(Username)
             self.Domain = Domain(DomainName)
 
         self.Validate()

@@ -2,14 +2,14 @@ import sqlalchemy
 import sqlalchemy.orm
 import os
 from Global.Decorator     import Do_Log
-from Global.Class.Auth    import User , Password
+from Global.Class.Auth    import Username , Password
 from Global.Class.Network import IPv4 , Port
 
 class SQLAlchemyManager :
     def __init__(self,Name:str,*,
             Host:IPv4,
             Port:Port,
-            Username:User,
+            Username:Username,
             Password:Password,
             DataBase:str,
             Mode:str,

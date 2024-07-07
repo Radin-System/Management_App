@@ -1,5 +1,5 @@
 from .                    import Device
-from Global.Class.Auth    import User , Password
+from Global.Class.Auth    import Username , Password
 from Global.Class.Network import Hostname, IPv4 , Port
 
 class Mikrotik (Device):
@@ -7,7 +7,7 @@ class Mikrotik (Device):
                  Hostname:Hostname,
                  ManagementIP:IPv4,
                  ManagementPort:Port,
-                 Username:User,
+                 Username:Username,
                  Password:Password,)->None:
         self.Logger          = print
         super().__init__(Hostname,ManagementIP,ManagementPort,Username,Password)
