@@ -1,32 +1,27 @@
-class Port :
-    def __init__(self , Input : str) -> None :
-        """Input Example : 80/HTTP , 576/TCP , 0/ICMP , LDAP"""
-        self.Input = Input
-        if '/' in self.Input :
-            self.Number , self.Protocol = self.Input.strip().split('/',1)
-            self.Protocol = self.Protocol.upper()
-            try    : self.Number = int(self.Number)
-            except : self.Number = 0
-        else :
-            self.Number   = Get.Port_Number(self.Input)
-            self.Protocol = self.Input if Validate.Port(self.Number) else ''
+from Class import Validator,Decorator
 
-        self.Validate()
-
-        if self.Valid :
-            self.Type          = Get.Port_Type(self.Protocol)
-            self.Protocol      = self.Protocol
-            self.Well_Khown    = Validate.WellKhown(self.Number)
-            self.Default       = Validate.DefaultProtocol(self.Number , self.Protocol)
-
-    def Validate (self) -> None :
-        if   self.Number == 0 and self.Protocol.upper() == 'ICMP'            : self.Valid = True
-        elif self.Number != 0 and self.Protocol.upper() == 'ICMP'            : self.Valid = False
-        elif Validate.Port(self.Number) and Validate.Protocol(self.Protocol) : self.Valid = True
-        else                                                                 : self.Valid = False
-
-    def __str__ (self) -> str :
-        return f'{self.Number}/{self.Protocol}' if self.Valid else self.Input
+class Port(Validator):
+    def __init__(self,Input:int) -> None:
+        super().__init__(Input)
     
-    def __bool__ (self) -> str :
-        return self.Valid
+    @Decorator.Return_False_On_Exception
+    def Validate(self) -> bool :
+        '''
+        port is a number betwen 1 to 65,535
+        '''
+
+        self.Input : int
+
+        if not isinstance(self.Input,int) :
+            self.Error_Message = f'Provided Port must be a integer : {self.Input}'
+            return False
+
+        if self.Input < 1 :
+            self.Error_Message = f'Provided Port can not be smaller than 1 : {self.Input}'
+            return False
+
+        if self.Input > 65535 :
+            self.Error_Message = f'Provided Port can not be bigger than 65535 : {self.Input}'
+            return False
+
+        return True

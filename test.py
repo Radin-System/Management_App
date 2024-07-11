@@ -1,4 +1,4 @@
-from Typing import Username,Password,Domain,IPv4,Email
+from Typing import Username,Password,Domain,Email,IPv4,Port,Mac
 
 if __name__ == '__main__' :
     test_usernames = [
@@ -8,7 +8,20 @@ if __name__ == '__main__' :
         'Mamad Heydari',
         'Mohamm@d',
         'Am!r"',
-        'a'
+        'a',
+        'user_123',
+        'test_user',
+        'john.doe',
+        'admin_user',
+        'user@domain',
+        'root',
+        'guest',
+        '123456',
+        'test123',
+        'sample_user',
+        'username!',
+        'user.name',
+        'test.user'
     ]
 
     test_passwords = [
@@ -16,15 +29,68 @@ if __name__ == '__main__' :
         'asd',
         'Admin',
         'asd@123',
+        'password',
+        '12345',
+        'qwerty',
+        'P@ssw0rd!',
+        'letmein',
+        'admin123',
+        'rootpass',
+        'userpass',
+        'testpass',
+        'simplepass',
+        'complexP@ss',
+        'easy123',
+        'hard2guess',
+        'securePass1!',
+        'passW0rd',
+        'P@ssword123'
     ]
+
     test_domains = [
         'rsto.ir',
         'reza',
         'zabbix.sdiqoifqasdasdasdqwerqwrqdasdasdqwerasdqwfgqegqrgqdfwofid.qofnoqudfdqwfqgerqrg.qfenfoqjenfdqfnqefqegqsafas.qpdfoqdf',
         '-ali.asd',
         'mamad..ali',
-        '7ho.st'
+        '7ho.st',
         'Google.com',
+        'example.com',
+        'test-domain.org',
+        'my-site.net',
+        'sub.domain.co',
+        'invalid_domain',
+        'domain..com',
+        '1invalid-domain',
+        'another-test.org',
+        'sub..domain.com',
+        'valid-domain.ir',
+        'another.invalid.domain',
+        'newdomain.info',
+        'mysite.example'
+    ]
+
+    test_emails = [
+        'Admin@rsto.ir',
+        'Admin@rsto',
+        'Adm$in@rsto.ir',
+        'Admin@@rsto.ir',
+        'Admin',
+        'user@example.com',
+        'test@domain.org',
+        'email@sub.domain.com',
+        'invalid-email',
+        'user@domain',
+        'admin@site',
+        'root@localhost',
+        'test@localhost.local',
+        'guest@guest',
+        'username@domain.com',
+        'user@domain..com',
+        'email@invalid',
+        'user@domain.com.',
+        'user@.domain.com',
+        'user@domain.com..'
     ]
 
     test_ipv4s = [
@@ -35,49 +101,83 @@ if __name__ == '__main__' :
         '172.24.10.1/32',
         '172.42.17/255.255.252.0',
         '172.20.30.2/0.255.255.255',
-
+        '10.0.0.1',
+        '192.168.0.256',
+        '192.168.1',
+        '172.16.0.1',
+        '10.10.10.10/24',
+        '300.300.300.300',
+        '127.0.0.1',
+        'localhost',
+        '192.168.0.1/33',
+        '192.168.1.1/255.255.255.0',
+        'invalid.ip',
+        '192.168.10.10',
+        '172.16.254.1/16'
     ]
 
-    test_emails = [
-        'Admin@rsto.ir',
-        'Admin@rsto',
-        'Adm$in@rsto.ir',
-        'Admin@@rsto.ir',
-        'Admin',
+    test_ports = [
+        1324,
+        123,
+        12657489,
+        1,
+        0,
+        467,
+        80,
+        8080,
+        65536,
+        22,
+        21,
+        443,
+        3306,
+        5432,
+        27017,
+        99999,
+        25,
+        110,
+        53,
+        2049
     ]
 
-    ats = 10*'#'
+    test_macs = [
+        '00:14:22:01:23:45',
+        '01:23:45:67:89:ab',
+        'AA:BB:CC:DD:EE:FF',
+        '00-14-22-01-23-45',
+        '01-23-45-67-89-ab',
+        'aa-bb-cc-dd-ee-ff',
+        '0014.2201.2345',
+        '0123.4567.89ab',
+        'aabb.ccdd.eeff',
+        '00:14:22:01:23:45:67',
+        '01:23:45:67:89:ab:cd',
+        'AA:BB:CC:DD:EE:FF:11',
+        '00-14-22-01-23-45-67',
+        '01-23-45-67-89-ab-cd',
+        'aa-bb-cc-dd-ee-ff-11',
+        '0014.2201.2345.6789',
+        '0123.4567.89ab.cdef',
+        'aabb.ccdd.eeff.gghh',
+        '00:14:22:01:23',
+        '01:23:45:67:89'
+    ]
 
-    print(ats)
-    print(ats)
 
-    for User in test_usernames :
-        try : print(f'Valid Username : {Username(User)}')
-        except ValueError as e : print(f'Invalid Username : {User} : {e}')
+    Tests = [
+        (test_usernames,Username),
+        (test_passwords,Password),
+        (test_domains,Domain),
+        (test_emails,Email),
+        (test_ipv4s,IPv4),
+        (test_ports,Port),
+        (test_macs,Mac),
+    ]
 
-    print(ats)
+    ats = 40*'_'
 
-    for Pass in test_passwords :
-        try : print(f'Valid Password : {Password(Pass)}')
-        except ValueError as e : print(f'Invalid Password : {Pass} : {e}')
-    
-    print(ats)
-
-    for Dom in test_domains :
-        try : print(f'Valid Domain : {Domain(Dom)}')
-        except ValueError as e : print(f'Invalid Domain : {Dom} : {e}')
-    
-    print(ats)
-
-    for ip in test_ipv4s :
-        try : print(f'Valid IPv4 : {IPv4(ip)}')
-        except ValueError as e : print(f'Invalid IPv4 : {ip} : {e}')
-    
-    print(ats)
-
-    for email in test_emails :
-        try : print(f'Valid Email : {Email(email)}')
-        except ValueError as e : print(f'Invalid Email : {email} : {e}')
-    
-    print(ats)
-    print(ats)
+    for Test in Tests :
+        print(ats)
+        print(f'{10*'_'}Testing {Test[1].__name__}')
+        for Item in Test[0] :
+            try : print(f'Valid {Test[1].__name__} : {Test[1](Item)}')
+            except Exception as e: print(f'Invalid {Test[1].__name__} : {e}')
