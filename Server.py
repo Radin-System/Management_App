@@ -1,13 +1,26 @@
 if __name__ == '__main__' :
-    from Global import Main_Config
-    from Global import Main_Logger
-
+    from Global.Class    import Config
+    from Global.Class    import Logger
+    from Global.Constant import CONFIGFILE
+    
     from TaskManager import SimpleTaskManager
     
-    from SQLManager         import SQLAlchemyManager
-    from SQLManager.Models  import Base,Models
+    from SQLManager        import SQLAlchemyManager
+    from SQLManager.Models import Base,Models
 
     from AMIManager import AsteriskAMIManager
+    
+    Main_Config = Config(
+        Config_File = CONFIGFILE,
+        )
+
+    Main_Logger = Logger(
+        Name            = 'Main',
+        Log_File        = Main_Config.Get('GLOBALS','log_file'),
+        Debug_Condition = Main_Config.Get('GLOBALS','debug'),
+        Header          = Main_Config.Get('LOG','log_header'),
+        Time_Format     = Main_Config.Get('LOG','log_time_format'),
+        )
 
     TaskManager = SimpleTaskManager('TaskManager',
         Check_Interval = Main_Config.Get('TASKMANAGER','chck_interval'),
