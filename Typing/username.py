@@ -17,6 +17,10 @@ class Username(Validator):
 
         self.Input:str
 
+        if not isinstance(self.Input,str) :
+            self.Error_Message = 'Provided username must be a string'
+            return False
+
         if not re.match(r'^[a-zA-Z0-9._-]+$' , self.Input) :
             self.Error_Message = 'Provided username only can contain A-Z,a-z,0-9,underscore,dash and dots'
             return False

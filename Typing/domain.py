@@ -17,6 +17,10 @@ class Domain(Validator):
 
         self.Input:str
 
+        if not isinstance(self.Input,str) :
+            self.Error_Message = 'Provided domain must be a string'
+            return False
+
         if not '.' in self.Input :
             self.Error_Message = 'Provided domain must contain one or more dots'
             return False
