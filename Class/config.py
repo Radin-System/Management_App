@@ -1,10 +1,9 @@
 import os
 from typing          import Dict,Any
-from datetime        import datetime
 from configparser    import ConfigParser
-from Global.Function import Convert
-from Global.Class.Network import IPv4,Port
-from Global.Class.Auth import Username,Password
+from . import Convert
+from .Network import IPv4,Port
+from .Auth import Username,Password
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -134,69 +133,3 @@ class Config:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
         self.Config.set(Section, Parameter, str(Value))
         self.Save_Config()
-
-class Component :
-    def __init__(self) -> None:
-        self.Name : str = 'Empty Component'
-        self.Running : bool = None
-
-    def Start_Actions(self) -> None :
-        raise NotImplementedError('Please provide an action for starting the componnet')
-
-    def Stop_Actions(self) -> None:
-        raise NotImplementedError('Please provide an action for stopping the componnet')
-
-    def Start(self) -> None:
-        if not self.Running :
-            self.Running = True
-            self.Start_Actions()
-
-    def Stop(self) -> None:
-        if self.Running :
-            self.Running = False
-            self.Stop_Actions()
-
-    def __bool__(self) -> bool :
-        return self.Running
-
-    def __str__(self) -> str :
-        return f'<Component :{self.Name}>'
-
-    def __repr__(self) -> str:
-        return f'{self.__class__.__name__}("{self.Name}",*Args,**Kwargs)'
-
-class Logger(Component):
-    def __init__(self,*,
-            Name:str,
-            Log_File:str,
-            Debug_Condition:bool,
-            Header:str,
-            Time_Format:str,
-            ) -> None :
-
-        self.Name        = Name
-        self.Log_File    = Log_File
-        self.Condition   = Debug_Condition
-        self.Header      = Header
-        self.Time_Format = Time_Format
-
-        self.Check_Folder()
-
-    def Check_Folder(self) -> None :
-        try :
-            if  not os.path.exists(self.Log_File) :
-                os.mkdir(os.path.dirname(self.Log_File))
-                self(f'Created The Log Folder and File : {self.Log_File}')
-        except FileExistsError : pass
-
-    def __call__(self, Text:str, Formated = True) -> None :
-        Time = datetime.now()
-        LogText = f'{self.Header[0]} {Time.strftime(self.Time_Format)} - {self.Name} : {Text} {self.Header[1]}'.replace('\n','')+'\n' if Formated else Text
-        with open(self.Log_File , mode = 'a') as File : File.write(LogText)
-        if self.Condition : print(LogText , end='')
-    
-    def Start_Actions(self) -> None:
-        pass
-
-    def Stop_Actions(self) -> None:
-        pass

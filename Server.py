@@ -1,8 +1,9 @@
 if __name__ == '__main__' :
-    from Global.Class    import Config
-    from Global.Class    import Logger
-    from Global.Constant import CONFIGFILE
-    
+    CONFIGFILE = '.configfiles/config.ini'
+
+    from Class import Config
+    from Class import Logger
+
     from TaskManager import SimpleTaskManager
     
     from SQLManager        import SQLAlchemyManager

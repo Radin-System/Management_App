@@ -1,10 +1,10 @@
 import sqlalchemy
 import sqlalchemy.orm
 import os
-from Global.Decorator     import Do_Log
-from Global.Class.Auth    import Username , Password
-from Global.Class.Network import IPv4 , Port
-from Global.Class import Component
+from Class.Decorator     import Do_Log
+from Class.Auth    import Username , Password
+from Class.Network import IPv4 , Port
+from Class import Component
 
 class SQLAlchemyManager(Component):
     def __init__(self,Name:str,*,

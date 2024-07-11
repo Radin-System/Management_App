@@ -1,7 +1,7 @@
 import threading , socket , time
-from Global.Class.Auth    import Username,Password
-from Global.Class.Network import IPv4,Port
-from Global.Class import Component
+from Class.Auth      import Username,Password
+from Class.Network   import IPv4,Port
+from Class.Component import Component
 
 class AsteriskAMIManager(Component):
     def __init__(self, Name:str, *,
