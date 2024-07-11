@@ -1,7 +1,6 @@
 import threading , socket , time
-from Class.Auth      import Username,Password
-from Class.Network   import IPv4,Port
-from Class.Component import Component
+from Typing import Username,Password,IPv4,Port
+from Class import Component
 
 class AsteriskAMIManager(Component):
     def __init__(self, Name:str, *,
@@ -32,7 +31,7 @@ class AsteriskAMIManager(Component):
 
     def Connect(self) -> None :
         if not self.Connected :
-            self.Client_Socket.connect((self.Host.IPv4, self.Port.Number))
+            self.Client_Socket.connect((self.Host, self.Port))
             self.Connected = True
             self.Receiver_Thread = threading.Thread(target=self.Receiver)
             self.Receiver_Thread.start()
@@ -45,7 +44,7 @@ class AsteriskAMIManager(Component):
 
     def Login(self) -> None :
         if not self.Authenticated :
-            Response = self.Send_Action('Login', Username = self.Usename.Username, Secret = self.Password.Raw)
+            Response = self.Send_Action('Login', Username = self.Usename, Secret = self.Password)
             if Response :
                 if 'Success' in Response.get('Response') :
                     self.Authenticated = True
