@@ -15,6 +15,10 @@ class Email(Validator):
 
         self.Input:str
 
+        if not isinstance(self.Input,str) :
+            self.Error_Message = 'Provided email must be a string'
+            return False
+
         if not '@' in self.Input :
             self.Error_Message = 'Provided Email must contain an @'
             return False

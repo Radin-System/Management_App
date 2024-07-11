@@ -17,6 +17,10 @@ class Password(Validator):
 
         self.Input:str
 
+        if not isinstance(self.Input,str) :
+            self.Error_Message = 'Provided Password must be a string'
+            return False
+
         if self.Complex :
             self.Score = 0
             if any(Char.islower()        for Char in self.Input) : self.Score += 1

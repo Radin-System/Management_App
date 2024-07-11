@@ -15,6 +15,11 @@ class IPv4(Validator):
 
         self.Input:str
 
+        if not isinstance(self.Input,str) :
+            self.Error_Message = 'Provided IPv4 must be a string'
+            return False
+
+
         if '/' in self.Input :
             if self.Input.count('/') != 1 :
                 self.Error_Message = f'Provided IPv4 and Mask should only contain one slash'
