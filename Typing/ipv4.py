@@ -70,7 +70,7 @@ class IPv4(Validator):
                 return False
         
         elif Mask.isdigit() :
-            if  0 >= Mask >= 32 :
+            if  0 >= int(Mask) >= 32 :
                 self.Error_Message = f'CIDR Mask should be betwean or equal to 0 and 32 : {Mask}'
                 return False    
 
