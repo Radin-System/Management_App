@@ -1,15 +1,25 @@
-mysql-connector-python
-Flask-HTMLmin
-cryptography
-mysqlclient
+## Web Framwork
+flask
 flask_login
+Flask-HTMLmin
+
+## SQL Client
 sqlalchemy
-pyOpenSSL
-paramiko
-psycopg2
+mysql-connector-python
+mysqlclient
 pymysql
 pyodbc
+
+## Global
+pyOpenSSL
+cryptography
 pillow
 ldap3
 pyler
-flask
+paramiko
+psycopg2
+
+## Web Automation
+selenium
+pytesseract
+requests
