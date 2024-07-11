@@ -2,9 +2,6 @@ import os,re
 
 ROOT       = os.getcwd()
 
-
-SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
-
 MAC_PATTERN_MAP = {
     'Hex'    : re.compile(r'^[0-9a-f]{12}$'                       , re.IGNORECASE) , # 1234ABCD5678
     'Dotted' : re.compile(r'^([0-9a-f]{4}[.:-]){2}([0-9a-f]{4})$' , re.IGNORECASE) , # 1234.abcd.5678

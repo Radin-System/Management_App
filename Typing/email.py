@@ -1,23 +1,38 @@
-class Email:
-    def __init__(self , Input : str) -> None : 
-        self.Input = Input.strip()
-        self.User   = ''
-        self.Domain = ''
+from Class import Validator
+from Class import Decorator
+from . import Username,Domain
 
-        if '@' in self.Input :
-            Username , DomainName = self.Input.split('@',1)
-            self.User   = Username(Username)
-            self.Domain = Domain(DomainName)
+class Email(Validator):
+    def __init__(self, Input:str) -> None:
+        super().__init__(Input)
 
-        self.Validate()
-        self.Email         = self.Input if self.Valid else ''
-        self.userPrincipal = self.Email
-
+    @Decorator.Return_False_On_Exception
     def Validate(self) -> None :
-        self.Valid = bool( self.User and self.Domain and Validate.Email(self.Input)) 
+        '''
+        a valid email contains a username an @ and a domain afterwards.
+        Email only contains one @
+        '''
 
-    def __str__ (self) -> str :
-        return f'{self.User.Username}@{self.Domain.Domain}' if self.Valid else self.Input
-    
-    def __bool__ (self) -> bool :
-        return self.Valid
+        self.Input:str
+
+        if not '@' in self.Input :
+            self.Error_Message = 'Provided Email must contain an @'
+            return False
+        
+        if self.Input.count('@') != 1 :
+            self.Error_Message = 'Provided Email should only contain one @'
+            return False
+        
+        User, Dom = self.Input.split('@',1)
+
+        try : Username(User)
+        except Exception as e :
+            self.Error_Message = f'Username Error <{User}> : {str(e)}'
+            return False
+        
+        try : Domain(Dom)
+        except Exception as e :
+            self.Error_Message = f'DomainName Error <{Dom}> : {str(e)}'
+            return False
+        
+        return True

@@ -2,8 +2,8 @@ import os
 from typing          import Dict,Any
 from configparser    import ConfigParser
 from . import Convert
-from .Network import IPv4,Port
-from .Auth import Username,Password
+from . import IPv4,Port
+from . import Username,Password
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}

@@ -1,41 +1,72 @@
-class IPv4 : # Not Compleated
-    def __init__(self , Input : str) -> None : 
-        self.Input = Input.strip()
+import re
+from Class import Validator,Decorator
+
+class IPv4(Validator):
+    def __init__(self, Input:str) -> None:
+        super().__init__(Input)
+
+    @Decorator.Return_False_On_Exception
+    def Validate(self) -> None :
+        """
+        What makes a valid IPv4 address?
+        An IPv4 address has the following format: x . x . x . x where x is called an octet and must be a decimal value between 0 and 255.
+        ip can contain / or space and a CIDR or Subnetmask afterwards
+        """
+
+        self.Input:str
 
         if '/' in self.Input :
-            self.IPv4 , self.Subnet = self.Input.split('/',1)
+            if self.Input.count('/') != 1 :
+                self.Error_Message = f'Provided IPv4 and Mask should only contain one slash'
+                return False
+
+            IP,Mask = self.Input.split('/',1)
+
+        elif ' ' in self.Input :
+            if self.Input.count(' ') != 1 :
+                self.Error_Message = f'Provided IPv4 and Mask should only contain one space'
+                return False
+
+            IP,Mask = self.Input.split(' ',1)
+
         else :
-            self.IPv4 = self.Input
-            self.Subnet = ''
+            IP = self.Input
+            Mask = '255.255.255.255'
 
-        self.Validate()
+        if IP.count('.') != 3 :
+            self.Error_Message = f'Provided IPv4 should contain three dots'
+            return False
 
-        if self.Valid :
-            if self.Subnet :
-                self.CIDR = '/'+self.Subnet if Validate.CIDR('/'+self.Subnet) else Convert.MaskToCIDR(self.Subnet)
-                self.Mask =  self.Subnet    if Validate.Mask(self.Subnet)     else Convert.CIDRToMask('/'+self.Subnet)
-            else :
-                self.CIDR = '/32'
-                self.Mask = '255.255.255.255'
-            self.Position  = Get.Position(self.IPv4,self.CIDR)
-            self.Class     = Get.IP_Class(self.IPv4)
-            self.Type      = Get.IP_Type(self.IPv4)
-            self.NetID     = Get.NetID(self.IPv4,self.CIDR)
-            self.Broadcast = Get.Broadcast(self.IPv4,self.CIDR)
-            self.IPs       = Get.IPs(self.IPv4,self.CIDR)
-            self.Hosts     = self.IPs[1:-1]
-            self.Host      = True if self.CIDR == '/32' or ( self.NetID != self.IPv4 and self.Broadcast != self.IPv4 ) else False
+        Octets = IP.split('.',3)
 
-    def Validate(self) -> None :
-        if Validate.IPv4(self.IPv4):
-            if self.Subnet and ( Validate.Mask(self.Subnet) or Validate.CIDR('/'+self.Subnet) ) : self.Valid = True
-            elif not self.Subnet : self.Valid = True
-            else : self.Valid = False
-        else : self.Valid = False
-    
-    def __str__ (self) -> str :
-        return f'{self.IPv4}/{self.CIDR}' if self.Valid else self.Input
-    
-    def __bool__ (self) -> bool :
-        return self.Valid
-    
+        for Octet in Octets :
+            if not Octet.isdigit(): 
+                self.Error_Message = f'IP Octets must be digits : {Octet}'
+                return False
+            
+            if 0 >= int(Octet) >= 255 :
+                self.Error_Message = f'IP octets must be betwean or equal to 0 and 255 : {Octet}'
+                return False
+
+        if '.' in Mask :
+            if Mask.count('.') != 3 :
+                self.Error_Message = f'Provided subnet Mask should contain three dots'
+                return False
+
+            Mask_Octets = Mask.split('.',3)
+            try : 
+                Binary_Mask = ''.join('{:08b}'.format(int(Octet)) for Octet in Mask_Octets)
+                if not re.match(r'^1*0*$', Binary_Mask) :
+                    self.Error_Message = f'Invalid binary info for Mask : {Mask}'
+                    return False
+                
+            except Exception as e:
+                self.Error_Message = f'Something went wrong while converting subnet mask to binary : {str(e)}'
+                return False
+        
+        elif Mask.isdigit() :
+            if  0 >= Mask >= 32 :
+                self.Error_Message = f'CIDR Mask should be betwean or equal to 0 and 32 : {Mask}'
+                return False    
+
+        return True
