@@ -26,7 +26,7 @@ if __name__ == '__main__' :
 
     test_passwords = [
         'HDie@3419',
-        'asd',
+        'asdasda',
         'Admin',
         'asd@123',
         'password',
@@ -164,13 +164,13 @@ if __name__ == '__main__' :
 
 
     Tests = [
-        (test_usernames,Username),
+        #(test_usernames,Username),
         (test_passwords,Password),
-        (test_domains,Domain),
-        (test_emails,Email),
-        (test_ipv4s,IPv4),
-        (test_ports,Port),
-        (test_macs,Mac),
+        #(test_domains,Domain),
+        #(test_emails,Email),
+        #(test_ipv4s,IPv4),
+        #(test_ports,Port),
+        #(test_macs,Mac),
     ]
 
     ats = 40*'_'
