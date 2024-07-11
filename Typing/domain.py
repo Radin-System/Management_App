@@ -25,6 +25,10 @@ class Domain(Validator):
             self.Error_Message = 'Provided domain must contain one or more dots'
             return False
 
+        if '..' in self.Input :
+            self.Error_Message = 'Provided domain can not contain two dots in a row'
+            return False
+
         if not 4 <= len(self.Input) :
             self.Error_Message = 'Provided domain should have at least 4 charecters'
             return False
@@ -40,7 +44,7 @@ class Domain(Validator):
             return False
 
         for Segment in Segments :
-            if Segment.startswith('-') and Segment.endswith('-'): 
+            if Segment.startswith('-') or Segment.endswith('-'): 
                 self.Error_Message = f'Provided domain segment should not start or end with a "-" : {Segment}'
                 return False
 
