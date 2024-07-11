@@ -1,6 +1,5 @@
 import time,paramiko
-from Class.Auth    import Username,Password
-from Class.Network import Hostname,IPv4,Port
+from Typing import Username,Password,IPv4,Port
 
 class Device :
     def __init__(self,
@@ -23,10 +22,10 @@ class Device :
         self.Connection = paramiko.SSHClient()
         self.Connection.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.Connection.connect(
-            hostname = self.Host.IPv4,
-            port     = self.Port.Number,
-            username = self.Username.Username,
-            password = self.Password.Raw
+            hostname = self.Host,
+            port     = self.Port,
+            username = self.Username,
+            password = self.Password,
             )
         
         self.Shell  = self.Connection.invoke_shell()
