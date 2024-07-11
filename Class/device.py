@@ -1,6 +1,6 @@
 import time,paramiko
-from Global.Class.Auth    import Username,Password
-from Global.Class.Network import Hostname,IPv4,Port
+from Class.Auth    import Username,Password
+from Class.Network import Hostname,IPv4,Port
 
 class Device :
     def __init__(self,

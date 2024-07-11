@@ -2,7 +2,7 @@ import time
 import threading
 import multiprocessing
 from datetime     import datetime, timedelta
-from Global.Class import Component
+from Class.Class import Component
 
 class Task:
     def __init__(
