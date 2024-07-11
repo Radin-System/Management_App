@@ -1,9 +1,10 @@
 import os
 from typing          import Dict,Any
 from configparser    import ConfigParser
+
+from Typing import Username,Password,IPv4,Port
+
 from . import Convert
-from . import IPv4,Port
-from . import Username,Password
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -30,26 +31,11 @@ class Config:
         'chck_interval': 5,
         }
 
-    DEFAULT['LDAPUSER'] = {
-        'use_ssl': False,
-        'validate_ssl': False,
-        }
-
-    DEFAULT['WEBSERVER'] = {
-        'debug': False,
-        'FLASK_DEBUG': False,
-        'bind_ip': '127.0.0.1',
-        'bind_port': 'HTTP',
-        'tls_mode': False,
-        'secret_key': 'd3u15q$w5if^uos*$775ig^njkf02421',  # Test Key
-        'minify_html': True,
-        }
-
     DEFAULT['SQLManager'] = {
         'debug': True,
         'mode': 'SQLITE3',
         'host': '127.0.0.1',
-        'port': '0/ICMP',
+        'port': 0,
         'username': 'admin', # Test Username
         'password': 'asd@123', # Test Password
         'database': 'management_app',
@@ -60,7 +46,7 @@ class Config:
     DEFAULT['AMIMANAGER'] = {
         'debug': False,
         'host': '127.0.0.1',
-        'port': '5038/TCP',
+        'port': 5038,
         'tls_mode': False,
         'username': 'admin', # Test Username
         'password': 'asd@123', # Test Password
