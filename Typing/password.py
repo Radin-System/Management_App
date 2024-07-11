@@ -1,42 +1,35 @@
+from Class import Validator
+from Class import Decorator
+SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
+class Password(Validator):
+    def __init__(self, Input:str, Complex:bool = True) -> None:
+        self.Complex = Complex
+        super().__init__(Input)
 
-class Password :
-    def __init__(self , Input : str ) -> None : 
-        self.Input    = Input
-        self.Crypted  = None
-        self.MD5      = None
-        self.Raw      = None
-        self.Method   = None
-        self.Score    = 0
+    @Decorator.Return_False_On_Exception
+    def Validate(self) -> None:
+        """
+        complex passwords consist of at least seven characters, 
+        including three of the following four character types: uppercase letters, lowercase letters, numeric digits, 
+        and non-alphanumeric characters such as & $ * and !.
+        """
 
-        if   Validate.MD5(self.Input)     : self.Method = 'MD5'
-        elif Validate.Crypted(self.Input) : self.Method = 'Crypted'
-        else                              : self.Method = 'Raw' 
+        self.Input:str
 
-        if   self.Method == 'MD5'     :
-            self.MD5     = self.Input
-            self.Crypted = ''
-            self.Raw     = ''
-        elif self.Method == 'Raw'     : 
-            self.MD5     = Crypto.MD5(self.Input)
-            self.Crypted = Crypto.Encrypt(self.Input)
-            self.Raw     = self.Input
-        elif self.Method == 'Crypted' :
-            self.MD5     = Crypto.MD5(Crypto.Decrypt(self.Input.encode('utf-8')))
-            self.Crypted = self.Input.encode('utf-8')
-            self.Raw     = Crypto.Decrypt(self.Input)
+        if self.Complex :
+            self.Score = 0
+            if any(Char.islower()        for Char in self.Input) : self.Score += 1
+            if any(Char.isupper()        for Char in self.Input) : self.Score += 1
+            if any(Char.isdigit()        for Char in self.Input) : self.Score += 1
+            if any(Char in SPECIAL_CHARS for Char in self.Input) : self.Score += 1
 
-        self.Validate()
+            if self.Input < 7 :
+                self.Error_Message = 'Provided password must contain at least 7 charecters'
+                return False
 
-    def Validate(self) -> None :
-        if any(char.islower()        for char in self.Raw) : self.Score += 1
-        if any(char.isupper()        for char in self.Raw) : self.Score += 1
-        if any(char.isdigit()        for char in self.Raw) : self.Score += 1
-        if any(char in SPECIAL_CHARS for char in self.Raw) : self.Score += 1
-        self.Valid = bool(self.Method == 'MD5' or (self.Score >= 3 and len(self.Raw) >= 7))
+            if self.Score <= 3 :
+                self.Error_Message = 'Provided password does not meet the complexity rules'
+                return False
 
-    def __str__ (self) -> str :
-        return '****'
-    
-    def __bool__ (self) -> bool :
-        return self.Valid
+        return True
