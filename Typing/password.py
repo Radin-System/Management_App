@@ -3,11 +3,10 @@ from Class import Decorator
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
 class Password(Validator):
-    def __init__(self, Input:str, Complex:bool = True) -> None:
-        self.Complex = Complex
+    def __init__(self, Input:str) -> None:
         super().__init__(Input)
 
-    @Decorator.Return_False_On_Exception
+    #@Decorator.Return_False_On_Exception
     def Validate(self) -> None:
         """
         complex passwords consist of at least seven characters, 
@@ -21,19 +20,18 @@ class Password(Validator):
             self.Error_Message = 'Provided Password must be a string'
             return False
 
-        if self.Complex :
-            self.Score = 0
-            if any(Char.islower()        for Char in self.Input) : self.Score += 1
-            if any(Char.isupper()        for Char in self.Input) : self.Score += 1
-            if any(Char.isdigit()        for Char in self.Input) : self.Score += 1
-            if any(Char in SPECIAL_CHARS for Char in self.Input) : self.Score += 1
+        self.Score = 0
+        if any(Char.islower()        for Char in self.Input) : self.Score += 1
+        if any(Char.isupper()        for Char in self.Input) : self.Score += 1
+        if any(Char.isdigit()        for Char in self.Input) : self.Score += 1
+        if any(Char in SPECIAL_CHARS for Char in self.Input) : self.Score += 1
 
-            if self.Input < 7 :
-                self.Error_Message = 'Provided password must contain at least 7 charecters'
-                return False
+        if len(self.Input) < 7 :
+            self.Error_Message = 'Provided password must contain at least 7 charecters'
+            return False
 
-            if self.Score <= 3 :
-                self.Error_Message = 'Provided password does not meet the complexity rules'
-                return False
+        if self.Score <= 3 :
+            self.Error_Message = 'Provided password does not meet the complexity rules'
+            return False
 
         return True
