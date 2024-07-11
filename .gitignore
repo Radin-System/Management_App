@@ -1,5 +1,7 @@
-.log/
-.venv/
-.git/
-.db/
 .configfiles/
+.db/
+.git/
+.github/
+.log/
+.temp/
+.venv/
