@@ -20,17 +20,17 @@ class Password(Validator):
             self.Error_Message = 'Provided Password must be a string'
             return False
 
-        self.Score = 0
-        if any(Char.islower()        for Char in self.Input) : self.Score += 1
-        if any(Char.isupper()        for Char in self.Input) : self.Score += 1
-        if any(Char.isdigit()        for Char in self.Input) : self.Score += 1
-        if any(Char in SPECIAL_CHARS for Char in self.Input) : self.Score += 1
+        Score = 0
+        if any(Char.islower()        for Char in self.Input) : Score += 1
+        if any(Char.isupper()        for Char in self.Input) : Score += 1
+        if any(Char.isdigit()        for Char in self.Input) : Score += 1
+        if any(Char in SPECIAL_CHARS for Char in self.Input) : Score += 1
 
         if len(self.Input) < 7 :
             self.Error_Message = 'Provided password must contain at least 7 charecters'
             return False
 
-        if self.Score <= 3 :
+        if Score < 3 :
             self.Error_Message = 'Provided password does not meet the complexity rules'
             return False
 
