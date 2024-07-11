@@ -63,7 +63,7 @@ class AsteriskAMIManager(Component):
                 if 'Goodbye' in Response.get('Response') : self.Logger('Loged off Succsessfuly')
                 else : self.Logger('Unsuccsessful Logoff - Still changing flag to logedoff')
                 
-    def Event_Parser(self,Event:str) -> dict | None :
+    def Event_Parser(self, Event:str) -> dict | None:
         Lines = Event.strip().split('\r\n')
         Operation = {}
         for Line in Lines:
@@ -75,7 +75,7 @@ class AsteriskAMIManager(Component):
     def Receiver(self) -> None:
         Buffer = b''
         while self.Running and self.Connected:
-            Data = self.Client_Socket.recv(256)
+            Data = self.Client_Socket.recv(2048)
             Buffer += Data
             while b'\r\n\r\n' in Buffer :
                 Raw_Operation , Buffer = Buffer.split(b'\r\n\r\n', 1)
@@ -85,8 +85,7 @@ class AsteriskAMIManager(Component):
                         New_Event = threading.Thread(target=self.Handel_Event , args=(Operation,) )
                         New_Event.start()
 
-
-    def Handel_Event(self , Event : dict) -> None :
+    def Handel_Event(self, Event:dict) -> None:
         try :
             self.Logger(f'New Event : {Event.get('Event')}')
             Functions = __import__(name = '_Globals.Functions.AMI.Responses' , fromlist=[Event.get('Event')])
@@ -95,7 +94,7 @@ class AsteriskAMIManager(Component):
         except ImportError    : self.Logger('Action Not Found')
         except Exception as e : self.Logger(f'Unable to react to the Event : {e}')
 
-    def Send_Action(self , Act , **kwargs) -> dict | None:
+    def Send_Action(self, Act, **kwargs) -> dict | None:
         if     self.ActionId > self.Max_ActionID : self.ActionId = 1
         else : self.ActionId += 1
         Action = f'Action: {Act}\r\n'
