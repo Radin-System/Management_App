@@ -6,4 +6,5 @@ from .device import Device
 from .exception import CustomException
 from .ImageReader import ImageReader
 from .logger import Logger
+from .task import Task
 from .validator import Validator

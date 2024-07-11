@@ -1,10 +1,6 @@
-import sqlalchemy
-import sqlalchemy.orm
-import os
-from Class.Decorator     import Do_Log
-from Class.Auth    import Username , Password
-from Class.Network import IPv4 , Port
-from Class import Component
+import os,sqlalchemy,sqlalchemy.orm
+from Typing import Username,Password,IPv4,Port
+from Class import Component,Decorator
 
 class SQLAlchemyManager(Component):
     def __init__(self,Name:str,*,
@@ -34,21 +30,21 @@ class SQLAlchemyManager(Component):
             except : return False
         return False
 
-    @Do_Log('Creating engine...','Done!')
+    @Decorator.Do_Log('Creating engine...','Done!')
     def Create_Engine(self) :
-        if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}',echo=self.Verbose)
-        elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'        ,echo=self.Verbose)
-        elif self.Mode == 'POSTGRE' : self.Engine = sqlalchemy.create_engine(f'postgresql+psycopg2://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}' ,echo=self.Verbose)
-        elif self.Mode == 'MARIADB' : self.Engine = sqlalchemy.create_engine(f'mysql+pymysql://{self.Username.Username}:{self.Password.Raw}@{self.Host.IPv4}:{self.Port.Number}/{self.DataBase}'       ,echo=self.Verbose)
-        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(self.SQLite_Path,self.DataBase)}.db'                                                            ,echo=self.Verbose)
+        if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}',echo=self.Verbose)
+        elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}'        ,echo=self.Verbose)
+        elif self.Mode == 'POSTGRE' : self.Engine = sqlalchemy.create_engine(f'postgresql+psycopg2://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}' ,echo=self.Verbose)
+        elif self.Mode == 'MARIADB' : self.Engine = sqlalchemy.create_engine(f'mysql+pymysql://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}'       ,echo=self.Verbose)
+        else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(self.SQLite_Path,self.DataBase)}.db'                                   ,echo=self.Verbose)
         if self.Connected() : self.Base.metadata.create_all(self.Engine)
         else                : self.Logger('Engine Faild')
     
-    @Do_Log('Initiating Base','Done!')
+    @Decorator.Do_Log('Initiating Base','Done!')
     def Init_Base(self , Base) :
         self.Base = Base
     
-    @Do_Log('Initiating SQL Models...' , 'Initiation Compleated !')
+    @Decorator.Do_Log('Initiating SQL Models...' , 'Initiation Compleated !')
     def Init_Models(self, Models : list) -> None:
         if self.Base :
             for Model in Models : 
@@ -150,10 +146,10 @@ class SQLAlchemyManager(Component):
             if 'Session' in locals() and Session : Session.close()
             raise e
 
-    @Do_Log('Starting...','Done!')
+    @Decorator.Do_Log('Starting...','Done!')
     def Start_Actions(self):
         pass
     
-    @Do_Log('Stopping...','Done!')
+    @Decorator.Do_Log('Stopping...','Done!')
     def Stop_Actions(self):
         self.Engine = None
