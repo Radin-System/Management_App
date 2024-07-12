@@ -2,10 +2,6 @@ import os
 from typing          import Dict,Any
 from configparser    import ConfigParser
 
-from Typing import Username,Password,IPv4,Port
-
-from . import Convert
-
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
 
@@ -102,18 +98,11 @@ class Config:
 
         Value = self.Config.get(Section,Parameter)
 
-        if   Value.lower() in ['none','null'] : Value = None
-        elif Value.lower() in ['true','yes']  : Value = True
-        elif Value.lower() in ['false','no']  : Value = False
-        elif Value.isdigit()                  : Value = int(Value)
-
-        if   Parameter == 'host'        : return IPv4(Value)
-        elif Parameter == 'port'        : return Port(Value)
-        elif Parameter == 'username'    : return Username(Value)
-        elif Parameter == 'password'    : return Password(Value)
-        elif Parameter.endswith('_csv') : return Convert.CSVToList(Value)
-
-        else : return Value
+        if   Value.lower() in ['none','null'] : return None
+        elif Value.lower() in ['true','yes']  : return True
+        elif Value.lower() in ['false','no']  : return False
+        elif Value.isdigit()                  : return int(Value)
+        else                                  : return Value
 
     def Set(self, Section, Parameter, Value) -> None:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)

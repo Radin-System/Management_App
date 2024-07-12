@@ -1,6 +1,7 @@
-from Class import Validator
-from Class import Decorator
-from . import Username,Domain
+from Class.validator import Validator
+from Class.decorator import Decorator
+from .domain import Domain
+from .username import Username
 
 class Email(Validator):
     def __init__(self, Input:str) -> None:

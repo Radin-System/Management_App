@@ -1,8 +1,8 @@
 if __name__ == '__main__' :
     CONFIGFILE = '.configfiles/config.ini'
 
-    from Class import Config
-    from Class import Logger
+    from Class.config import Config
+    from Class.logger import Logger
 
     from TaskManager import SimpleTaskManager
     

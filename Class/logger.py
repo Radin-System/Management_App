@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from . import Component
+from .component import Component
 
 class Logger(Component):
     def __init__(self,*,

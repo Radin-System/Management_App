@@ -1,6 +1,6 @@
 import re
-from Class import Validator
-from Class import Decorator
+from Class.validator import Validator
+from Class.decorator import Decorator
 
 class Username(Validator):
     def __init__(self, Input:str) -> None:

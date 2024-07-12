@@ -1,11 +1,3 @@
-"""
-class Template(CustomError):
-    '''Exception raised for specific error conditions.'''
-    def __init__(self, message):
-        self.message = message
-        super().__init__(self.message)
-"""
-
 class CustomException:
     class CustomError(Exception):
         """Base class for custom exceptions."""
