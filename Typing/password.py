@@ -1,12 +1,13 @@
-from Class import Validator
-from Class import Decorator
+from Class.validator import Validator
+from Class.decorator import Decorator
+
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"
 
 class Password(Validator):
     def __init__(self, Input:str) -> None:
         super().__init__(Input)
 
-    #@Decorator.Return_False_On_Exception
+    @Decorator.Return_False_On_Exception
     def Validate(self) -> None:
         """
         complex passwords consist of at least seven characters, 

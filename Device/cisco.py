@@ -1,6 +1,8 @@
 from Class.device  import Device
-from Class.Auth    import Username , Password
-from Class.Network import Hostname, IPv4 , Port
+from Typing.username import Username
+from Typing.password import Password
+from Typing.ipv4 import IPv4
+from Typing.port import Port
 
 class Cisco(Device):
     def __init__(self,*,

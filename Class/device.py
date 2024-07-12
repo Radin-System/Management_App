@@ -1,5 +1,8 @@
 import time,paramiko
-from Typing import Username,Password,IPv4,Port
+from Typing.username import Username
+from Typing.password import Password
+from Typing.ipv4 import IPv4
+from Typing.port import Port
 
 class Device :
     def __init__(self,

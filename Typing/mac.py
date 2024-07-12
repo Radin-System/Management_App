@@ -1,5 +1,6 @@
 import re
-from Class import Validator,Decorator
+from Class.validator import Validator
+from Class.decorator import Decorator
 
 MAC_SPECIALS = '.-:,'
 

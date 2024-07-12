@@ -1,7 +1,7 @@
 import time
 import threading
-
-from Class import Component,Task
+from Class.component import Component
+from Class.task import Task
 
 class SimpleTaskManager(Component):
     def __init__(self, Name:str, *,
