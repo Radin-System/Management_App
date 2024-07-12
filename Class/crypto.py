@@ -1,5 +1,5 @@
-import hashlib
-
+import os,hashlib
+from cryptography.fernet import Fernet
 class Crypto :
 
     @staticmethod
