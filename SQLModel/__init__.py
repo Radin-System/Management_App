@@ -21,6 +21,5 @@ class ownerMixin(Base):
     owner_id = CustomColumn()
     owner = relationship()
 
-
 Models = [
 ]

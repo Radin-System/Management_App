@@ -1,5 +1,4 @@
 import os,sqlalchemy,sqlalchemy.orm
-from Class.device  import Device
 from Typing.username import Username
 from Typing.password import Password
 from Typing.ipv4 import IPv4
@@ -17,6 +16,8 @@ class SQLAlchemyManager(Component):
             Mode:str,
             SQLite_Path:str,
             Verbose:bool,
+            Base,
+            Models:list,
             ) -> None :
 
         self.Name        = Name
@@ -28,6 +29,9 @@ class SQLAlchemyManager(Component):
         self.Mode        = Mode
         self.SQLite_Path = SQLite_Path
         self.Verbose     = Verbose
+        self.Init_Base(Base = Base)
+        self.Create_Engine()
+        self.Init_Models(Models = Models)
 
     def Connected(self) -> bool:
         if self.Engine :
