@@ -1,4 +1,10 @@
-from Typing import Username,Password,Domain,Email,IPv4,Port,Mac
+from Typing.domain import Domain
+from Typing.email import Email
+from Typing.ipv4 import IPv4
+from Typing.mac import Mac
+from Typing.password import Password
+from Typing.port import Port
+from Typing.username import Username
 
 if __name__ == '__main__' :
     test_usernames = [
