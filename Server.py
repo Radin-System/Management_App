@@ -6,11 +6,11 @@ if __name__ == '__main__' :
 
     from TaskManager import SimpleTaskManager
     
-    from SQLManager        import SQLAlchemyManager
-    from SQLManager.Models import Base,Models
+    from SQLManager import SQLAlchemyManager
+    from SQLModel   import Base,Models
 
     from AMIManager import AsteriskAMIManager
-    
+
     Main_Config = Config(
         Config_File = CONFIGFILE,
         )
@@ -26,7 +26,7 @@ if __name__ == '__main__' :
     TaskManager = SimpleTaskManager('TaskManager',
         Check_Interval = Main_Config.Get('TASKMANAGER','chck_interval'),
         )
-    
+
     SQLManager = SQLAlchemyManager('SQLManager',
         Host        = Main_Config.Get('SQLMANAGER','host'),
         Port        = Main_Config.Get('SQLMANAGER','port'), 
@@ -36,10 +36,9 @@ if __name__ == '__main__' :
         Mode        = Main_Config.Get('SQLMANAGER','mode'),
         SQLite_Path = Main_Config.Get('SQLMANAGER','sqlite_path'),
         Verbose     = Main_Config.Get('SQLMANAGER','verbose'),
+        Base        = Base ,
+        Models      = Models ,
         )
-    SQLManager.Init_Base(Base = Base)
-    SQLManager.Create_Engine()
-    SQLManager.Init_Models(Models = Models)
 
     AMIManager = AsteriskAMIManager('AMIManager',
         Host            = Main_Config.Get('AMIMANAGER','host'),
