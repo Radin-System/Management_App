@@ -27,7 +27,7 @@ if __name__ == '__main__' :
         'sample_user',
         'username!',
         'user.name',
-        'test.user'
+        'test.user',
     ]
 
     test_passwords = [
@@ -50,7 +50,7 @@ if __name__ == '__main__' :
         'hard2guess',
         'securePass1!',
         'passW0rd',
-        'P@ssword123'
+        'P@ssword123',
     ]
 
     test_domains = [
@@ -73,7 +73,7 @@ if __name__ == '__main__' :
         'valid-domain.ir',
         'another.invalid.domain',
         'newdomain.info',
-        'mysite.example'
+        'mysite.example',
     ]
 
     test_emails = [
@@ -96,7 +96,7 @@ if __name__ == '__main__' :
         'email@invalid',
         'user@domain.com.',
         'user@.domain.com',
-        'user@domain.com..'
+        'user@domain.com..',
     ]
 
     test_ipv4s = [
@@ -119,7 +119,7 @@ if __name__ == '__main__' :
         '192.168.1.1/255.255.255.0',
         'invalid.ip',
         '192.168.10.10',
-        '172.16.254.1/16'
+        '172.16.254.1/16',
     ]
 
     test_ports = [
@@ -142,7 +142,7 @@ if __name__ == '__main__' :
         25,
         110,
         53,
-        2049
+        2049,
     ]
 
     test_macs = [
@@ -165,9 +165,8 @@ if __name__ == '__main__' :
         '0123.4567.89ab.cdef',
         'aabb.ccdd.eeff.gghh',
         '00:14:22:01:23',
-        '01:23:45:67:89'
+        '01:23:45:67:89',
     ]
-
 
     Tests = [
         (test_usernames,Username),
