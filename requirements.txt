@@ -1,15 +1,3 @@
-## Web Framwork
-flask
-flask_login
-Flask-HTMLmin
-
-## SQL Client
-sqlalchemy
-mysql-connector-python
-mysqlclient
-pymysql
-pyodbc
-
 ## Global
 pyOpenSSL
 cryptography
@@ -18,6 +6,13 @@ ldap3
 pyler
 paramiko
 psycopg2
+
+## SQL Client
+sqlalchemy
+mysql-connector-python
+mysqlclient
+pymysql
+pyodbc
 
 ## Web Automation
 selenium
