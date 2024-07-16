@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.service import Service
-from Class.ImageReader import ImageReader
+from Class.image import ImageReader
 
 class WebBot:
     def __init__(self,Driver_Path:str,Base_URL) -> None:
