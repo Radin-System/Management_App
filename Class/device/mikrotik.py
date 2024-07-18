@@ -1,8 +1,8 @@
 from . import Device
 
 class Mikrotik(Device):
-    def __init__(self,*Args,**Kwargs) -> None:
-        super().__init__(*Args,**Kwargs)
+    def __init__(self, Name, *, Host: str, Port: int, Username: str, Password: str) -> None:
+        super().__init__(Name, Host=Host, Port=Port, Username=Username, Password=Password)
 
     def Get_Hostname(self) -> str:
         return self.Connection.Send('system identity print').replace('name:','').strip()

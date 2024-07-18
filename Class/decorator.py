@@ -29,7 +29,7 @@ class Decorator :
     def Running_Reqired(Function) -> callable :
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
-            if not Args[0].Is_Running(): raise Exception(f'The component must be started to preform this action<{Function.__name__}> : {Args[0].Name}')
+            if not Args[0].Is_Running(): raise Exception(f'The component must be started to preform this action<{Function.__name__}>')
             Result = Function(*Args, **Kwargs)
             return Result
         return Wrapper
@@ -38,7 +38,7 @@ class Decorator :
     def Connection_Reqired(Function) -> callable :
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
-            if not Args[0].Is_Connected(): raise ConnectionError(f'no connection to preform this action <{Function.__name__}> : {Args[0].Name}')
+            if not Args[0].Is_Connected(): raise ConnectionError(f'no connection to preform this action <{Function.__name__}>')
             Result = Function(*Args, **Kwargs)
             return Result
         return Wrapper

@@ -10,10 +10,8 @@ class SSH(Connection) :
 
         self.Client = paramiko.SSHClient()
         self.Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.Shell  = self.Client.invoke_shell()
-        self.Banner = self.Client.get_transport().remote_version
         self.Terminal = ''
-
+        self.Shell = None
         self.Excute_Mode:bool = True
 
     def Connect(self) -> None :
@@ -23,6 +21,9 @@ class SSH(Connection) :
             username = self.Username,
             password = self.Password,
             )
+
+        self.Shell  = self.Client.invoke_shell()
+        self.Banner = self.Client.get_transport().remote_version
 
     @Decorator.Connection_Reqired
     def Receive(self) -> str :
