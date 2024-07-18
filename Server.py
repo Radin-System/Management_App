@@ -22,11 +22,11 @@ if __name__ == '__main__' :
         Time_Format     = Main_Config.Get('LOG','log_time_format'),
         )
 
-    Main_TaskManager = TaskManager('TaskManager',
+    Main_TaskManager = TaskManager(
         Check_Interval = Main_Config.Get('TASKMANAGER','chck_interval'),
         )
 
-    Main_SQLManager = SQLManager('SQLManager',
+    Main_SQLManager = SQLManager(
         Host        = Main_Config.Get('SQLMANAGER','host'),
         Port        = Main_Config.Get('SQLMANAGER','port'),
         Username    = Main_Config.Get('SQLMANAGER','username'),
@@ -39,7 +39,7 @@ if __name__ == '__main__' :
         Models      = Models ,
         )
 
-    Main_AMIManager = AMIManager('AMIManager',
+    Main_AMIManager = AMIManager(
         Host            = Main_Config.Get('AMIMANAGER','host'),
         Port            = Main_Config.Get('AMIMANAGER','port'),
         Username        = Main_Config.Get('AMIMANAGER','username'),

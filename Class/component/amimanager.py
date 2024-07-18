@@ -2,7 +2,7 @@ import threading,socket,time
 from . import Component
 
 class AMIManager(Component):
-    def __init__(self, Name:str, *,
+    def __init__(self,*,
             Host:str,
             Port:int,
             Username:str,
@@ -12,7 +12,6 @@ class AMIManager(Component):
             Max_ActionID:int,
             ) -> None:
 
-        self.Name         = Name
         self.Host         = Host
         self.Port         = Port
         self.Usename      = Username

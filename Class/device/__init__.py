@@ -1,9 +1,7 @@
 from Class.connection import Connection
 
 class Device :
-    def __init__(self,Name:str) -> None:
-        self.Name = Name
-
+    def __init__(self) -> None:
         self.Logger = print
         self.Connection:Connection = None
 
@@ -18,7 +16,7 @@ class Device :
         self.Connection_Type = self.Connection.__class__.__name__
 
     def __str__(self) -> str :
-        return f'<Component :{self.Name}>'
+        return f'<Component :{self.__name__}>'
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}("{self.Name}",*Args,**Kwargs)'
+        return f'{self.__class__.__name__}("{self.__name__}",*Args,**Kwargs)'

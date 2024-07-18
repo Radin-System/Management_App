@@ -4,7 +4,7 @@ from Class.component import Component
 from Class.decorator import Decorator
 
 class SQLManager(Component):
-    def __init__(self,Name:str,*,
+    def __init__(self,*,
             Host:str,
             Port:int,
             Username:str,
@@ -17,7 +17,6 @@ class SQLManager(Component):
             Models:list,
             ) -> None :
 
-        self.Name        = Name
         self.Host        = Host
         self.Port        = Port
         self.Username    = Username

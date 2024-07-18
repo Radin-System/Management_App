@@ -2,7 +2,6 @@ from typing import Callable
 
 class Component :
     def __init__(self) -> None:
-        self.Name:str = 'Empty Component'
         self.Running:bool = None
         self.Logger:Callable = print
 
@@ -35,7 +34,7 @@ class Component :
         return self.Running
 
     def __str__(self) -> str :
-        return f'<Component :{self.Name}>'
+        return f'<Component :{self.__name__}>'
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}("{self.Name}",*Args,**Kwargs)'
+        return f'{self.__class__.__name__}("{self.__name__}",*Args,**Kwargs)'

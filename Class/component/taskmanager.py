@@ -4,13 +4,11 @@ from Class.component import Component
 from Class.task import Task
 
 class TaskManager(Component):
-    def __init__(self, Name:str, *,
+    def __init__(self,*,
             Check_Interval:int|float
             ) -> None:
-        
-        self.Name = Name
+
         self.Check_Interval = Check_Interval
-        
         self.Tasks : list[Task] = []
         self.Thread = threading.Thread(target=self.Main_Loop)
 
