@@ -1,14 +1,15 @@
+from Class.connection import Connection
 from . import Device
 
 class Cisco(Device):
-    def __init__(self,*Args,Enable:str,**Kwargs) -> None:
+    def __init__(self, Name:str, *, Enable:str) -> None:
+        super().__init__(Name)
         self.Enable = Enable
-        super().__init__(*Args,**Kwargs)
 
-    def Connect(self,*Args,**Kwargs) -> None:
-        Func = super().Connect(*Args,**Kwargs)
-        self.Connection.Excute_Mode = True
-        return Func
+    def Connect(self, via:Connection, *, Host:str, Port:int, Username:str, Password:str) -> None:
+        Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
+        if self.Connection_Type == 'SSH' : self.Connection.Excute_Mode = False
+        return Result
 
     def Prepare_Terminal(self) -> None:
         self.Set_State('privileged')
