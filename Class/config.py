@@ -27,7 +27,7 @@ class Config:
         'chck_interval': 5,
         }
 
-    DEFAULT['SQLManager'] = {
+    DEFAULT['SQLMANAGER'] = {
         'debug': True,
         'mode': 'SQLITE3',
         'host': '127.0.0.1',
