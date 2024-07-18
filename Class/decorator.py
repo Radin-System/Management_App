@@ -26,7 +26,7 @@ class Decorator :
         return Inner
 
     @staticmethod
-    def Running_Reqired(Function) -> callable :
+    def Running_Required(Function) -> callable :
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
             if not Args[0].Is_Running(): raise Exception(f'The component must be started to preform this action<{Function.__name__}>')
@@ -35,7 +35,7 @@ class Decorator :
         return Wrapper
 
     @staticmethod
-    def Connection_Reqired(Function) -> callable :
+    def Connection_Required(Function) -> callable :
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
             if not Args[0].Is_Connected(): raise ConnectionError(f'no connection to preform this action <{Function.__name__}>')
