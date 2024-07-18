@@ -3,7 +3,7 @@ import threading
 from Class.component import Component
 from Class.task import Task
 
-class SimpleTaskManager(Component):
+class TaskManager(Component):
     def __init__(self, Name:str, *,
             Check_Interval:int|float
             ) -> None:

@@ -3,7 +3,7 @@ import os,sqlalchemy,sqlalchemy.orm
 from Class.component import Component
 from Class.decorator import Decorator
 
-class SQLAlchemyManager(Component):
+class SQLManager(Component):
     def __init__(self,Name:str,*,
             Host:str,
             Port:int,

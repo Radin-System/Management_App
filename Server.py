@@ -4,9 +4,9 @@ if __name__ == '__main__' :
     from Class.config import Config
     from Class.component.logger import Logger
 
-    from Class.component.taskmanager import SimpleTaskManager
+    from Class.component.taskmanager import TaskManager
     
-    from Class.component.sqlmanager import SQLAlchemyManager
+    from Class.component.sqlmanager import SQLManager
     from Models   import Base,Models
 
     from Class.component.amimanager import AMIManager
@@ -23,11 +23,11 @@ if __name__ == '__main__' :
         Time_Format     = Main_Config.Get('LOG','log_time_format'),
         )
 
-    TaskManager = SimpleTaskManager('TaskManager',
+    Main_TaskManager = TaskManager('TaskManager',
         Check_Interval = Main_Config.Get('TASKMANAGER','chck_interval'),
         )
 
-    SQLManager = SQLAlchemyManager('SQLManager',
+    Main_SQLManager = SQLManager('SQLManager',
         Host        = Main_Config.Get('SQLMANAGER','host'),
         Port        = Main_Config.Get('SQLMANAGER','port'), 
         Username    = Main_Config.Get('SQLMANAGER','username'), 
@@ -40,7 +40,7 @@ if __name__ == '__main__' :
         Models      = Models ,
         )
 
-    AMIManager = AMIManager('AMIManager',
+    Main_AMIManager = AMIManager('AMIManager',
         Host            = Main_Config.Get('AMIMANAGER','host'),
         Port            = Main_Config.Get('AMIMANAGER','port'),
         Username        = Main_Config.Get('AMIMANAGER','username'),
