@@ -3,8 +3,7 @@ from datetime import datetime
 from . import Component
 
 class Logger(Component):
-    def __init__(self,*,
-            Name:str,
+    def __init__(self,Name:str,*,
             Log_File:str,
             Debug_Condition:bool,
             Header:str,

@@ -15,8 +15,7 @@ if __name__ == '__main__' :
         Config_File = CONFIGFILE,
         )
 
-    Main_Logger = Logger(
-        Name            = 'Main',
+    Main_Logger = Logger('Main',
         Log_File        = Main_Config.Get('GLOBALS','log_file'),
         Debug_Condition = Main_Config.Get('GLOBALS','debug'),
         Header          = Main_Config.Get('LOG','log_header'),
