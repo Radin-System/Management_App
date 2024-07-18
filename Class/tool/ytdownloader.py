@@ -1,6 +1,6 @@
 from pytube import YouTube,Playlist
 
-class YouTubeDownloader :
+class YTDownloader :
     def __init__(self, Name:str) -> None:
         self.Name = Name
 
