@@ -98,11 +98,11 @@ class Config:
 
         Value = self.Config.get(Section,Parameter)
 
-        if   Value.lower() in ['none','null'] : return Fallback
-        elif Value.lower() in ['true','yes']  : return True
-        elif Value.lower() in ['false','no']  : return False
-        elif Value.isdigit()                  : return int(Value)
-        else                                  : return Value
+        if   Value.lower() in ['none','null','']: return Fallback
+        elif Value.lower() in ['true','yes']: return True
+        elif Value.lower() in ['false','no']: return False
+        elif Value.isdigit(): return int(Value)
+        else: return Value
 
     def Set(self, Section, Parameter, Value) -> None:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
