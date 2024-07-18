@@ -1,17 +1,14 @@
 import os,sqlalchemy,sqlalchemy.orm
-from Typing.username import Username
-from Typing.password import Password
-from Typing.ipv4 import IPv4
-from Typing.port import Port
+
 from Class.component import Component
 from Class.decorator import Decorator
 
 class SQLAlchemyManager(Component):
     def __init__(self,Name:str,*,
-            Host:IPv4,
-            Port:Port,
-            Username:Username,
-            Password:Password,
+            Host:str,
+            Port:int,
+            Username:str,
+            Password:str,
             DataBase:str,
             Mode:str,
             SQLite_Path:str,

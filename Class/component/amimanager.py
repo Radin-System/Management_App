@@ -1,16 +1,12 @@
-import threading , socket , time
-from Typing.username import Username
-from Typing.password import Password
-from Typing.ipv4 import IPv4
-from Typing.port import Port
-from Class.component import Component
+import threading,socket,time
+from . import Component
 
-class AsteriskAMIManager(Component):
+class AMIManager(Component):
     def __init__(self, Name:str, *,
-            Host:IPv4,
-            Port:Port,
-            Username:Username,
-            Password:Password,
+            Host:str,
+            Port:int,
+            Username:str,
+            Password:str,
             Event_Whitelist:list,
             Timeout:int,
             Max_ActionID:int,
