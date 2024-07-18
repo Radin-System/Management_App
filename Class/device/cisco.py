@@ -1,4 +1,4 @@
-from Class.device  import Device
+from . import Device
 
 class Cisco(Device):
     def __init__(self,*Args,Enable:str,**Kwargs) -> None:
