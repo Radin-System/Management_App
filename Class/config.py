@@ -98,7 +98,7 @@ class Config:
 
         Value = self.Config.get(Section,Parameter)
 
-        if   Value.lower() in ['none','null'] : return None
+        if   Value.lower() in ['none','null'] : return Fallback
         elif Value.lower() in ['true','yes']  : return True
         elif Value.lower() in ['false','no']  : return False
         elif Value.isdigit()                  : return int(Value)
