@@ -2,14 +2,14 @@ if __name__ == '__main__' :
     CONFIGFILE = '.configfiles/config.ini'
 
     from Class.config import Config
-    from Class.logger import Logger
+    from Class.component.logger import Logger
 
-    from TaskManager import SimpleTaskManager
+    from Class.component.taskmanager import SimpleTaskManager
     
-    from SQLManager import SQLAlchemyManager
-    from SQLModel   import Base,Models
+    from Class.component.sqlmanager import SQLAlchemyManager
+    from Models   import Base,Models
 
-    from AMIManager import AsteriskAMIManager
+    from Class.component.amimanager import AMIManager
 
     Main_Config = Config(
         Config_File = CONFIGFILE,
@@ -40,7 +40,7 @@ if __name__ == '__main__' :
         Models      = Models ,
         )
 
-    AMIManager = AsteriskAMIManager('AMIManager',
+    AMIManager = AMIManager('AMIManager',
         Host            = Main_Config.Get('AMIMANAGER','host'),
         Port            = Main_Config.Get('AMIMANAGER','port'),
         Username        = Main_Config.Get('AMIMANAGER','username'),

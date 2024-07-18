@@ -5,8 +5,8 @@ from Class.decorator import Decorator
 from . import Connection
 
 class SSH(Connection) :
-    def __init__(self, *Args, **Kwargs) -> None:
-        super().__init__(*Args, **Kwargs)
+    def __init__(self,*, Host: str, Port: int, Username: str, Password: str) -> None:
+        super().__init__(Host=Host, Port=Port, Username=Username, Password=Password)
 
         self.Client = paramiko.SSHClient()
         self.Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
