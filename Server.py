@@ -29,8 +29,8 @@ if __name__ == '__main__' :
 
     Main_SQLManager = SQLManager('SQLManager',
         Host        = Main_Config.Get('SQLMANAGER','host'),
-        Port        = Main_Config.Get('SQLMANAGER','port'), 
-        Username    = Main_Config.Get('SQLMANAGER','username'), 
+        Port        = Main_Config.Get('SQLMANAGER','port'),
+        Username    = Main_Config.Get('SQLMANAGER','username'),
         Password    = Main_Config.Get('SQLMANAGER','password'),
         DataBase    = Main_Config.Get('SQLMANAGER','database'),
         Mode        = Main_Config.Get('SQLMANAGER','mode'),
