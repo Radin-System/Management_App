@@ -28,4 +28,4 @@ class Connection :
         return f'<Connection :{self.__class__.__name__}>'
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__}(Host={self.Host},Port={self.Port})'
+        return f'{self.__class__.__name__}(*args,**Kwargs)'

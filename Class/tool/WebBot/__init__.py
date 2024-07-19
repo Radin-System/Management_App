@@ -5,8 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.service import Service
+from Class.tool import Tool
 
-class WebBot:
+class WebBot(Tool):
     def __init__(self,Driver_Path:str,Base_URL) -> None:
         self.Driver_Path = Driver_Path
         self.Base_URL = Base_URL
