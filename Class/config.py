@@ -14,11 +14,11 @@ class Config:
         'debug': True,
         'development_mode':True,
         'log_file': '.log/main.txt',
-        'name' : 'RSTO',
-        'version' : '1.1b',
+        'name': 'RSTO',
+        'version': '1.1b',
         'language': 'fa',
-        'ignored_csv': '.configfiles,.temp,.log,.db',
-        'develop_files_csv':'.temp,.log,.db'
+        'temp_foldes_csv':'.temp,',
+        'develop_files_csv':'.temp,.log,.db',
         }
 
     DEFAULT['LOG'] = {
@@ -61,6 +61,7 @@ class Config:
         self.Load_Config()
         self.Set_Enviroment()
         self.Check_Development_Mode()
+        self.Remove_Temp_Folders()
         self.Create_Ignored_Folders()
 
     def Load_Config(self) -> None:
@@ -117,15 +118,22 @@ class Config:
         self.Save_Config()
 
     def Create_Ignored_Folders(self) -> None:
-        Folders = self.Get('GLOBALS','ignored_csv',[])
-        for Folder in Folders :
-            if not os.path.exists(Folder) : os.makedirs(Folder)
-    
+        with open('.gitignore') as Ignored:
+            for Line in Ignored.readlines() :
+                Folder = Line.strip().replace('/','')
+                if not os.path.exists(Folder) :
+                    os.mkdir(Folder)
+
     def Check_Development_Mode(self) -> None:
         Development_Mode = self.Get('GLOBALS','development_mode',False)
         if Development_Mode :
-            print('Warning , The application is running in Development mode, All logs,databases,configs will be recreated on next run')
+            print('Warning, The application is running in Development mode, All logs,databases,configs will be recreated on next run')
             Folders = self.Get('GLOBALS','develop_files_csv',[])
             print('Removing following folders :',Folders)
             for Folder in Folders :
                 shutil.rmtree(Folder)
+    
+    def Remove_Temp_Folders(self) -> None:
+        Folders = self.Get('GLOBALS','temp_foldes_csv',[])
+        for Folder in Folders :
+            shutil.rmtree(Folder)
