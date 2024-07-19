@@ -1,10 +1,10 @@
-from Typing.domain import Domain
-from Typing.email import Email
-from Typing.ipv4 import IPv4
-from Typing.mac import Mac
-from Typing.password import Password
-from Typing.port import Port
-from Typing.username import Username
+from Class.validator.domain import Domain
+from Class.validator.email import Email
+from Class.validator.ipv4 import IPv4
+from Class.validator.mac import Mac
+from Class.validator.password import Password
+from Class.validator.port import Port
+from Class.validator.username import Username
 
 if __name__ == '__main__' :
     test_usernames = [
