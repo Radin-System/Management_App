@@ -1,6 +1,7 @@
 import os
-from typing          import Dict,Any
-from configparser    import ConfigParser
+from typing           import Dict,Any
+from configparser     import ConfigParser
+from Function.convert import CsvToList
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}
@@ -10,11 +11,13 @@ class Config:
         }
 
     DEFAULT['GLOBALS'] = {
-        'debug': True,
+        'debug': False,
+        'development_mode':False,
         'log_file': '.log/main.txt',
         'name' : 'RSTO',
         'version' : '1.1b',
         'language': 'fa',
+        'file_system_csv': '.configfiles,.temp,.log,.db',
         }
 
     DEFAULT['LOG'] = {
@@ -56,6 +59,7 @@ class Config:
         self.Config = ConfigParser()
         self.Load_Config()
         self.Set_Enviroment()
+        self.Check_File_System()
 
     def Load_Config(self) -> None:
         Config_Dir = os.path.dirname(self.Config_File)
@@ -98,6 +102,8 @@ class Config:
 
         Value = self.Config.get(Section,Parameter)
 
+        if Section.endswith('_csv') : return CsvToList(Value)
+
         if   Value.lower() in ['none','null','']: return Fallback
         elif Value.lower() in ['true','yes']: return True
         elif Value.lower() in ['false','no']: return False
@@ -108,3 +114,8 @@ class Config:
         if not self.Config.has_section(Section) : self.Config.add_section(Section)
         self.Config.set(Section, Parameter, str(Value))
         self.Save_Config()
+
+    def Check_File_System(self) -> None:
+        Folders = self.Get('GLOBALS','file_system_csv',[])
+        for Folder in Folders :
+            if not os.path.exists(Folder) : os.makedirs(Folder)
