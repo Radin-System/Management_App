@@ -1,5 +1,5 @@
 from . import Validator
-from Class.decorator import Return_False_On_Exception
+from Function.decorator import Return_False_On_Exception
 
 class Port(Validator):
     def __init__(self,Input:int) -> None:

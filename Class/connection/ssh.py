@@ -1,7 +1,7 @@
 import time
 import paramiko
 
-from Class.decorator import Connection_Required
+from Function.decorator import Connection_Required
 from . import Connection
 
 class SSH(Connection) :

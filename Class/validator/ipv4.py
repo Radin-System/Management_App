@@ -1,6 +1,6 @@
 import re
 from . import Validator
-from Class.decorator import Return_False_On_Exception
+from Function.decorator import Return_False_On_Exception
 
 class IPv4(Validator):
     def __init__(self, Input:str) -> None:

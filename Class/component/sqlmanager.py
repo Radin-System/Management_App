@@ -1,7 +1,7 @@
 import os,sqlalchemy,sqlalchemy.orm
 
 from Class.component import Component
-from Class.decorator import Do_Log
+from Function.decorator import Do_Log
 
 class SQLManager(Component):
     def __init__(self,*,
