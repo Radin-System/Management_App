@@ -34,10 +34,10 @@ class Config:
     DEFAULT['SQLMANAGER'] = {
         'debug': True,
         'mode': 'SQLITE3',
-        'host': '127.0.0.1',
+        'host': '',
         'port': 0,
-        'username': 'admin', # Test Username
-        'password': 'asd@123', # Test Password
+        'username': '',
+        'password': '',
         'database': 'management_app',
         'sqlite_path': '.db/',
         'verbose': False,
@@ -45,11 +45,11 @@ class Config:
 
     DEFAULT['AMIMANAGER'] = {
         'debug': False,
-        'host': '127.0.0.1',
-        'port': 5038,
+        'host': '',
+        'port': 0,
         'tls_mode': False,
-        'username': 'admin', # Test Username
-        'password': 'asd@123', # Test Password
+        'username': '',
+        'password': '',
         'timeout': 10,
         'event_whitelist_csv': 'AgentConnect,AgentComplete',
         'max_action_id': 2048,
