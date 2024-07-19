@@ -7,7 +7,7 @@ if __name__ == '__main__' :
     from Class.component.taskmanager import TaskManager
     
     from Class.component.sqlmanager import SQLManager
-    from Models   import Base,Models
+    from Model   import Base,Models
 
     from Class.component.amimanager import AMIManager
 
