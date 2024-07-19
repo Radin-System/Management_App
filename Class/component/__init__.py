@@ -1,9 +1,9 @@
 from typing import Callable
 
 class Component :
-    def __init__(self) -> None:
-        self.Running:bool = None
-        self.Logger:Callable = print
+    
+    Running:bool = None
+    Logger:Callable = print
 
     def Start_Actions(self) -> None :
         raise NotImplementedError('Please provide an action for starting the componnet')

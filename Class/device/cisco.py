@@ -1,11 +1,8 @@
-from Class.connection import Connection
+from Class.connection import Connection as Con
 from . import Device
 
 class Cisco(Device):
-    def __init__(self) -> None:
-        super().__init__()
-
-    def Connect(self, via:Connection, *, Host:str, Port:int, Username:str, Password:str, Enable:str) -> None:
+    def Connect(self, via:Con, *, Host:str, Port:int, Username:str, Password:str, Enable:str) -> None:
         Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
         self.Enable = Enable
         if self.Connection_Type == 'SSH' : self.Connection.Excute_Mode = False

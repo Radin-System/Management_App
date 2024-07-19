@@ -5,14 +5,12 @@ from Class.decorator import Connection_Required
 from . import Connection
 
 class SSH(Connection) :
-    def __init__(self,*, Host: str, Port: int, Username: str, Password: str) -> None:
-        super().__init__(Host=Host, Port=Port, Username=Username, Password=Password)
 
-        self.Client = paramiko.SSHClient()
-        self.Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.Terminal = ''
-        self.Shell = None
-        self.Excute_Mode:bool = True
+    Client = paramiko.SSHClient()
+    Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    Terminal = ''
+    Shell = None
+    Excute_Mode:bool = True
 
     def Connect(self) -> None :
         self.Client.connect(
@@ -28,7 +26,7 @@ class SSH(Connection) :
     @Connection_Required
     def Receive(self) -> str :
         if self.Shell.recv_ready():
-            return self.Shell.recv(65536).decode('utf-8')
+            return self.Shell.recv(65536).decode(self.Encoding)
 
     @Connection_Required
     def Send(self, Message:str, Wait:float = 0.5) -> str:
@@ -36,7 +34,7 @@ class SSH(Connection) :
         if self.Excute_Mode :
             _ , Stdout , _ = self.Client.exec_command(Message)
             time.sleep(Wait)
-            Response = Stdout.read().decode('utf-8')
+            Response = Stdout.read().decode(self.Encoding)
             self.Terminal += Message
             self.Terminal += Response.replace('\r\n','\n').strip() if Response else ''
             return str(Response).replace('\r\n','\n').strip() if Response else ''

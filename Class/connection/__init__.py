@@ -11,6 +11,8 @@ class Connection :
         self.Username = Username
         self.Password = Password
 
+        self.Encoding = 'utf-8'
+
     def Connect(self) -> None :
         raise NotImplementedError('Please provide an action for connecting with this method')
 

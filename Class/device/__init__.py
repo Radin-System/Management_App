@@ -1,11 +1,11 @@
-from Class.connection import Connection
+from Class.connection import Connection as Con
 
 class Device :
-    def __init__(self) -> None:
-        self.Logger = print
-        self.Connection:Connection = None
+    
+    Logger = print
+    Connection:Con = None
 
-    def Connect(self,via:Connection,*,
+    def Connect(self,via:Con,*,
             Host:str,
             Port:int,
             Username:str,
