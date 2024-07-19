@@ -1,9 +1,7 @@
 from pytube import YouTube,Playlist
+from . import Tool
 
-class YTDownloader :
-    def __init__(self, Name:str) -> None:
-        self.Name = Name
-
+class YTDownloader(Tool):
     def Download(self,URL) -> None:
         try:
             Download_Instance = Playlist(URL)
