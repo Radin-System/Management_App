@@ -17,7 +17,7 @@ class Config:
         'name' : 'RSTO',
         'version' : '1.1b',
         'language': 'fa',
-        'file_system_csv': '.configfiles,.temp,.log,.db',
+        'ignored_csv': '.configfiles,.temp,.log,.db',
         }
 
     DEFAULT['LOG'] = {
@@ -59,7 +59,8 @@ class Config:
         self.Config = ConfigParser()
         self.Load_Config()
         self.Set_Enviroment()
-        self.Check_File_System()
+        self.Check_Development_Mode()
+        self.Create_Ignored_Folders()
 
     def Load_Config(self) -> None:
         Config_Dir = os.path.dirname(self.Config_File)
@@ -97,7 +98,7 @@ class Config:
             for K , V in self.Config['ENVIRON'].items(): os.environ.setdefault(K,str(V))
 
     def Get(self, Section:str, Parameter:str, Fallback:Any=None) -> Any:
-        if not self.Config.has_section: raise KeyError('Provided config file does not have this section :',Section)
+        if not self.Config.has_section: raise KeyError(f'Provided config file does not have this section :{Section}')
         if not self.Config.has_option(Section, Parameter): return Fallback
 
         Value = self.Config.get(Section,Parameter)
@@ -115,7 +116,14 @@ class Config:
         self.Config.set(Section, Parameter, str(Value))
         self.Save_Config()
 
-    def Check_File_System(self) -> None:
-        Folders = self.Get('GLOBALS','file_system_csv',[])
+    def Create_Ignored_Folders(self) -> None:
+        Folders = self.Get('GLOBALS','ignored_csv',[])
         for Folder in Folders :
             if not os.path.exists(Folder) : os.makedirs(Folder)
+    
+    def Check_Development_Mode(self) -> None:
+        Development_Mode = self.Get('GLOBALS','development_mode',False)
+        if Development_Mode :
+            Folders = self.Get('GLOBALS','ignored_csv',[])
+            for Folder in Folders :
+                os.remove(Folder)
