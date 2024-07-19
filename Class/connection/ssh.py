@@ -22,7 +22,6 @@ class SSH(Connection):
         self.Client.set_missing_host_key_policy(paramiko.WarningPolicy())
         self.History = ''
         self.Shell = None
-        self.Excute_Mode:bool = True
 
     def Connect(self) -> None :
         self.Client.connect(
@@ -31,9 +30,16 @@ class SSH(Connection):
             username = self.Username,
             password = self.Password,
             )
-
         self.Shell  = self.Client.invoke_shell()
+        self.Excute_Mode = self.Check_Multi_Channel_Support()
         self.Banner = self.Client.get_transport().remote_version
+
+    def Check_Multi_Channel_Support(self) :
+        try : 
+            self.Client.invoke_shell().close()
+            return True
+        except paramiko.ChannelException :
+            return False
 
     @Connection_Required
     def Receive(self) -> str :

@@ -5,7 +5,6 @@ class Cisco(Device):
     def Connect(self, via:Con, *, Host:str, Port:int, Username:str, Password:str, Enable:str) -> None:
         Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
         self.Enable = Enable
-        if self.Connection_Type == 'SSH' : self.Connection.Excute_Mode = False
         return Result
 
     def Prepare_Terminal(self) -> None:
