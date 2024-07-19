@@ -11,8 +11,8 @@ class Config:
         }
 
     DEFAULT['GLOBALS'] = {
-        'debug': False,
-        'development_mode':False,
+        'debug': True,
+        'development_mode':True,
         'log_file': '.log/main.txt',
         'name' : 'RSTO',
         'version' : '1.1b',
