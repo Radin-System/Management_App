@@ -5,12 +5,25 @@ from Class.decorator import Connection_Required
 from . import Connection
 
 class SSH(Connection) :
+    def __init__(self,*,
+        Host:str,
+        Port:int,
+        Username:str,
+        Password:str,
+        Encoding:str = 'utf-8',
+        ) -> None :
 
-    Client = paramiko.SSHClient()
-    Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    Terminal = ''
-    Shell = None
-    Excute_Mode:bool = True
+        self.Host = Host
+        self.Port = Port
+        self.Username = Username
+        self.Password = Password
+
+        self.Encoding = Encoding
+        self.Client = paramiko.SSHClient()
+        self.Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.Terminal = ''
+        self.Shell = None
+        self.Excute_Mode:bool = True
 
     def Connect(self) -> None :
         self.Client.connect(
