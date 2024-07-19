@@ -23,7 +23,7 @@ if __name__ == '__main__' :
         )
 
     Main_TaskManager = TaskManager(
-        Check_Interval = Main_Config.Get('TASKMANAGER','chck_interval'),
+        Check_Interval = Main_Config.Get('TASKMANAGER','check_interval'),
         )
 
     Main_SQLManager = SQLManager(

@@ -24,7 +24,7 @@ class Config:
         }
 
     DEFAULT['TASKMANAGER'] ={
-        'chck_interval': 5,
+        'check_interval': 5,
         }
 
     DEFAULT['SQLMANAGER'] = {
