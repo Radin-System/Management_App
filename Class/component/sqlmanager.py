@@ -49,15 +49,15 @@ class SQLManager(Component):
         for Model in self.Models :
             setattr(self , Model.__name__ , Model)
 
-    @Running_Required
-    @Connection_Required
-    def Transaction(self,Function) -> callable:
+    @staticmethod
+    def Transaction(Function) -> callable:
         @wraps(Function)
         def Wrapper(*Args,**Kwargs) :
-                with self.Connection.begin():
-                    with sqlalchemy.orm.Session(bind=self.Connection) as Session:
+                Connection = Args[0].Engine.connect()
+                with Connection.begin():
+                    with sqlalchemy.orm.Session(bind=Connection) as Session:
                         try:
-                            result = Function(Session, *Args, **Kwargs)
+                            result = Function(*Args, Session, **Kwargs)
                             Session.commit()
                             return result
                         except Exception as e:
@@ -66,19 +66,27 @@ class SQLManager(Component):
         return Wrapper
 
     @Transaction
-    def Create(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+    @Running_Required
+    @Connection_Required
+    def Create(self, Instance ,Session:sqlalchemy.orm.Session) -> None:
         Session.add(Instance)
 
     @Transaction
-    def Update(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+    @Running_Required
+    @Connection_Required
+    def Update(self, Instance ,Session:sqlalchemy.orm.Session) -> None:
         Session.merge(Instance)
 
     @Transaction
-    def Delete(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+    @Running_Required
+    @Connection_Required
+    def Delete(self, Instance ,Session:sqlalchemy.orm.Session) -> None:
         Session.delete(Instance)
 
     @Transaction
-    def Query(self,Session:sqlalchemy.orm.Session,Model,*, 
+    @Running_Required
+    @Connection_Required
+    def Query(self,Model,Session:sqlalchemy.orm.Session,*, 
         Eager:bool = False,
         Sort:list[tuple[str,str]] = [],
         First:bool = False, 
@@ -103,14 +111,15 @@ class SQLManager(Component):
         return Result
 
     @Transaction
-    def Count(self, Session:sqlalchemy.orm.Session, Model, **Conditions) -> int:
+    @Running_Required
+    @Connection_Required
+    def Count(self, Model, Session:sqlalchemy.orm.Session, **Conditions) -> int:
         Query = Session.query(Model)
         if Conditions : Query = Query.filter_by(**Conditions)
         return Query.count()
 
     def Start_Actions(self) -> None:
         self.Create_Engine()
-        self.Connection = self.Engine.connect()
         self.Init_Models()
     
     def Stop_Actions(self) -> None:
