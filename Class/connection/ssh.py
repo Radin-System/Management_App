@@ -1,7 +1,7 @@
 import time
 import paramiko
 
-from Class.decorator import Decorator
+from Class.decorator import Connection_Required
 from . import Connection
 
 class SSH(Connection) :
@@ -25,12 +25,12 @@ class SSH(Connection) :
         self.Shell  = self.Client.invoke_shell()
         self.Banner = self.Client.get_transport().remote_version
 
-    @Decorator.Connection_Required
+    @Connection_Required
     def Receive(self) -> str :
         if self.Shell.recv_ready():
             return self.Shell.recv(65536).decode('utf-8')
 
-    @Decorator.Connection_Required
+    @Connection_Required
     def Send(self, Message:str, Wait:float = 0.5) -> str:
         if not Message.endswith('\n'): Message += '\n'
         if self.Excute_Mode :
@@ -48,7 +48,7 @@ class SSH(Connection) :
             self.Terminal += Response.replace('\r\n','\n') if Response else ''
             return str(Response).strip() if Response else ''
 
-    @Decorator.Connection_Required
+    @Connection_Required
     def Disconnect(self) -> None :
         self.Shell = None
         self.Client.close()

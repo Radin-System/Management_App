@@ -1,5 +1,5 @@
 from . import Validator
-from Class.decorator import Decorator
+from Class.decorator import Return_False_On_Exception
 from .domain import Domain
 from .username import Username
 
@@ -7,7 +7,7 @@ class Email(Validator):
     def __init__(self, Input:str) -> None:
         super().__init__(Input)
 
-    @Decorator.Return_False_On_Exception
+    @Return_False_On_Exception
     def Validate(self) -> None :
         '''
         a valid email contains a username an @ and a domain afterwards.

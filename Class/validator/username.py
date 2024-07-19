@@ -1,12 +1,12 @@
 import re
 from . import Validator
-from Class.decorator import Decorator
+from Class.decorator import Return_False_On_Exception
 
 class Username(Validator):
     def __init__(self, Input:str) -> None:
         super().__init__(Input)
 
-    @Decorator.Return_False_On_Exception
+    @Return_False_On_Exception
     def Validate(self) -> None :
         """
         Usernames can contain letters (a-Z), numbers (0-9), and periods (.). 

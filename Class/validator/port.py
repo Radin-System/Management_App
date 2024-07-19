@@ -1,11 +1,11 @@
 from . import Validator
-from Class.decorator import Decorator
+from Class.decorator import Return_False_On_Exception
 
 class Port(Validator):
     def __init__(self,Input:int) -> None:
         super().__init__(Input)
     
-    @Decorator.Return_False_On_Exception
+    @Return_False_On_Exception
     def Validate(self) -> bool :
         '''
         port is a number betwen 1 to 65,535

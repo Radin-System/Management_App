@@ -1,6 +1,6 @@
 import re
 from . import Validator
-from Class.decorator import Decorator
+from Class.decorator import Return_False_On_Exception
 
 MAC_SPECIALS = '.-:,'
 
@@ -8,7 +8,7 @@ class Mac(Validator):
     def __init__(self,Input:str) -> None:
         super().__init__(Input)
 
-    @Decorator.Return_False_On_Exception
+    @Return_False_On_Exception
     def Validate(self) -> bool :
         self.Input : str
 

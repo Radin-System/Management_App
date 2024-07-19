@@ -1,7 +1,7 @@
 import os,sqlalchemy,sqlalchemy.orm
 
 from Class.component import Component
-from Class.decorator import Decorator
+from Class.decorator import Do_Log
 
 class SQLManager(Component):
     def __init__(self,*,
@@ -35,7 +35,7 @@ class SQLManager(Component):
             except : return False
         return False
 
-    @Decorator.Do_Log('Creating engine...','Done!')
+    @Do_Log('Creating engine...','Done!')
     def Create_Engine(self) :
         if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}',echo=self.Verbose)
         elif self.Mode == 'MSSQL'   : self.Engine = sqlalchemy.create_engine(f'mssql+pyodbc://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}'        ,echo=self.Verbose)
@@ -45,11 +45,11 @@ class SQLManager(Component):
         if self.Connected() : self.Base.metadata.create_all(self.Engine)
         else                : self.Logger('Engine Faild')
     
-    @Decorator.Do_Log('Initiating Base','Done!')
+    @Do_Log('Initiating Base','Done!')
     def Init_Base(self , Base) :
         self.Base = Base
     
-    @Decorator.Do_Log('Initiating SQL Models...' , 'Initiation Compleated !')
+    @Do_Log('Initiating SQL Models...' , 'Initiation Compleated !')
     def Init_Models(self, Models : list) -> None:
         if self.Base :
             for Model in Models : 
@@ -151,10 +151,10 @@ class SQLManager(Component):
             if 'Session' in locals() and Session : Session.close()
             raise e
 
-    @Decorator.Do_Log('Starting...','Done!')
+    @Do_Log('Starting...','Done!')
     def Start_Actions(self):
         pass
     
-    @Decorator.Do_Log('Stopping...','Done!')
+    @Do_Log('Stopping...','Done!')
     def Stop_Actions(self):
         self.Engine = None
