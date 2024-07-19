@@ -1,4 +1,4 @@
-import os
+import os,shutil
 from typing           import Dict,Any
 from configparser     import ConfigParser
 from Function.convert import CsvToList
@@ -18,6 +18,7 @@ class Config:
         'version' : '1.1b',
         'language': 'fa',
         'ignored_csv': '.configfiles,.temp,.log,.db',
+        'develop_files_csv':'.temp,.log,.db'
         }
 
     DEFAULT['LOG'] = {
@@ -63,12 +64,11 @@ class Config:
         self.Create_Ignored_Folders()
 
     def Load_Config(self) -> None:
-        Config_Dir = os.path.dirname(self.Config_File)
-        if Config_Dir and not os.path.exists(Config_Dir) : os.makedirs(Config_Dir)
         if os.path.exists(self.Config_File):
             self.Config.read(self.Config_File)
             self.Check_Config()
-        else: self.Init_Default()
+        else: 
+            self.Init_Default()
 
     def Init_Default(self) -> None:
         for Section, Parameters in self.DEFAULT.items():
@@ -103,7 +103,7 @@ class Config:
 
         Value = self.Config.get(Section,Parameter)
 
-        if Section.endswith('_csv') : return CsvToList(Value)
+        if Parameter.endswith('_csv') : return CsvToList(Value)
 
         if   Value.lower() in ['none','null','']: return Fallback
         elif Value.lower() in ['true','yes']: return True
@@ -125,6 +125,7 @@ class Config:
         Development_Mode = self.Get('GLOBALS','development_mode',False)
         if Development_Mode :
             print('Warning , The application is running in Development mode, All logs,databases,configs will be recreated on next run')
-            Folders = self.Get('GLOBALS','ignored_csv',[])
+            Folders = self.Get('GLOBALS','develop_files_csv',[])
+            print('Removing following folders :',Folders)
             for Folder in Folders :
-                os.remove(Folder)
+                shutil.rmtree(Folder)
