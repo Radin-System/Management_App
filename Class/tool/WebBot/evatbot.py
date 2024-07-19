@@ -9,7 +9,7 @@ class Evat_Bot(WebBot):
 
         self.ImageReader = ImageReader
 
-    def Handel_Math_Text(self, Image_Path:str) -> int :
+    def Handel_Math_Text(self, Image_Path:str) -> int:
         Tries = 0
         while Tries < 5:
             Tries += 1
@@ -17,10 +17,10 @@ class Evat_Bot(WebBot):
             Captcha = self.Driver.find_element(By.ID,'capimg2')
             Refresh_Button = self.Driver.find_element(By.ID,'RefreshImg')
 
-            self.Driver.execute_script("var element = arguments[0];element.style.cssText = '';",Captcha)
+            self.Remove_CSS(Captcha)
 
             Captcha.screenshot(Image_Path)
-            Text = self.ImageReader.Extract_Text(Image_Path).replace('i','1').strip()
+            Text = self.ImageReader.Extract_Text(Image_Path).strip()
             print(f'Captcha Text :[{Text}]')
 
             if '+' in Text :
@@ -34,11 +34,10 @@ class Evat_Bot(WebBot):
             Refresh_Button.click()
         else: raise TimeoutError(f'Unable to get capcha in {Tries} tries')
 
-    def Get_From_LegalID(self,ID:int) -> dict :
+    def Get_From_Legal_ID(self,Legal_ID:int) -> dict:
         self.Get('frmNewvalidationofregistration.aspx')
-        self.Fill_Input(By.ID,'LegalNatIDNo',ID)
-        self.Fill_Input(By.ID,'CaptchaText',self.Handel_Math_Text('capimg2.png'))
-        self.Sleep(1)
+        self.Fill_Input(By.ID,'LegalNatIDNo',Legal_ID)
+        self.Fill_Input(By.ID,'CaptchaText',self.Handel_Math_Text('.temp/capimg2.png'))
+        self.Sleep()
         Button = self.Driver.find_element(By.ID,'btnSearch2')
         Button.click()
-        self.Sleep(20)

@@ -20,7 +20,7 @@ class WebBot(Tool):
         self.Wait.until(EC.visibility_of_all_elements_located)
 
     def Sleep(self,Seconds:int) -> None :
-        time.sleep(Seconds + random.uniform(0,4))
+        time.sleep(Seconds + random.uniform(0,2))
 
     def Fill_Input(self,by:By, identifier:str, text:str , clear=True) -> WebElement:
         Input = self.Driver.find_element(by,identifier)
@@ -32,6 +32,9 @@ class WebBot(Tool):
         Element = self.Driver.find_element(by,identifier)
         Element.click()
         return Element
+
+    def Remove_CSS(self,Element:WebElement) -> None:
+        self.Driver.execute_script("var element = arguments[0];element.style.cssText = '';",Element)
 
     def Stop(self):
         self.Driver.quit()
