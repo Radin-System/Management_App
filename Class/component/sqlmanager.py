@@ -25,9 +25,10 @@ class SQLManager(Component):
         self.Mode        = Mode
         self.SQLite_Path = SQLite_Path
         self.Verbose     = Verbose
-        self.Init_Base(Base = Base)
+        self.Base        = Base
+        self.Models      = Models
         self.Create_Engine()
-        self.Init_Models(Models = Models)
+        self.Init_Models()
 
     def Connected(self) -> bool:
         if self.Engine :
@@ -44,18 +45,12 @@ class SQLManager(Component):
         else                        : self.Engine = sqlalchemy.create_engine(f'sqlite:///{os.path.join(self.SQLite_Path,self.DataBase)}.db'                                   ,echo=self.Verbose)
         if self.Connected() : self.Base.metadata.create_all(self.Engine)
         else                : self.Logger('Engine Faild')
-    
-    @Do_Log('Initiating Base','Done!')
-    def Init_Base(self , Base) :
-        self.Base = Base
-    
+        
     @Do_Log('Initiating SQL Models...' , 'Initiation Compleated !')
-    def Init_Models(self, Models : list) -> None:
-        if self.Base :
-            for Model in Models : 
-                self.Logger(f'Model : {Model.__name__}')
-                setattr(self , Model.__name__ , Model)
-        else : self.Logger('faild to Initiate Models : No Base !')
+    def Init_Models(self) -> None:
+        for Model in self.Models : 
+            self.Logger(f'Model : {Model.__name__}')
+            setattr(self , Model.__name__ , Model)
 
     def Create(self, Instance) -> int :
         try:
