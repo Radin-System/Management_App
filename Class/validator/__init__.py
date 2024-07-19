@@ -1,8 +1,8 @@
 class Validator:
-    def __new__(cls, Input:str, *args, **kwargs):
+    def __new__(cls, Input:str):
         Instance = super().__new__(cls)
         Instance.Input = Input
-        Instance.Error_Message = 'Not Provided an Error Message'
+        Instance.Error_Message = 'Something went wrong while validating the input'
         Instance.Check_For_Error()
         return Instance.Input
 
