@@ -1,16 +1,15 @@
 import tracemalloc
 from functools import wraps
 from time import perf_counter
-from typing import Callable
 
-def Return_False_On_Exception(Function) -> Callable:
+def Return_False_On_Exception(Function) -> callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         try : return Function(*Args, **Kwargs)
         except : return False
     return Wrapper
 
-def Do_Log(Before:str = '', After:str = '') -> Callable:
+def Do_Log(Before:str = '', After:str = '') -> callable:
     def Inner (Function):
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
@@ -37,7 +36,7 @@ def Connection_Required(Function) -> callable :
         return Result
     return Wrapper
 
-def Do_Performance (Function) -> Callable:
+def Do_Performance (Function) -> callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         tracemalloc.start()

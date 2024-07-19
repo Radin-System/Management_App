@@ -2,6 +2,7 @@ import os,sqlalchemy,sqlalchemy.orm
 
 from Class.component import Component
 from Function.decorator import Running_Required,Connection_Required,Return_False_On_Exception
+from functools import wraps
 
 class SQLManager(Component):
     def __init__(self,*,
@@ -50,34 +51,34 @@ class SQLManager(Component):
 
     @Running_Required
     @Connection_Required
-    def Create(self, Instance) -> int:
-        with self.Engine.connect() as Connection:
-            with Connection.begin():
-                with sqlalchemy.orm.Session(bind=Connection) as Session:
-                    Session.add(Instance)
-                    Session.commit()
+    def Transaction(self,Function) -> callable:
+        @wraps(Function)
+        def Wrapper(*Args,**Kwargs) :
+                with self.Connection.begin():
+                    with sqlalchemy.orm.Session(bind=self.Connection) as Session:
+                        try:
+                            result = Function(Session, *Args, **Kwargs)
+                            Session.commit()
+                            return result
+                        except Exception as e:
+                            Session.rollback()
+                            raise e
+        return Wrapper
 
-    @Running_Required
-    @Connection_Required
-    def Update(self, Instance) -> None:
-        with self.Engine.connect() as Connection:
-            with Connection.begin():
-                with sqlalchemy.orm.Session(bind=Connection) as Session:
-                    Session.merge(Instance)
-                    Session.commit()
+    @Transaction
+    def Create(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+        Session.add(Instance)
 
-    @Running_Required
-    @Connection_Required
-    def Delete(self, Instance) -> None:
-        with self.Engine.connect() as Connection:
-            with Connection.begin():
-                with sqlalchemy.orm.Session(bind=Connection) as Session:
-                    Session.delete(Instance)
-                    Session.commit()
+    @Transaction
+    def Update(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+        Session.merge(Instance)
 
-    @Running_Required
-    @Connection_Required
-    def Query(self,Model,*, 
+    @Transaction
+    def Delete(self, Session:sqlalchemy.orm.Session, Instance) -> None:
+        Session.delete(Instance)
+
+    @Transaction
+    def Query(self,Session:sqlalchemy.orm.Session,Model,*, 
         Eager:bool = False,
         Sort:list[tuple[str,str]] = [],
         First:bool = False, 
@@ -87,35 +88,29 @@ class SQLManager(Component):
         ) -> (list | None): 
         #Usage : SQLManager.Query(SQLManager.User , Eager=True , Sort=[('name','asc')] , First = False , Limit = 10 , Offset = 12 , email = None)
       
-        with self.Engine.connect() as Connection:
-            with Connection.begin():
-                with sqlalchemy.orm.Session(bind=Connection) as Session:
-                    Query   = Session.query(Model)
-                    if Eager      : Query = Query.options(sqlalchemy.orm.joinedload('*'))
-                    if Conditions : Query = Query.filter_by(**Conditions)
-                    if Sort       :
-                        for attr, order in Sort :
-                            if   'asc'  in order.lower(): Query = Query.order_by(getattr(Model, attr).asc())
-                            elif 'desc' in order.lower(): Query = Query.order_by(getattr(Model, attr).desc())
-                            else                        : raise ValueError(f"Invalid sorting order: {order}")
-                    if Limit  : Query = Query.limit(Limit)
-                    if Offset : Query = Query.offset(Offset)
-                    if First  : Result = Query.first()
-                    else      : Result = Query.all()
-                    return Result
+        Query   = Session.query(Model)
+        if Eager      : Query = Query.options(sqlalchemy.orm.joinedload('*'))
+        if Conditions : Query = Query.filter_by(**Conditions)
+        if Sort       :
+            for attr, order in Sort :
+                if   'asc'  in order.lower(): Query = Query.order_by(getattr(Model, attr).asc())
+                elif 'desc' in order.lower(): Query = Query.order_by(getattr(Model, attr).desc())
+                else                        : raise ValueError(f"Invalid sorting order: {order}")
+        if Limit  : Query = Query.limit(Limit)
+        if Offset : Query = Query.offset(Offset)
+        if First  : Result = Query.first()
+        else      : Result = Query.all()
+        return Result
 
-    @Running_Required
-    @Connection_Required
-    def Count(self, Model, **Conditions) -> int:
-        with self.Engine.connect() as Connection:
-            with Connection.begin():
-                with sqlalchemy.orm.Session(bind=Connection) as Session:
-                    Query   = Session.query(Model)
-                    if Conditions : Query = Query.filter_by(**Conditions)
-                    return Query.count()
+    @Transaction
+    def Count(self, Session:sqlalchemy.orm.Session, Model, **Conditions) -> int:
+        Query = Session.query(Model)
+        if Conditions : Query = Query.filter_by(**Conditions)
+        return Query.count()
 
     def Start_Actions(self) -> None:
         self.Create_Engine()
+        self.Connection = self.Engine.connect()
         self.Init_Models()
     
     def Stop_Actions(self) -> None:
