@@ -1,10 +1,9 @@
 import time
 import paramiko
-
 from Function.decorator import Connection_Required
 from . import Connection
 
-class SSH(Connection) :
+class SSH(Connection):
     def __init__(self,*,
         Host:str,
         Port:int,
@@ -17,11 +16,11 @@ class SSH(Connection) :
         self.Port = Port
         self.Username = Username
         self.Password = Password
-
         self.Encoding = Encoding
+
         self.Client = paramiko.SSHClient()
-        self.Client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.Terminal = ''
+        self.Client.set_missing_host_key_policy(paramiko.WarningPolicy())
+        self.History = ''
         self.Shell = None
         self.Excute_Mode:bool = True
 
@@ -48,15 +47,15 @@ class SSH(Connection) :
             _ , Stdout , _ = self.Client.exec_command(Message)
             time.sleep(Wait)
             Response = Stdout.read().decode(self.Encoding)
-            self.Terminal += Message
-            self.Terminal += Response.replace('\r\n','\n').strip() if Response else ''
+            self.History += Message
+            self.History += Response.replace('\r\n','\n').strip() if Response else ''
             return str(Response).replace('\r\n','\n').strip() if Response else ''
         else :
             if not Message.endswith('\n') : Message += '\n'
             self.Shell.send(Message)
             time.sleep(Wait)
             Response = self.Receive()
-            self.Terminal += Response.replace('\r\n','\n') if Response else ''
+            self.History += Response.replace('\r\n','\n') if Response else ''
             return str(Response).strip() if Response else ''
 
     @Connection_Required
