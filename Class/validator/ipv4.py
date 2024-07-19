@@ -26,24 +26,24 @@ class IPv4(Validator):
                 self.Error_Message = f'Provided IPv4 and Mask should only contain one slash : {self.Input}'
                 return False
 
-            IP,Mask = self.Input.split('/',1)
+            Ip,Mask = self.Input.split('/',1)
 
         elif ' ' in self.Input :
             if self.Input.count(' ') != 1 :
                 self.Error_Message = f'Provided IPv4 and Mask should only contain one space : {self.Input}'
                 return False
 
-            IP,Mask = self.Input.split(' ',1)
+            Ip,Mask = self.Input.split(' ',1)
 
         else :
-            IP = self.Input
+            Ip = self.Input
             Mask = '255.255.255.255'
 
-        if IP.count('.') != 3 :
+        if Ip.count('.') != 3 :
             self.Error_Message = f'Provided IPv4 should contain three dots : {self.Input}'
             return False
 
-        Octets = IP.split('.',3)
+        Octets = Ip.split('.',3)
 
         for Octet in Octets :
             if not Octet.isdigit(): 
