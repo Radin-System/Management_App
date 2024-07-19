@@ -124,6 +124,7 @@ class Config:
     def Check_Development_Mode(self) -> None:
         Development_Mode = self.Get('GLOBALS','development_mode',False)
         if Development_Mode :
+            print('Warning , The application is running in Development mode, All logs,databases,configs will be recreated on next run')
             Folders = self.Get('GLOBALS','ignored_csv',[])
             for Folder in Folders :
                 os.remove(Folder)
