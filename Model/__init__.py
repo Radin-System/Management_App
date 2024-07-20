@@ -34,7 +34,7 @@ class OwnerMixin:
     @declared_attr
     def owner_id(cls): return Column(Integer, ForeignKey('users.id'))
 
-from authentication import Authentication
+from .authentication import Authentication
 from .company import Company
 from .device import Device
 from .location import Location
