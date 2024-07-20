@@ -25,7 +25,7 @@ if __name__ == '__main__' :
     
     with sql :
         ## Testing Users
-        Admin = sql.User(username='admin',password='admin',en_firstname='Administrator',en_lastname=' ',fa_firstname=' ',fa_lastname=' ',admin=True)
+        Admin = sql.User(username='admin',password='asd@123',en_firstname='Administrator',en_lastname=' ',fa_firstname=' ',fa_lastname=' ',admin=True)
         New_User = sql.User(username='m.heydari',password='asd@123',en_firstname='Mohammad',en_lastname='Heydari',fa_firstname='محمد',fa_lastname='حیدری')
         ## Testing Company 
         Radin = sql.Company(en_name='Radin System',fa_name='رادین سیستم',domain='rsto.ir',owner=Admin)
@@ -39,7 +39,7 @@ if __name__ == '__main__' :
         ## Testing Node
         Node = sql.Node(hostname='QC-F1',fqdn='QC-F1.Amanfilter.ir',company=Amanfilter,location=Office,owner=Admin)
         ## Testing Personnel
-        Person = sql.Personnel(username='Soraya.khodaei',agent=True,en_firstname='soraya',en_lastname='khodayi', fa_firstname='صریا',fa_lastname='خدایی',email='H.N54678@gmail.com',extension=800,phone_number='09112345678',company=Amanfilter,location=Office,owner=Admin)
+        Person = sql.Personnel(username='Soraya.khodaei',agent=True,en_firstname='soraya',en_lastname='khodayi', fa_firstname='صریا',fa_lastname='خدایی',email='H.N54678@gmail.com',extension=800,mobile_number='09112345678',company=Amanfilter,location=Office,owner=Admin)
 
         Records = [Admin,New_User,Radin,Amanfilter,Office,Radius,Device,Node,Person]
         for Record in Records :
