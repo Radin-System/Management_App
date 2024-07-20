@@ -8,12 +8,12 @@ Base = declarative_base()
 class InfoMixin(Base):
     __abstract__ = True
     description  = Column(Text, nullable=True)
-    create_date  = Column(DateTime, default=datetime.now())
-    last_update  = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
-    active       = Column(Boolean, default=True)
-    deletable    = Column(Boolean, default=True)
-    changable    = Column(Boolean, default=True)
-    visible      = Column(Boolean, default=True)
+    active       = Column(Boolean, default=True, nullable=False)
+    visible      = Column(Boolean, default=True, nullable=False)
+    deletable    = Column(Boolean, default=True, nullable=False)
+    changable    = Column(Boolean, default=True, nullable=False)
+    create_date  = Column(DateTime, default=datetime.now(), nullable=False)
+    last_update  = Column(DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
 
 class NameMixin:
     __abstract__ = True
@@ -29,10 +29,10 @@ class OwnerMixin:
     __abstract__ = True
 
     @declared_attr
-    def owner_id(cls): return Column(Integer, ForeignKey('users.id'))
+    def owner(cls): return relationship("User", backref=f"owned_{cls.__tablename__}")
 
     @declared_attr
-    def owner(cls): return relationship("User", backref=f"owned_{cls.__tablename__}")
+    def owner_id(cls): return Column(Integer, ForeignKey('users.id'))
 
 from authentication import Authentication
 from .company import Company
