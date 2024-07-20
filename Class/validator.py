@@ -88,11 +88,11 @@ class Password(Validator):
         if any(Char.isdigit()        for Char in self.Input): Score += 1
         if any(Char in SPECIAL_CHARS for Char in self.Input): Score += 1
 
-        if len(self.Input) < 7 :
+        if len(self.Input) < 7:
             self.Error_Message = 'Provided password must contain at least 7 charecters'
             return False
 
-        if Score < 3 :
+        if Score < 3:
             self.Error_Message = 'Provided password does not meet the complexity rules'
             return False
 
@@ -471,7 +471,7 @@ class EnglishSpecial(Validator):
             self.Error_Message = f'Provided input must be a string: {self.Input}'
             return False
 
-        if not re.match(r'^[a-zA-Z\s@.0-9\'\"<>\?\!]+$', self.Input):
+        if not re.match(r'^[a-zA-Z\s@.0-9\'\"<>\?\!.-]+$', self.Input):
             self.Error_Message = f'Provided input can only contain English letters, spaces, and special characters: {self.Input}'
             return False
 
@@ -493,7 +493,7 @@ class PersianSpecial(Validator):
             self.Error_Message = f'Provided input must be a string: {self.Input}'
             return False
 
-        if not re.match(r'^[\u0600-\u06FF\s@.0-9\'\"<>\?\!]+$', self.Input):
+        if not re.match(r'^[\u0600-\u06FF\s@.0-9\'\"<>\?\!.-]+$', self.Input):
             self.Error_Message = f'Provided input can only contain Persian letters, spaces, and special characters: {self.Input}'
             return False
 
