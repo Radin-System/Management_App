@@ -2,12 +2,15 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
+from Class.validator import English,Domain,EnglishSpecial,Persian,PhoneNumber
+
 class Company(InfoMixin, OwnerMixin):
     __tablename__ = 'companies'
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    en_name       = Column(String, nullable=False, unique=True)
-    fa_name       = Column(String, nullable=False, unique=True)
-    domain        = Column(String, nullable=False, unique=True)
+    en_name       = Column(String, nullable=False, unique=True, info={'Validator':English})
+    fa_name       = Column(String, nullable=False, unique=True, info={'Validator':Persian})
+    domain        = Column(String, nullable=False, unique=True, info={'Validator':(EnglishSpecial,Domain)})
+    phone_number  = Column(String, nullable=True, unique=True, info={'Validator':PhoneNumber})
     sarv_uid      = Column(String, nullable=True, unique=True)
 
     locations     = relationship("Location", back_populates="company")

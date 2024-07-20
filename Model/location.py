@@ -2,12 +2,14 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
+from Class.validator import English,EnglishSpecial,Persian
+
 class Location(InfoMixin, OwnerMixin):
     __tablename__ = 'locations'
     id            = Column(Integer, primary_key=True, autoincrement=True)
-    type          = Column(String, nullable=False)
-    en_name       = Column(String, nullable=False)
-    fa_name       = Column(String, nullable=False)
+    type          = Column(String, nullable=False, info={'Validator':EnglishSpecial})
+    en_name       = Column(String, nullable=False, info={'Validator':English})
+    fa_name       = Column(String, nullable=False, info={'Validator':Persian})
 
     company       = relationship("Company", back_populates="locations")
     company_id    = Column(Integer, ForeignKey('companies.id'), nullable=False)

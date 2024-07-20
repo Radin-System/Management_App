@@ -98,7 +98,7 @@ class Password(Validator):
 
         return True
 
-class Username(Validator):
+class Hostname(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
@@ -211,7 +211,7 @@ class FQDN(Validator):
 
         Host, Dom = self.Input.split('.',1)
 
-        try: Username(Host)
+        try: Hostname(Host)
         except Exception as e :
             self.Error_Message = f'Hostname Error: {self.Input} : {str(e)}'
             return False
