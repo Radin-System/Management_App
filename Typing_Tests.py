@@ -1,10 +1,5 @@
-from Class.validator.domain import Domain
-from Class.validator.email import Email
-from Class.validator.ipv4 import IPv4
-from Class.validator.mac import Mac
-from Class.validator.password import Password
-from Class.validator.port import Port
-from Class.validator.username import Username
+from Class.validator import Domain, Email, IPv4, Mac, Password, Port, Username
+
 
 if __name__ == '__main__' :
     test_usernames = [
