@@ -3,7 +3,7 @@ import time
 from Function.decorator import Connection_Required
 from . import Connection
 
-class Socket(Connection):
+class TCPSocket(Connection):
     def __init__(self,*,
         Host:str,
         Port:int,
