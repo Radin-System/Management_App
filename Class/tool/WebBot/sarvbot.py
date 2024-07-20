@@ -118,7 +118,5 @@ class SarvBot(WebBot):
 
         for Input in Buttons :
             if Input.get_attribute('value') == 'ذخیره' : 
-                if Submit:
-                    Input.click()
-                    Input.click()
+                if Submit : Input.click()
                 break
