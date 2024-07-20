@@ -95,7 +95,7 @@ class SQLManager(Component):
         **Conditions
         ) -> (list | None): 
         #Usage : SQLManager.Query(SQLManager.User , Eager=True , Sort=[('name','asc')] , First = False , Limit = 10 , Offset = 12 , email = None)
-      
+
         Query   = Session.query(Model)
         if Eager      : Query = Query.options(sqlalchemy.orm.joinedload('*'))
         if Conditions : Query = Query.filter_by(**Conditions)
@@ -121,6 +121,6 @@ class SQLManager(Component):
     def Start_Actions(self) -> None:
         self.Create_Engine()
         self.Init_Models()
-    
+
     def Stop_Actions(self) -> None:
         self.Engine = None
