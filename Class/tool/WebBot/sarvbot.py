@@ -102,12 +102,14 @@ class SarvBot(WebBot):
 
         return Result
 
-    def Add_or_Edit(self,Module:str,Record:str=None,**Kwargs:dict) :
+    def Add_or_Edit(self,Module:str,Record:str=None,Submit = False,**Kwargs:dict) :
         Record = f'&record={Record}' if Record is not None else ''
         self.Get(f'index.php?module={Module}&action=EditView')
 
         for Key , Value in Kwargs.items() :
-            if Value['Type'] == 'input' : self.Fill_Input(By.ID,Key,Value['Value'])
+            if Value['Type'] == 'input' : self.Fill_Input(By.ID,Key,Value['Value'],Click=True,Clear=True)
+            if Value['Type'] == 'text'  : self.Fill_Input(By.ID,Key,Value['Value'],Clear=True)
+            if Value['Type'] == 'date'  : self.Fill_Input(By.ID,Key,Value['Value'])
             if Value['Type'] == 'multi' : self.Select_Radio(By.ID,Key,Value['Value'])
 
         Form = self.Driver.find_element(By.ID,'EditView')
@@ -116,5 +118,7 @@ class SarvBot(WebBot):
 
         for Input in Buttons :
             if Input.get_attribute('value') == 'ذخیره' : 
-                Input.click()
+                if Submit:
+                    Input.click()
+                    Input.click()
                 break

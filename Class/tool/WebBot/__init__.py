@@ -19,13 +19,14 @@ class WebBot(Tool):
         self.Driver.get(self.Base_URL+URL)
         self.Wait.until(EC.visibility_of_all_elements_located)
 
-    def Sleep(self,Seconds:int) -> None :
+    def Sleep(self, Seconds:int=0) -> None :
         time.sleep(Seconds + random.uniform(0,2))
 
-    def Fill_Input(self,by:By, identifier:str, text:str , clear=True) -> WebElement:
-        Input = self.Driver.find_element(by,identifier)
-        if clear : Input.clear()
-        Input.send_keys(text)
+    def Fill_Input(self,by:By, Identifier:str, Text:str, Click:bool = False, Clear:bool = True) -> WebElement:
+        Input = self.Driver.find_element(by,Identifier)
+        if Clear : Input.clear()
+        if Click : Input.click()
+        Input.send_keys(Text)
         return Input
 
     def Click_Element(self,by:By, identifier:str) -> WebElement:
