@@ -18,7 +18,7 @@ class Validator:
 
     def Validate(self) -> bool:
         raise NotImplementedError('Subclasses should implement this method.')
-    
+
 class Username(Validator):
     def __init__(self, Input:str) -> None:
         super().__init__(Input)
@@ -498,7 +498,7 @@ class PersianSpecial(Validator):
             return False
 
         return True
-    
+
 class MobileNumber(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
