@@ -78,6 +78,10 @@ class Password(Validator):
             self.Error_Message = 'Provided Password must be a string'
             return False
 
+        if not re.match(r'^[a-zA-Z\s@.0-9\'\"<>\?\!]+$', self.Input):
+            self.Error_Message = f'Provided Password can only contain English letters, spaces, and special characters'
+            return False
+
         Score = 0
         if any(Char.islower()        for Char in self.Input): Score += 1
         if any(Char.isupper()        for Char in self.Input): Score += 1
@@ -94,7 +98,7 @@ class Password(Validator):
 
         return True
 
-class Hostname(Validator):
+class Username(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
@@ -207,7 +211,7 @@ class FQDN(Validator):
 
         Host, Dom = self.Input.split('.',1)
 
-        try: Hostname(Host)
+        try: Username(Host)
         except Exception as e :
             self.Error_Message = f'Hostname Error: {self.Input} : {str(e)}'
             return False
@@ -331,6 +335,31 @@ class IPv4(Validator):
                 self.Error_Message = f'CIDR Mask should be betwean or equal to 0 and 32: {self.Input}'
                 return False    
 
+        return True
+
+class Ipv4OrFQDN(Validator):
+    def __init__(self,Input:str) -> None:
+        super().__init__(Input)
+
+    @Return_False_On_Exception
+    def Validate(self) -> bool :
+        """
+        Checks if input is Ip address or FQDN.
+        """
+
+        self.Input:str
+
+        if not isinstance(self.Input,str) :
+            self.Error_Message = f'Provided Input must be a string: {self.Input}'
+            return False
+
+        try: Username(self.Input)
+        except ValueError:
+            try: IPv4(self.Input)
+            except ValueError as e:
+                self.Error_Message = f'Provided input is nether a IPv4 or a FQDN: {self.Input}'
+                return False
+        
         return True
 
 class Mac(Validator):
