@@ -32,7 +32,7 @@ class OwnerMixin:
     def owner(cls): return relationship("User", backref=f"owned_{cls.__tablename__}")
 
     @declared_attr
-    def owner_id(cls): return Column(Integer, ForeignKey('users.id'))
+    def owner_id(cls): return Column(Integer, ForeignKey('users.id'), nullable=False)
 
 from .authentication import Authentication
 from .company import Company

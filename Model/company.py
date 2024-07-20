@@ -8,7 +8,7 @@ class Company(InfoMixin, OwnerMixin):
     en_name       = Column(String, nullable=False, unique=True)
     fa_name       = Column(String, nullable=False, unique=True)
     domain        = Column(String, nullable=False, unique=True)
-    sarv_uid      = Column(String, nullable=False, unique=True)
+    sarv_uid      = Column(String, nullable=True, unique=True)
 
     locations     = relationship("Location", back_populates="company")
     personnels    = relationship("Personnel", back_populates="company")

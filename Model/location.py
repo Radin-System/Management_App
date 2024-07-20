@@ -5,6 +5,7 @@ from . import InfoMixin, OwnerMixin
 class Location(InfoMixin, OwnerMixin):
     __tablename__ = 'locations'
     id            = Column(Integer, primary_key=True, autoincrement=True)
+    type          = Column(String, nullable=False)
     en_name       = Column(String, nullable=False)
     fa_name       = Column(String, nullable=False)
 
