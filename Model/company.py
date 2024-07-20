@@ -11,3 +11,5 @@ class Company(InfoMixin,OwnerMixin):
 
     locations     = relationship("Location", back_populates="company")
     personnels    = relationship("Personnel", back_populates="company")
+    devices       = relationship("Device", back_populates="company")
+    nodes         = relationship("Node", back_populates="company")

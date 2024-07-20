@@ -12,6 +12,9 @@ class Device(InfoMixin, OwnerMixin):
     connection_method  = Column(String, nullable=False)
     connection_port    = Column(Integer, nullable=False)
 
+    company            = relationship("Company", back_populates="devices")
+    company_id         = Column(Integer, ForeignKey('companies.id'), nullable=False)
+    
     location           = relationship("Location", back_populates="devices")
     location_id        = Column(Integer, ForeignKey('locations.id'), nullable=False)
     

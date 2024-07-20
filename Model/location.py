@@ -12,4 +12,5 @@ class Location(InfoMixin, OwnerMixin):
     company_id    = Column(Integer, ForeignKey('companies.id'), nullable=False)
     
     devices       = relationship("Device", back_populates="location")
+    nodes         = relationship("Node", back_populates="location")
     personnels    = relationship("Personnel", back_populates="location")
