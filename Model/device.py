@@ -19,4 +19,4 @@ class Device(InfoMixin, OwnerMixin):
     location_id        = Column(Integer, ForeignKey('locations.id'), nullable=False)
 
     authentication     = relationship("Authentication", back_populates="devices")
-    authentication_id  = Column(Integer, ForeignKey('authentication.id'), nullable=False)
+    authentication_id  = Column(Integer, ForeignKey('authentications.id'), nullable=False)
