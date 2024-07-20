@@ -24,10 +24,10 @@ class InfoMixin(Base):
             if Validator :
                 if isinstance(Validator,tuple): #Validate by tuple
                     for Item in Validator:
-                        Name = Item(Name)
+                        Item(Value)
 
                 if isinstance(Validator,type):
-                    Name = Validator(Value)
+                    Validator(Value)
 
         super().__setattr__(Name, Value)
 
