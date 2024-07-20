@@ -11,5 +11,5 @@ class Personnel(NameMixin, InfoMixin, OwnerMixin):
     company       = relationship("Company", back_populates="personnels")
     company_id    = Column(Integer, ForeignKey('companies.id'), nullable=False)
     
-    company       = relationship("Location", back_populates="personnels")
-    location_id   = Column(Integer, ForeignKey('location.id'), nullable=False)
+    location       = relationship("Location", back_populates="personnels")
+    location_id   = Column(Integer, ForeignKey('locations.id'), nullable=False)

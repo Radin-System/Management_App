@@ -57,7 +57,7 @@ class Config:
 
     DEFAULT['TOOL'] = {
         'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
-        'teseract_path ' : 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+        'teseract_path' : 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
         'sarv_url' : 'https://app.sarvcrm.com/' ,
         'sarv_username' : '',
         'sarv_password' : '',
@@ -67,6 +67,7 @@ class Config:
     def __init__(self, Config_File : str) -> None:
         self.Config_File = Config_File
         self.Config = ConfigParser()
+        self.Create_Ignored_Folders()
         self.Load_Config()
         self.Set_Enviroment()
         self.Check_Development_Mode()

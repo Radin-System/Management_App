@@ -8,8 +8,8 @@ class Node(InfoMixin, OwnerMixin):
     hostname           = Column(String, nullable=False)
     fqdn               = Column(String, nullable=False, unique=True)
 
-    company       = relationship("Company", back_populates="nodes")
-    company_id    = Column(Integer, ForeignKey('companies.id'), nullable=False)
+    company            = relationship("Company", back_populates="nodes")
+    company_id         = Column(Integer, ForeignKey('companies.id'), nullable=False)
 
     location           = relationship("Location", back_populates="nodes")
     location_id        = Column(Integer, ForeignKey('locations.id'), nullable=False)

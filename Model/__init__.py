@@ -38,6 +38,7 @@ from .authentication import Authentication
 from .company import Company
 from .device import Device
 from .location import Location
+from .node import Node
 from .personnel import Personnel
 from .user import User
 
@@ -46,6 +47,7 @@ Models = [
     Company,
     Device,
     Location,
+    Node,
     Personnel,
     User,
     ]
