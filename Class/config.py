@@ -140,9 +140,11 @@ class Config:
             Folders = self.Get('GLOBALS','develop_files_csv',[])
             print('Removing following folders :',Folders)
             for Folder in Folders :
-                shutil.rmtree(Folder)
+                if os.path.exists(Folder):
+                    shutil.rmtree(Folder)
     
     def Remove_Temp_Folders(self) -> None:
         Folders = self.Get('GLOBALS','temp_foldes_csv',[])
         for Folder in Folders :
-            shutil.rmtree(Folder)
+            if os.path.exists(Folder):
+                shutil.rmtree(Folder)
