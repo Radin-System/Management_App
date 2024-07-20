@@ -322,6 +322,7 @@ class English(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
+    @Return_False_On_Exception
     def Validate(self) -> bool:
         """
         Validates that the input contains only English characters and whitespace.
@@ -343,6 +344,7 @@ class Persian(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
+    @Return_False_On_Exception
     def Validate(self) -> bool:
         """
         Validates that the input contains only Persian characters and whitespace.
@@ -364,6 +366,7 @@ class EnglishSpecial(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
+    @Return_False_On_Exception
     def Validate(self) -> bool:
         """
         Validates that the input contains only English letters, spaces, and special characters.
@@ -375,7 +378,6 @@ class EnglishSpecial(Validator):
             self.Error_Message = f'Provided input must be a string: {self.Input}'
             return False
 
-        # Regex to allow English letters, spaces, and special characters
         if not re.match(r'^[a-zA-Z\s@.0-9\'\"<>\?\!]+$', self.Input):
             self.Error_Message = f'Provided input can only contain English letters, spaces, and special characters: {self.Input}'
             return False
@@ -386,6 +388,7 @@ class PersianSpecial(Validator):
     def __init__(self, Input: str) -> None:
         super().__init__(Input)
 
+    @Return_False_On_Exception
     def Validate(self) -> bool:
         """
         Validates that the input contains only Persian letters, spaces, and special characters.
@@ -397,9 +400,56 @@ class PersianSpecial(Validator):
             self.Error_Message = f'Provided input must be a string: {self.Input}'
             return False
 
-        # Regex to allow Persian letters, spaces, and special characters
         if not re.match(r'^[\u0600-\u06FF\s@.0-9\'\"<>\?\!]+$', self.Input):
             self.Error_Message = f'Provided input can only contain Persian letters, spaces, and special characters: {self.Input}'
+            return False
+
+        return True
+    
+class MobileNumber(Validator):
+    def __init__(self, Input: str) -> None:
+        super().__init__(Input)
+    
+    @Return_False_On_Exception
+    def Validate(self) -> bool:
+        """
+        Validates that the input is a Mobile number.
+        """
+
+        self.Input:str
+
+        if not isinstance(self.Input, str):
+            self.Error_Message = f'Provided input must be a string: {self.Input}'
+            return False
+
+        clean_input = self.Input.replace(" ", "").replace("-", "")
+
+        if not re.match(r'^(\+98|0)?9\d{9}$', clean_input):
+            self.Error_Message = f'Provided mobile number is invalid: {self.Input}'
+            return False
+
+        return True
+
+class PhoneNumber(Validator):
+    def __init__(self, Input: str) -> None:
+        super().__init__(Input)
+
+    @Return_False_On_Exception
+    def Validate(self) -> bool:
+        """
+        Validates that the input is a Phone number.
+        """
+
+        self.Input:str
+
+        if not isinstance(self.Input, str):
+            self.Error_Message = f'Provided input must be a string: {self.Input}'
+            return False
+
+        clean_input = self.Input.replace(" ", "").replace("-", "")
+
+        if not re.match(r'^(\+98|0)?\d{5,11}$', clean_input):
+            self.Error_Message = f'Provided phone number is invalid: {self.Input}'
             return False
 
         return True
