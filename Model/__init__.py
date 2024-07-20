@@ -5,16 +5,6 @@ from datetime import datetime
 
 Base = declarative_base()
 
-class NameMixin(Base):
-    __abstract__ = True
-    en_firstname = Column(String, nullable=False)
-    en_lastname  = Column(String, nullable=False)
-    fa_firstname = Column(String, nullable=False)
-    fa_lastname  = Column(String, nullable=False)
-    email        = Column(String, nullable=True)
-    extension    = Column(Integer, nullable=True)
-    phone_number = Column(String, nullable=True)
-    
 class InfoMixin(Base):
     __abstract__ = True
     description  = Column(Text, nullable=True)
@@ -24,6 +14,16 @@ class InfoMixin(Base):
     deletable    = Column(Boolean, default=True)
     changable    = Column(Boolean, default=True)
     visible      = Column(Boolean, default=True)
+
+class NameMixin:
+    __abstract__ = True
+    en_firstname = Column(String, nullable=False)
+    en_lastname  = Column(String, nullable=False)
+    fa_firstname = Column(String, nullable=False)
+    fa_lastname  = Column(String, nullable=False)
+    email        = Column(String, nullable=True)
+    extension    = Column(Integer, nullable=True)
+    phone_number = Column(String, nullable=True)
 
 class OwnerMixin:
     __abstract__ = True
