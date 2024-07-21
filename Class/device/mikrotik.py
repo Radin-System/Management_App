@@ -26,11 +26,11 @@ class Mikrotik(Device):
         for Item in Parsed_Interfaces:
             Detailed_Item = self.Get_Parsed_Table(Type_To_Table.get(Item['type']),Where=('name',Item['name']))
             if Item['type'] == 'ether':
-                Result['Ethernet'].append(Ethernet(Kwargs=Detailed_Item[0]))
+                Result['Ethernet'].append(Ethernet(Detail=Detailed_Item[0]))
             if Item['type'] == 'vlan':
-                Result['VLan'].append(VLan(Kwargs=Detailed_Item[0]))
+                Result['VLan'].append(VLan(Detail=Detailed_Item[0]))
             if Item['type'] == 'wg':
-                Result['WireGuard'].append(WireGuard(Kwargs=Detailed_Item[0]))
+                Result['WireGuard'].append(WireGuard(Detail=Detailed_Item[0]))
 
         return Result
 
