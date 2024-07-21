@@ -4,6 +4,12 @@ from typing import Any
 from . import Device
 from .interface import Ethernet,VLan,WireGuard
 
+Type_To_Table:dict[str,str] = {
+    'ether':'interface/ethernet',
+    'vlan':'interface/vlan',
+    'wg':'interface/wireguard',
+    }
+
 class Mikrotik(Device):
     def Get_Hostname(self) -> str:
         return self.Connection.Send('system identity print').replace('name:','').strip()
@@ -13,12 +19,6 @@ class Mikrotik(Device):
             'Ethernet':[],
             'VLan':[],
             'WireGuard':[],
-        }
-
-        Type_To_Table:dict[str,str] = {
-            'ether':'interface/ethernet',
-            'vlan':'interface/vlan',
-            'wg':'interface/wireguard',
         }
 
         Parsed_Interfaces = self.Get_Parsed_Table('interface')
