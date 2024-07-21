@@ -6,6 +6,7 @@ ldap3
 pyler
 paramiko
 psycopg2
+pandas
 
 ## SQL Client
 sqlalchemy
