@@ -9,7 +9,8 @@ if __name__ == '__main__' :
 
     with MyDevice.Connection :
         Hostname = MyDevice.Get_Hostname()
-        Configs = MyDevice.Get_Export()
-
-    with open(f'{Hostname}.txt','w') as f :
-        f.write(Configs)
+        #Configs = MyDevice.Get_Export()
+        Result = MyDevice.Get_Interfaces()
+        for K,V in Result.items():
+            for i in V :
+                print (i.name)

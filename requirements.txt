@@ -6,7 +6,7 @@ ldap3
 pyler
 paramiko
 psycopg2
-pandas
+pyparsing
 
 ## SQL Client
 sqlalchemy

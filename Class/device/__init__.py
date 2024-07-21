@@ -3,7 +3,11 @@ from Class.connection import Connection as Con
 class Device :
     
     Logger = print
+    Hostname:str = None
+    Domain:str = None
     Connection:Con = None
+    Interfaces:list = []
+    Services:list = []
 
     def Connect(self,via:Con,*,
             Host:str,

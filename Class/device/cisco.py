@@ -2,10 +2,30 @@ from Class.connection import Connection as Con
 from . import Device
 
 class Cisco(Device):
-    def Connect(self, via:Con, *, Host:str, Port:int, Username:str, Password:str, Enable:str) -> None:
-        Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
+    def Connect(self,via:Con,*,
+            Host:str, 
+            Port:int, 
+            Username:str, 
+            Password:str, 
+            Enable:str
+            ) -> None:
+
         self.Enable = Enable
+        Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
+        self.Prepare_Terminal()
         return Result
+
+    def Get_Command_Prompt(self) -> str :
+        return self.Connection.Send(' ')
+
+    def Get_Hostname(self) -> str:
+        self.Set_State('privileged')
+        Command_Prompt = self.Get_Command_Prompt()
+        return Command_Prompt.replace('#','').strip()
+
+    def Get_Config(self, Mode:str = 'full') -> str:
+        self.Set_State('privileged')
+        return self.Connection.Send(f'show running-config {Mode}',5.5)
 
     def Prepare_Terminal(self) -> None:
         self.Set_State('privileged')
@@ -34,15 +54,3 @@ class Cisco(Device):
         if Current_State == 'configure'  and New_State == 'userEXEC'   : self.Set_State('privileged') ; self.Set_State('userEXEC') ; return
         if Current_State == New_State                                  : pass # Do Nothing
         else : raise Exception(f'Invalid States : Current_State={Current_State} , New_State={New_State}')
-
-    def Get_Command_Prompt(self) -> str :
-        return self.Connection.Send(' ')
-
-    def Get_RunningConfig(self, Mode:str = 'full') -> str:
-        self.Set_State('privileged')
-        return self.Connection.Send(f'show running-config {Mode}',5.5)
-
-    def Get_Hostname(self) -> str:
-        self.Set_State('privileged')
-        Command_Prompt = self.Get_Command_Prompt()
-        return Command_Prompt.replace('#','').strip()
