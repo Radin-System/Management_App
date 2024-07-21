@@ -9,5 +9,5 @@ if __name__ == '__main__' :
 
     with MyDevice.Connection :
         Hostname = MyDevice.Get_Hostname()
-        Configs = MyDevice.Get_Export()
+        Configs = MyDevice.Get_Config()
         Result = MyDevice.Get_Interfaces()
