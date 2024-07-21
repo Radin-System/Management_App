@@ -9,8 +9,5 @@ if __name__ == '__main__' :
 
     with MyDevice.Connection :
         Hostname = MyDevice.Get_Hostname()
-        #Configs = MyDevice.Get_Export()
+        Configs = MyDevice.Get_Export()
         Result = MyDevice.Get_Interfaces()
-        for K,V in Result.items():
-            for i in V :
-                print (i.name)
