@@ -9,6 +9,9 @@ class Device :
     Interfaces:list = []
     Services:list = []
 
+    def __init__(self,Name) -> None:
+        self.Name = Name
+
     def Connect(self,via:Con,*,
             Host:str,
             Port:int,
