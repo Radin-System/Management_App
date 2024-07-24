@@ -3,7 +3,7 @@ from Class.tool.imagereader import ImageReader
 from . import WebBot
 
 
-class Evat_Bot(WebBot):
+class EvatBot(WebBot):
     def __init__(self, Driver_Path:str, Base_URL:str, ImageReader:ImageReader) -> None:
         super().__init__(Driver_Path, Base_URL)
 
