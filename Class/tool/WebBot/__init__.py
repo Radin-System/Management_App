@@ -1,4 +1,5 @@
 import time,random
+from typing import Self
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -39,3 +40,9 @@ class WebBot(Tool):
 
     def Stop(self):
         self.Driver.quit()
+    
+    def __enter__(self) -> Self:
+        return self
+    
+    def __exit__(self,Eexception_Type, Exception_Value, Traceback) -> None :
+        self.Stop()
