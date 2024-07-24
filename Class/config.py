@@ -57,11 +57,11 @@ class Config:
 
     DEFAULT['TOOL'] = {
         'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
-        'teseract_path' : 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
-        'sarv_url' : 'https://app.sarvcrm.com/' ,
-        'sarv_username' : '',
-        'sarv_password' : '',
-        'evat_url' : 'https://evat.ir/',
+        'teseract_path': 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+        'sarv_url': 'https://app.sarvcrm.com/' ,
+        'sarv_username': '',
+        'sarv_password': '',
+        'evat_url': 'https://evat.ir/',
     }
 
     def __init__(self, Config_File : str) -> None:
