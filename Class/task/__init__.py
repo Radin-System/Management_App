@@ -7,7 +7,7 @@ class Task:
             Action_time:datetime, 
             Timeout:datetime,
             ) -> None:
-        
+
         self.Name = Name
         self.Action_time = Action_time
         self.Timeout = Timeout
