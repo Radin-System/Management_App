@@ -1,3 +1,5 @@
+from typing import Self
+
 class Connection :
 
     def Connect(self) -> None :
@@ -18,8 +20,9 @@ class Connection :
     def __bool__(self) -> bool :
         return self.Is_Connected()
 
-    def __enter__(self) -> None :
+    def __enter__(self) -> Self :
         self.Connect()
+        return self
 
     def __exit__(self,Eexception_Type, Exception_Value, Traceback) -> None :
         self.Disconnect()
