@@ -1,9 +1,11 @@
 import importlib
+from typing import Any
+from pyparsing import Word, alphas, alphanums, nums, QuotedString, Suppress, Group, Dict, LineEnd, OneOrMore, ZeroOrMore
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 from Class.connection import Connection as Con
-from Class.validator import English, EnglishSpecial,Hostname,FQDN,Ipv4OrFQDN,Port
+from Class.validator import English, EnglishSpecial, Hostname, FQDN, Ipv4OrFQDN, Port
 
 class Device(InfoMixin, OwnerMixin):
     ## SQL Table
@@ -50,13 +52,6 @@ class Device(InfoMixin, OwnerMixin):
 
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}(*Args,**Kwargs)'
-
-
-
-
-
-from typing import Any
-from pyparsing import Word, alphas, alphanums, nums, QuotedString, Suppress, Group, Dict, LineEnd, OneOrMore, ZeroOrMore
 
 Type_To_Table:dict[str,str] = {
     'ether':'interface/ethernet',
@@ -137,7 +132,6 @@ class Mikrotik():
             Parsed_Data.append(Result.asDict())
 
         return Parsed_Data
-
 
 class Cisco():
     def Prepare_Connection(self) -> None:
