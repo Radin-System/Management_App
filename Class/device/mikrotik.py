@@ -1,8 +1,6 @@
-import re
 from pyparsing import Word, alphas, alphanums, nums, QuotedString, Suppress, Group, Dict, LineEnd, OneOrMore, ZeroOrMore
 from typing import Any
 from . import Device
-from .interface import Ethernet,VLan,WireGuard
 
 Type_To_Table:dict[str,str] = {
     'ether':'interface/ethernet',
@@ -11,28 +9,11 @@ Type_To_Table:dict[str,str] = {
     }
 
 class Mikrotik(Device):
+    def Prepare_Connection(self) -> None:
+        pass
+
     def Get_Hostname(self) -> str:
         return self.Connection.Send('system identity print').replace('name:','').strip()
-
-    def Get_Interfaces(self) -> dict[str,list]:
-        Result = {
-            'Ethernet':[],
-            'VLan':[],
-            'WireGuard':[],
-        }
-
-        Parsed_Interfaces = self.Get_Parsed_Table('interface')
-
-        for Item in Parsed_Interfaces:
-            Detailed_Item = self.Get_Parsed_Table(Type_To_Table.get(Item['type']),Where=('name',Item['name']))
-            if Item['type'] == 'ether':
-                Result['Ethernet'].append(Ethernet(Detail=Detailed_Item[0]))
-            if Item['type'] == 'vlan':
-                Result['VLan'].append(VLan(Detail=Detailed_Item[0]))
-            if Item['type'] == 'wg':
-                Result['WireGuard'].append(WireGuard(Detail=Detailed_Item[0]))
-
-        return Result
 
     def Get_Config(self) -> str:
         return self.Connection.Send('export show-sensitive verbose',10)
