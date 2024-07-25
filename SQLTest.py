@@ -3,7 +3,7 @@ if __name__ == '__main__' :
 
     from Class.config import Config
     from Class.component.sqlmanager import SQLManager
-    from Model   import Base,Models
+    from Class.model import Base,Models
 
 
     Main_Config = Config(
