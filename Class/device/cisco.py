@@ -2,18 +2,19 @@ from Class.connection import Connection as Con
 from . import Device
 
 class Cisco(Device):
-    def Connect(self,via:Con,*,
-            Host:str, 
-            Port:int, 
-            Username:str, 
-            Password:str, 
+    def __init__(self, Name:str,*,
             Enable:str
             ) -> None:
 
+        super().__init__(Name)
+
         self.Enable = Enable
-        Result = super().Connect(via, Host=Host, Port=Port, Username=Username, Password=Password)
-        self.Prepare_Terminal()
-        return Result
+
+    def Prepare_Connection(self) -> None:
+        self.Set_State('privileged')
+        self.Connection.Send('terminal width 0')
+        self.Connection.Send('terminal length 0')
+        self.Connection.Send('terminal no monitor')
 
     def Get_Command_Prompt(self) -> str :
         return self.Connection.Send(' ')
@@ -23,15 +24,9 @@ class Cisco(Device):
         Command_Prompt = self.Get_Command_Prompt()
         return Command_Prompt.replace('#','').strip()
 
-    def Get_Config(self, Mode:str = 'full') -> str:
+    def Get_Config(self, Mode:str='full') -> str:
         self.Set_State('privileged')
         return self.Connection.Send(f'show running-config {Mode}',5.5)
-
-    def Prepare_Terminal(self) -> None:
-        self.Set_State('privileged')
-        self.Connection.Send('terminal width 0')
-        self.Connection.Send('terminal length 0')
-        self.Connection.Send('terminal no monitor')
 
     def State(self) -> str:
         Command_Prompt = self.Get_Command_Prompt()

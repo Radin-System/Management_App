@@ -1,7 +1,7 @@
 from Class.connection import Connection as Con
 
 class Device :
-    
+
     Logger = print
     Hostname:str = None
     Domain:str = None
@@ -21,6 +21,11 @@ class Device :
 
         self.Connection = via(Host=Host,Port=Port,Username=Username,Password=Password)
         self.Connection_Type = self.Connection.__class__.__name__
+
+        self.Prepare_Connection()
+
+    def Prepare_Connection(self) -> None:
+        raise NotImplementedError('Please provide connection prepare actions')
 
     def __str__(self) -> str :
         return f'<Device :{self.__name__}>'
