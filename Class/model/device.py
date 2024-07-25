@@ -33,14 +33,13 @@ class Device(InfoMixin, OwnerMixin):
     Connection:Con = None
 
     def Connect(self) -> None :
-
         via = importlib.import_module(self.connection_method,'Class.connection')
-
         self.Connection = via(
             Host=self.fqdn,
             Port=self.connection_port,
             Username=self.authentication.username,
-            Password=self.authentication.password)
+            Password=self.authentication.password
+            )
 
         self.Prepare_Connection()
 
