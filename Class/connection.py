@@ -1,10 +1,11 @@
 import os, time, socket, struct, select, paramiko
+from scapy.all import Raw,sniff,sendp,Ether
 from typing import Self
 from Function.decorator import Connection_Required
 
 ICMP_ECHO_REQUEST = 8
 
-class Connection :
+class Connection:
 
     def Connect(self) -> None :
         raise NotImplementedError('Please provide an action for connecting with this method')
@@ -145,6 +146,68 @@ class ICMP(Connection):
             if time_left <= 0:
                 return
 
+class MAC_Telnet(Connection):
+    def __init__(self,*,
+            Interface:str,
+            Source:str,
+            Destination:str,
+            Encoding:str='utf-8'
+            ) -> None:
+
+        self.Source = Source
+        self.Interface = Interface
+        self.Destination = Destination
+        self.Encoding = Encoding
+
+        self.History = ''
+        self.connected = False
+        self.shell = None
+
+    def Connect(self) -> None:
+        # Create Ethernet frame for MAC-Telnet request
+        eth = Ether(src=self.Source, dst=self.Destination, type=0x8888)  # MikroTik MAC-Telnet uses EtherType 0x8888
+
+        # Empty payload for connection initiation
+        payload = b''
+
+        # Send the frame
+        sendp(eth/payload, iface=self.Interface)
+
+        # Wait for a response
+        response = sniff(iface=self.Interface, count=1, timeout=5)
+        if response:
+            self.connected = True
+            self.shell = response[0]  # Simplified example, handle response appropriately
+
+    @Connection_Required
+    def Receive(self) -> str:
+        if self.shell:
+            response = sniff(iface=self.Interface, count=1, timeout=5)
+            if response:
+                return response[0].load.decode(self.Encoding)
+
+    @Connection_Required
+    def Send(self, message: str, wait: float = 0.5) -> str:
+        if not message.endswith('\n'):
+            message += '\n'
+        
+        # Create Ethernet frame with the command
+        eth = Ether(src=self.Source, dst=self.Destination, type=0x8888) / Raw(load=message.encode(self.Encoding))
+        
+        sendp(eth, iface=self.Interface)
+        time.sleep(wait)
+        response = self.Receive()
+        self.History += response.replace('\r\n', '\n') if response else ''
+        return str(response).strip() if response else ''
+
+    @Connection_Required
+    def Disconnect(self) -> None:
+        self.shell = None
+        self.connected = False
+
+    def Is_Connected(self) -> bool:
+        return self.connected
+
 class SSH(Connection):
     def __init__(self,*,
         Host:str,
@@ -214,7 +277,7 @@ class SSH(Connection):
     def Is_Connected(self) -> bool:
         return True if self.Client.get_transport() is not None and self.Client.get_transport().is_active() else False
 
-class TCPSocket(Connection):
+class TCP_Socket(Connection):
     def __init__(self,*,
         Host:str,
         Port:int,

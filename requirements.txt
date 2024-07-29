@@ -4,14 +4,17 @@ cryptography
 pillow
 ldap3
 pyler
-paramiko
 psycopg2
 pyparsing
 
-## SQL Client
-sqlalchemy
+## Connections
 mysql-connector-python
 mysqlclient
+scapy
+paramiko
+
+## SQL Client
+sqlalchemy
 pymysql
 pyodbc
 
