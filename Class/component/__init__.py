@@ -1,7 +1,7 @@
 from typing import Callable
 
 class Component :
-    
+
     Running:bool = None
     Logger:Callable = print
 
