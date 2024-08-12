@@ -1,6 +1,6 @@
 import time, socket
-from Function.decorator import Connection_Required
 from .base import Connection
+from Function.decorator import Connection_Required
 
 class TcpSocket(Connection):
     def __init__(self,*,

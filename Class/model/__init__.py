@@ -52,7 +52,7 @@ class OwnerMixin:
 
 from .authentication import Authentication
 from .company import Company
-from .device import Device
+#from .device import Device
 from .location import Location
 from .node import Node
 from .personnel import Personnel
@@ -61,7 +61,7 @@ from .user import User
 Models = [
     Authentication,
     Company,
-    Device,
+#    Device,
     Location,
     Node,
     Personnel,
