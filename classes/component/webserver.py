@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_htmlmin import HTMLMIN
 
+from .sqlmanager import SQLManager
 from .base import Component
 
 class WebServer(Component):
@@ -10,6 +11,7 @@ class WebServer(Component):
         Port:int,
         Flask_Debug:bool=False,
         Secret_Key:str,
+        SQLManager:SQLManager,
         Blueprints:list,
         ) -> None:
 
@@ -17,6 +19,7 @@ class WebServer(Component):
         self.Port = Port
         self.Flask_Debug = Flask_Debug
         self.Secret_Key = Secret_Key
+        self.SQLManager = SQLManager
         self.Blueprints = Blueprints
 
     def Start_Actions(self) -> None:
