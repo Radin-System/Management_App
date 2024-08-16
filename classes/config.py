@@ -74,10 +74,10 @@ class Config:
     def __init__(self, Config_File:str) -> None:
         self.Config_File = Config_File
         self.Config = ConfigParser()
-        self.Load_Config()
+        self.Load()
         for K,V in self.Config['ENVIRON'].items(): os.environ.setdefault(K,str(V))
 
-    def Load_Config(self) -> None:
+    def Load(self) -> None:
         ## Cheking if file exist
         if os.path.exists(self.Config_File):
             self.Config.read(self.Config_File)
@@ -93,17 +93,15 @@ class Config:
                         Updated = True
 
             ## Updates file if any section or parameter is added
-            if Updated:
-                with open(self.Config_File, 'w') as Config_File:
-                    self.Config.write(Config_File)
+            if Updated: self.Save()
+
         ## Creates new file if file is missing
         else: 
             for Section, Parameters in self.DEFAULT.items():
                 Parameters = {K:str(V) for K,V in Parameters.items()}
                 self.Config[Section] = Parameters
 
-            with open(self.Config_File, 'w') as Config_File:
-                self.Config.write(Config_File)
+            self.Save()
 
     def Get(self,Sec:str,Parm:str,*,
             Fallback:Any=None, 
@@ -126,5 +124,8 @@ class Config:
 
     def Set(self, Section, Parameter, Value) -> None:
         self.Config.set(Section, Parameter, str(Value))
+        self.Save()
+    
+    def Save(self) -> None:
         with open(self.Config_File, 'w') as Config_File:
             self.Config.write(Config_File)

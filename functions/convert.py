@@ -4,10 +4,15 @@ from cryptography.fernet import Fernet
 def CsvToList(CSV:str) -> list:
     return [Item.strip() for Item in CSV.split(',')]
 
-def StrToMD5 (Raw:str) -> str:
+def StrToMD5(Raw:str) -> str:
     MD5 = hashlib.md5()
     MD5.update(Raw.encode())
     return MD5.hexdigest()
+
+def StrToSha(Raw:str) -> str:
+    Sha = hashlib.sha256()
+    Sha.update(Raw.encode())
+    return Sha.hexdigest()
 
 def Encrypt(Phrase:str, Key:bytes, Encoding='utf-8') -> bytes:
     frenet = Fernet(Key)
