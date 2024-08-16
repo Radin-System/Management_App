@@ -17,8 +17,8 @@ class Config:
         'name': 'RSTO',
         'version': '1.1b',
         'language': 'fa',
-        'temp_foldes_csv':'.temp,',
-        'develop_files_csv':'.temp,.log,.db',
+        'temp_foldes_csv':'.temp,.error,',
+        'develop_files_csv':'.temp,.log,.db,.error,',
     }
 
     DEFAULT['LOG'] = {
