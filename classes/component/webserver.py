@@ -1,9 +1,31 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_htmlmin import HTMLMIN
 
 from .sqlmanager import SQLManager
 from ._base import Component
+
+class PageSetting :
+    class DefaultBaseSetting :
+        def __init__(self) -> None:
+            self.Dir       = 'rtl'
+            self.Charset   = 'UTF-8'
+            self.Appname   = 'support_portal'
+            self.Language  = 'fa'
+            self.PageTitleEn = 'Support Portal'
+            self.PageTitleFa = 'پرتال پشتیبانی'
+
+    class DefaultStaticFile :
+        def __init__(self) -> None:
+            self.Main         = True
+            self.JQuery       = True
+            self.Bootstrap    = True
+            self.FontAwesome  = True
+            self.FontVazirmtn = True
+
+    def __init__(self) -> None:
+        self.BaseSetting = PageSetting.DefaultBaseSetting()
+        self.StaticFile  = PageSetting.DefaultStaticFile()
 
 class WebServer(Component):
     def __init__(self,App:Flask,*,
@@ -44,6 +66,10 @@ class WebServer(Component):
         @Login_Manager.user_loader
         def User_Loader(ID:int) -> Exception:
             return self.SQLManager.Query(self.SQLManager.User, Eager=True, First=True, id=ID)
+
+        @self.App.context_processor
+        def Context_Processor() -> dict:
+            return dict(Current_User=current_user, PageSetting=PageSetting())
 
     def Register_Blueprints(self) -> None:
         for Blueprint in self.Blueprints:

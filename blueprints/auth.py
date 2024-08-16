@@ -1,5 +1,5 @@
-from flask                           import Blueprint, request, render_template, redirect, url_for
-from flask_login                     import logout_user
+from flask import Blueprint, request, render_template, redirect, url_for
+from flask_login import logout_user
 
 from classes.component.sqlmanager import SQLManager
 
