@@ -11,11 +11,11 @@
       </ul>
       {% if Current_User.is_authenticated %}
         {% with User=Current_User , Dropdown=True %}
-          {% include 'base/widget/UserSmall.html' %}
+          {% include 'base/widget/usersmall.html' %}
         {% endwith %}
       {% else %}
         <div class="col-md-3 text-end">
-          {% include 'base/modal/Login.html' %}
+          {% include 'base/modal/login.html' %}
         </div>
       {% endif %}
     </header>

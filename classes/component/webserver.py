@@ -6,7 +6,7 @@ from .sqlmanager import SQLManager
 from .base import Component
 
 class WebServer(Component):
-    def __init__(self,*,
+    def __init__(self,App:Flask,*,
         Host:str,
         Port:int,
         Flask_Debug:bool=False,
@@ -14,7 +14,7 @@ class WebServer(Component):
         SQLManager:SQLManager,
         Blueprints:list,
         ) -> None:
-
+        self.App = App
         self.Host = Host
         self.Port = Port
         self.Flask_Debug = Flask_Debug
@@ -31,10 +31,6 @@ class WebServer(Component):
         pass
 
     def Init_App(self) -> None:
-        
-        ## Initing Apps
-        self.App = Flask(__name__, static_folder="static", template_folder="templates")
-
         ## Configs
         self.App.config['SECRET_KEY'] = self.Secret_Key
         Login_Manager = LoginManager()
@@ -46,7 +42,7 @@ class WebServer(Component):
         ## Adding Functions
         @Login_Manager.user_loader
         def User_Loader(ID:int) -> Exception:
-            raise NotImplementedError('No DB Management implemented')
+            return self.SQLManager.Query(self.SQLManager.User,Eager=True,First=True,id=ID)
 
     def Register_Blueprints(self) -> None:
         for Blueprint in self.Blueprints:

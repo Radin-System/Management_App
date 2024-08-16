@@ -1,3 +1,5 @@
+from flask import Flask
+
 if __name__ == '__main__' :
     CONFIGFILE = '.configfiles/config.ini'
 
@@ -44,7 +46,8 @@ if __name__ == '__main__' :
         Max_ActionID    = Main_Config.Get('AMIMANAGER','max_action_id'),
     )
 
-    Main_Webserver = WebServer(
+    Flask_App = Flask(__name__, static_folder="static", template_folder="templates")
+    Main_Webserver = WebServer(Flask_App,
         Host            = Main_Config.Get('WEBSERVER','host'),
         Port            = Main_Config.Get('WEBSERVER','port'),
         Flask_Debug     = Main_Config.Get('WEBSERVER','flask_debug'),

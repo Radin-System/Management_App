@@ -4,22 +4,22 @@ from flask_login                     import logout_user
 Auth = Blueprint('auth', __name__, url_prefix='/auth')
 
 @Auth.route('/')
-def Index():
-    return redirect(url_for('Auth.Login'))
+def index():
+    return redirect(url_for('auth.login'))
 
 @Auth.route('/login' , methods=['GET','POST'])
-def Login():
-    if request.method == 'GET'  : return render_template('Auth/Login.html')
-    if request.method == 'POST' :
+def login():
+    if request.method == 'GET' : return render_template('auth/login.html')
+    if request.method == 'POST':
         raise NotImplementedError('Route not implemented yet')
 
 @Auth.route('/logout' , methods=['GET','POST'])
-def Logout():
+def logout():
     logout_user()
-    return redirect(url_for('Root.Index'))
+    return redirect(url_for('root.index'))
 
 @Auth.route('/register' , methods=['GET','POST'])
-def Register():
-    if   request.method == 'GET'  : return render_template('Auth/Register.html')
+def register():
+    if   request.method == 'GET'  : return render_template('auth/register.html')
     elif request.method == 'POST' :
         raise NotImplementedError('Route not implemented yet')

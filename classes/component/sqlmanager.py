@@ -1,8 +1,9 @@
 import os,sqlalchemy,sqlalchemy.orm
+from typing import Any
+from functools import wraps
 
 from classes.component.base import Component
 from functions.decorator import Running_Required,Connection_Required,Return_False_On_Exception
-from functools import wraps
 
 class SQLManager(Component):
     def __init__(self,*,
@@ -93,7 +94,7 @@ class SQLManager(Component):
         Limit:int = None, 
         Offset:int = None,
         **Conditions
-        ) -> (list | None): 
+        ) -> list|Any|None:
         #Usage : SQLManager.Query(SQLManager.User , Eager=True , Sort=[('name','asc')] , First = False , Limit = 10 , Offset = 12 , email = None)
 
         Query   = Session.query(Model)

@@ -20,9 +20,9 @@
       {% block Style %}{% endblock %}
   </head>
   <body>
-    {% block Header %}{% include 'Base/Header.html' %}{% endblock %}
+    {% block Header %}{% include 'base/header.html' %}{% endblock %}
     {% block Content %}<!-- Content Block -->{% endblock %}
-    {% block Footer %}{% include 'Base/Footer.html' %}{% endblock %}
+    {% block Footer %}{% include 'base/footer.html' %}{% endblock %}
     <!-- Scripts -->
     {% if PageSetting.StaticFile.Bootstrap %}<script src="{{url_for('static', filename='bootstrap/bootstrap.bundle.min.js')}}"></script>{% endif %}
     {% if PageSetting.StaticFile.JQuery %}<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>{% endif %}

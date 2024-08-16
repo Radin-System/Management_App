@@ -8,7 +8,7 @@ from .root import Root
 Blueprints = [
     Api,
     Auth,
-    Error,
+    #Error,
     Faq,
     Register,
     Root,
