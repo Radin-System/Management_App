@@ -8,7 +8,7 @@ class Config:
 
     DEFAULT['ENVIRON'] = {
         'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA='  # Test Key
-        }
+    }
 
     DEFAULT['GLOBALS'] = {
         'debug': True,
@@ -19,17 +19,17 @@ class Config:
         'language': 'fa',
         'temp_foldes_csv':'.temp,',
         'develop_files_csv':'.temp,.log,.db',
-        }
+    }
 
     DEFAULT['LOG'] = {
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
         'log_max_size': '10MB'
-        }
+    }
 
     DEFAULT['TASKMANAGER'] ={
         'check_interval': 5,
-        }
+    }
 
     DEFAULT['SQLMANAGER'] = {
         'debug': True,
@@ -41,7 +41,7 @@ class Config:
         'database': 'management_app',
         'sqlite_path': '.db/',
         'verbose': False,
-        }
+    }
 
     DEFAULT['AMIMANAGER'] = {
         'debug': False,
@@ -53,7 +53,14 @@ class Config:
         'timeout': 10,
         'event_whitelist_csv': 'AgentConnect,AgentComplete',
         'max_action_id': 2048,
-        }
+    }
+
+    DEFAULT['WEBSERVER'] = {
+        'host': '0.0.0.0',
+        'port': 8080,
+        'flask_debug': True,
+        'Secret_Key': 'SDy9r3gbFDBjq0urv1398t0gsbuq0',
+    }
 
     DEFAULT['TOOL'] = {
         'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
