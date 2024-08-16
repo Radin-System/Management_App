@@ -14,6 +14,7 @@ class WebServer(Component):
         SQLManager:SQLManager,
         Blueprints:list,
         ) -> None:
+
         self.App = App
         self.Host = Host
         self.Port = Port
@@ -21,10 +22,10 @@ class WebServer(Component):
         self.Secret_Key = Secret_Key
         self.SQLManager = SQLManager
         self.Blueprints = Blueprints
-
-    def Start_Actions(self) -> None:
         self.Init_App()
         self.Register_Blueprints()
+
+    def Start_Actions(self) -> None:
         self.App.run(self.Host, self.Port, debug=self.Flask_Debug)
 
     def Stop_Actions(self) -> None:

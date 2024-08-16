@@ -48,12 +48,12 @@ if __name__ == '__main__' :
 
     Flask_App = Flask(__name__, static_folder="static", template_folder="templates")
     Main_Webserver = WebServer(Flask_App,
-        Host            = Main_Config.Get('WEBSERVER','host'),
-        Port            = Main_Config.Get('WEBSERVER','port'),
-        Flask_Debug     = Main_Config.Get('WEBSERVER','flask_debug'),
-        Secret_Key      = Main_Config.Get('WEBSERVER','secret_key'),
-        SQLManager      = Main_SQLManager,
-        Blueprints      = Blueprints,
+        Host        = Main_Config.Get('WEBSERVER','host'),
+        Port        = Main_Config.Get('WEBSERVER','port'),
+        Flask_Debug = Main_Config.Get('WEBSERVER','flask_debug'),
+        Secret_Key  = Main_Config.Get('WEBSERVER','secret_key'),
+        SQLManager  = Main_SQLManager,
+        Blueprints  = Blueprints,
     )
 
     Main_Webserver.Start()
