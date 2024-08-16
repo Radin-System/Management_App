@@ -1,7 +1,5 @@
 from flask import Blueprint, jsonify
-from functions import Create_Response
-
-Active_Tokens = {}
+from functions.web import Create_Response
 
 Api = Blueprint('api', __name__, url_prefix='/endpoint/api')
 

@@ -17,10 +17,6 @@ if __name__ == '__main__' :
         Time_Format     = Main_Config.Get('LOG','log_time_format'),
     )
 
-    Main_TaskManager = TaskManager(
-        Check_Interval = Main_Config.Get('TASKMANAGER','check_interval'),
-    )
-
     Main_SQLManager = SQLManager(
         Host        = Main_Config.Get('SQLMANAGER','host'),
         Port        = Main_Config.Get('SQLMANAGER','port'),
@@ -32,6 +28,10 @@ if __name__ == '__main__' :
         Verbose     = Main_Config.Get('SQLMANAGER','verbose'),
         Base        = Base,
         Models      = Models,
+    )
+
+    Main_TaskManager = TaskManager(
+        Check_Interval = Main_Config.Get('TASKMANAGER','check_interval'),
     )
 
     Main_AMIManager = AMIManager(
