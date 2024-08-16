@@ -5,23 +5,19 @@
 /* Set height to 100% for body and html to enable the background image to cover the whole page: */
 .Carousel-style {
   height: 350px;
+  background-size: cover;
+  background-position: center;
 }
 .Carousel-img1 {
   background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
-  background-size: cover; 
-  background-position: center;
 }
 
 .Carousel-img2 {
-  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
-  background-size: cover; 
-  background-position: center;
+  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}');
 }
 
 .Carousel-img3 {
-  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
-  background-size: cover; 
-  background-position: center;
+  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}');
 }
 </style>
 {% endblock %}
