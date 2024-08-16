@@ -1,16 +1,41 @@
 {% extends 'base/Base.html' %}
 
+{% block Style %}
+<style>
+/* Set height to 100% for body and html to enable the background image to cover the whole page: */
+.Carousel-style {
+  height: 350px;
+}
+.Carousel-img1 {
+  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
+  background-size: cover; 
+  background-position: center;
+}
+
+.Carousel-img2 {
+  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
+  background-size: cover; 
+  background-position: center;
+}
+
+.Carousel-img3 {
+  background-image: url('{{url_for("static",filename="asset/images/Abbstract_Pattern.jpg")}}'); 
+  background-size: cover; 
+  background-position: center;
+}
+</style>
+{% endblock %}
+
 {% block Content %}
 <div class="container" style="min-height: 1000px;">
   <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
-      <div class="carousel-item active" style="height: 350px;">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+      <div class="carousel-item active Carousel-style Carousel-img1">
         <div class="container">
           <div class="carousel-caption text-start">
             <h1>عنوان اول</h1>
@@ -19,8 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="carousel-item" style="height: 350px;">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+      <div class="carousel-item Carousel-style Carousel-img2">
         <div class="container">
           <div class="carousel-caption">
             <h1>عنوان دوم</h1>
@@ -29,8 +53,7 @@
           </div>
         </div>
       </div>
-      <div class="carousel-item" style="height: 350px;">
-        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+      <div class="carousel-item Carousel-style Carousel-img3">
         <div class="container">
           <div class="carousel-caption text-end">
             <h1>عنوان سوم</h1>
@@ -42,26 +65,26 @@
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">السابق</span>
+      <span class="visually-hidden">قبلی</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">التالي</span>
+      <span class="visually-hidden">بعدی</span>
     </button>
   </div>
 
   <div class="container my-5">
     <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
       <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-  <h1 class="display-7 fw-bold text-body-emphasis"> پشتیبانی IT برای کسب و کار شما</h1>
-  <br>
-  <p class="lead">ما در <strong>رادین سیستم</strong> مفتخریم که با ارائه خدمات جامع و تخصصی IT، به بهبود و ارتقاء عملکرد کسب و کار شما کمک می‌کنیم. تیم ما با بهره‌گیری از دانش و تجربه‌ای گسترده، در زمینه‌های مختلف IT فعالیت می‌کند و خدماتی متنوع ارائه می‌دهد.</p>
-  <p>ما در کنار شما هستیم تا زیرساخت‌های IT شما را بهبود بخشیم و بهره‌وری را افزایش دهیم.</p>
-  </div>
-  <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-  <img class="rounded-lg-3" src="{{ url_for('static',filename='asset/images/ITSupport-1.jpg') }}" alt="" width="720">
-  </div>
-  </div>
+        <h1 class="display-7 fw-bold text-body-emphasis"> پشتیبانی IT برای کسب و کار شما</h1>
+        <br>
+        <p class="lead">ما در <strong>رادین سیستم</strong> مفتخریم که با ارائه خدمات جامع و تخصصی IT، به بهبود و ارتقاء عملکرد کسب و کار شما کمک می‌کنیم. تیم ما با بهره‌گیری از دانش و تجربه‌ای گسترده، در زمینه‌های مختلف IT فعالیت می‌کند و خدماتی متنوع ارائه می‌دهد.</p>
+        <p>ما در کنار شما هستیم تا زیرساخت‌های IT شما را بهبود بخشیم و بهره‌وری را افزایش دهیم.</p>
+      </div>
+      <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+        <img class="rounded-lg-3" src="{{ url_for('static',filename='asset/images/ITSupport-1.jpg') }}" alt="" width="720">
+      </div>
+    </div>
   </div>
 
   <div class="container col-xl-10 col-xxl-10 px-3 py-5">
@@ -88,10 +111,10 @@
         <h1 class="display-7 fw-bold text-body-emphasis">خدمات اصلی ما شامل:</h1>
         <br>
         <ul>
-          <li><strong>طراحی و دیزاین شبکه:</strong> ایجاد و پیاده‌سازی شبکه‌های کامپیوتری با تمرکز بر امنیت، کارایی و پایداری.</li>
-          <li><strong>پشتیبانی فنی:</strong> رفع مشکلات و بهبود کارایی سیستم‌ها و شبکه‌ها با پشتیبانی سریع و حرفه‌ای.</li>
-          <li><strong>هلپ دسک:</strong> ارائه راهکارهای فوری و موثر برای حل مشکلات کاربران و کارکنان شما.</li>
-          <li><strong>راه‌اندازی سرویس‌ها:</strong> پیاده‌سازی و بهینه‌سازی سرویس‌های مختلف متناسب با نیازهای کسب و کار شما.</li>
+          <li><strong>طراحی شبکه : </strong> ایجاد و پیاده‌سازی شبکه‌های کامپیوتری با تمرکز بر امنیت، کارایی و پایداری.</li>
+          <li><strong>پشتیبانی فنی : </strong> رفع مشکلات و بهبود کارایی سیستم‌ها و شبکه‌ها با پشتیبانی سریع و حرفه‌ای.</li>
+          <li><strong>Help Desk : </strong> ارائه راهکارهای فوری و موثر برای حل مشکلات کاربران و کارکنان شما.</li>
+          <li><strong>راه‌اندازی : </strong> پیاده‌سازی و بهینه‌سازی سرویس‌های مختلف متناسب با نیازهای کسب و کار شما.</li>
         </ul>
       </div>
       <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
