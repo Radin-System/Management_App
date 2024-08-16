@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
-from constants import PageSetting
+from classes.pagesettings import PageSetting
 
 Faq = Blueprint('faq', __name__, url_prefix='/faq')
 

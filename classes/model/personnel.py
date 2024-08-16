@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from . import InfoMixin,NameMixin,OwnerMixin
 
-from Class.validator import EnglishSpecial,Username
+from classes.validator import EnglishSpecial,Username
 
 class Personnel(NameMixin, InfoMixin, OwnerMixin):
     __tablename__ = 'personnels'

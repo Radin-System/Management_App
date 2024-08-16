@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
-from Class.validator import English,EnglishSpecial,Persian
+from classes.validator import English,EnglishSpecial,Persian
 
 class Location(InfoMixin, OwnerMixin):
     __tablename__ = 'locations'

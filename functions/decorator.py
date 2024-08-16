@@ -1,6 +1,10 @@
 import tracemalloc
 from functools import wraps
 from time import perf_counter
+from flask import redirect,url_for,abort
+from functools import wraps
+from flask_login import current_user
+
 
 def Return_False_On_Exception(Function) -> callable:
     @wraps(Function)
@@ -36,7 +40,7 @@ def Connection_Required(Function) -> callable :
         return Result
     return Wrapper
 
-def Do_Performance (Function) -> callable:
+def Do_Performance(Function) -> callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         tracemalloc.start()
@@ -49,3 +53,19 @@ def Do_Performance (Function) -> callable:
         Result = Function(*Args, **Kwargs)
         return Result
     return Wrapper
+
+def login_required(Func):
+    @wraps(Func)
+    def Decorate(*args, **kwargs):
+        if not current_user.is_authenticated :
+            return redirect(url_for('Auth.Login'))
+        return Func(*args, **kwargs)
+    return Decorate
+
+def admin_required(Func):
+    @wraps(Func)
+    def Decorate(*args, **kwargs):
+        if not (current_user.is_authenticated and current_user.admin) :
+            return abort(401) ,401
+        return Func(*args, **kwargs)
+    return Decorate

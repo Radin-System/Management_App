@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
-from Class.validator import Username,EnglishSpecial
+from classes.validator import Username,EnglishSpecial
 
 class Authentication(InfoMixin, OwnerMixin):
     __tablename__ = 'authentications'

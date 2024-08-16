@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean, String, T
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from Class.validator import English,EnglishSpecial,Persian,Email,MobileNumber
+from classes.validator import English,EnglishSpecial,Persian,Email,MobileNumber
 
 Base = declarative_base()
 

@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
-from Class.validator import FQDN,EnglishSpecial,Hostname
+from classes.validator import FQDN,EnglishSpecial,Hostname
 
 class Node(InfoMixin, OwnerMixin):
     __tablename__      = 'nodes'

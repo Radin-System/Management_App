@@ -1,5 +1,5 @@
 from flask import Blueprint
-from functions import Handle_Http_Error
+from functions.web import Handle_Http_Error
 
 Error = Blueprint('error', __name__)
 

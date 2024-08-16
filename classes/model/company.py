@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
 
-from Class.validator import English,Domain,EnglishSpecial,Persian,PhoneNumber
+from classes.validator import English,Domain,EnglishSpecial,Persian,PhoneNumber
 
 class Company(InfoMixin, OwnerMixin):
     __tablename__ = 'companies'

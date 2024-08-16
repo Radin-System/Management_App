@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String
 from . import InfoMixin,NameMixin
 
-from Class.validator import EnglishSpecial,Password,Username
+from classes.validator import EnglishSpecial,Password,Username
 
 class User(NameMixin, InfoMixin):
     __tablename__ = 'users'

@@ -4,8 +4,8 @@ from pyparsing import Word, alphas, alphanums, nums, QuotedString, Suppress, Gro
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 from . import InfoMixin, OwnerMixin
-from Class.connection import Connection as Con
-from Class.validator import English, EnglishSpecial, Hostname, FQDN, Ipv4OrFQDN, Port
+from classes.connection.base import Connection as Con
+from classes.validator import English, EnglishSpecial, Hostname, FQDN, Ipv4OrFQDN, Port
 
 class Device(InfoMixin, OwnerMixin):
     ## SQL Table

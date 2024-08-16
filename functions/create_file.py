@@ -1,6 +1,6 @@
 import os
 
-def Create_VNC_File(Name:str,*,
+def Vnc(Name:str,*,
         Folder:str,
         Host:str,
         Domain:str,
