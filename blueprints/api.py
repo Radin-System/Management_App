@@ -13,10 +13,6 @@ def Api(SQLManager:SQLManager) -> Blueprint:
 
         return jsonify(Create_Response(Data))
 
-    @bp.route('/generate-token',methods=['POST'])
-    def generate_token():
-        raise NotImplementedError('route not implemented yet')
-
     @bp.route('/all-tokens',methods=['POST'])
     def all_tokens():
         raise NotImplementedError('route not implemented yet')

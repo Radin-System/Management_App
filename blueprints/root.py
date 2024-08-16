@@ -16,23 +16,15 @@ def Root(SQLManager:SQLManager) -> Blueprint:
         return render_template('index.html')
 
     @bp.route('/home')
-    def Home():
+    def home():
         return render_template('Home.html')
-
-    @bp.route('/services')
-    def Services():
-        return render_template('Services.html')
-
-    @bp.route('/about')
-    def About():
-        return render_template('About.html')
 
     @bp.route('/under-construction')
     def under_construction():
         return render_template('under-construction.html')
 
     @bp.route('/favicon.ico')
-    def Favicon():
+    def favicon():
         return redirect(url_for('static',filename='favicon.ico'))
 
     return bp
