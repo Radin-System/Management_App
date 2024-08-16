@@ -1,7 +1,7 @@
 import os,shutil
 from typing           import Dict,Any
 from configparser     import ConfigParser
-from Function.convert import CsvToList
+from functions.convert import CsvToList
 
 class Config:
     DEFAULT: Dict[str, Dict[str, Any]] = {}

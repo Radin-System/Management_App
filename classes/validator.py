@@ -1,5 +1,5 @@
 import re
-from Function.decorator import Return_False_On_Exception
+from functions.decorator import Return_False_On_Exception
 
 MAC_SPECIALS = '.-:,'
 SPECIAL_CHARS = '!@#$%^&*()_+"|\\/<>?:;{}[]' + "'"

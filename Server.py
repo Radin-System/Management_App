@@ -1,15 +1,15 @@
 if __name__ == '__main__' :
     CONFIGFILE = '.configfiles/config.ini'
 
-    from Class.config import Config
-    from Class.component.logger import Logger
+    from classes.config import Config
+    from classes.component.logger import Logger
 
-    from Class.component.taskmanager import TaskManager
+    from classes.component.taskmanager import TaskManager
     
-    from Class.component.sqlmanager import SQLManager
-    from Class.model import Base,Models
+    from classes.component.sqlmanager import SQLManager
+    from classes.model import Base,Models
 
-    from Class.component.amimanager import AMIManager
+    from classes.component.amimanager import AMIManager
 
     Main_Config = Config(
         Config_File = CONFIGFILE,

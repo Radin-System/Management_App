@@ -1,5 +1,5 @@
 import os, time, socket, struct, select
-from Function.decorator import Connection_Required
+from functions.decorator import Connection_Required
 from .base import Connection
 
 ICMP_ECHO_REQUEST = 8
