@@ -3,7 +3,7 @@ from flask_login import LoginManager
 from flask_htmlmin import HTMLMIN
 
 from .sqlmanager import SQLManager
-from .base import Component
+from ._base import Component
 
 class WebServer(Component):
     def __init__(self,App:Flask,*,

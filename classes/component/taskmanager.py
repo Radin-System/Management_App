@@ -1,6 +1,6 @@
 import time
 import threading
-from .base import Component
+from ._base import Component
 from classes.task import Task
 
 class TaskManager(Component):

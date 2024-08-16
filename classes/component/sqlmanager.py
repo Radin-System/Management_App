@@ -2,7 +2,7 @@ import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
 from functools import wraps
 
-from classes.component.base import Component
+from ._base import Component
 from functions.decorator import Running_Required,Connection_Required,Return_False_On_Exception
 
 class SQLManager(Component):

@@ -1,4 +1,4 @@
-from .base import Validator
+from ._base import Validator
 from functions.decorator import Return_False_On_Exception
 from .fqdn import FQDN
 from .ipv4 import IPv4

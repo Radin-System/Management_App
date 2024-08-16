@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from classes.validator import English, EnglishSpecial, Persian, Email, MobileNumber
-from .base import Base
+from ._base import Base
 
 class InfoMixin(Base):
     __abstract__ = True

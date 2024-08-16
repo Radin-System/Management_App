@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from classes.model.mixins import *
-from classes.connection.base import Connection as Con
+from classes.connection._base import Connection as Con
 from classes.validator import English, EnglishSpecial, Hostname, FQDN, IPv4OrFQDN, Port
 
 class Device(InfoMixin, OwnerMixin):

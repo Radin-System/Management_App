@@ -1,5 +1,5 @@
 import time, socket
-from .base import Connection
+from ._base import Connection
 from functions.decorator import Connection_Required
 
 class TcpSocket(Connection):

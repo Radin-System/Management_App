@@ -1,5 +1,5 @@
 import threading,socket,time
-from .base import Component
+from ._base import Component
 
 class AMIManager(Component):
     def __init__(self,*,

@@ -1,7 +1,7 @@
 import time
 from scapy.all import Raw,sniff,sendp,Ether
 from functions.decorator import Connection_Required
-from .base import Connection
+from ._base import Connection
 
 class MacTelnet(Connection):
     def __init__(self,*,

@@ -1,4 +1,4 @@
-from .base import Validator
+from ._base import Validator
 from .hostname import Hostname
 from .domain import Domain
 from functions.decorator import Return_False_On_Exception

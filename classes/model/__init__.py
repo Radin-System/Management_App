@@ -5,7 +5,7 @@ from .tables.location import Location
 from .tables.node import Node
 from .tables.personnel import Personnel
 from .tables.user import User
-from .base import Base
+from ._base import Base
 
 Models = [
     Authentication,

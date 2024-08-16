@@ -1,6 +1,6 @@
 import time, paramiko
 from functions.decorator import Connection_Required
-from .base import Connection
+from ._base import Connection
 
 class SSH(Connection):
     def __init__(self,*,
