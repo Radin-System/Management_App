@@ -23,3 +23,8 @@ selenium
 pytesseract
 requests
 pytube
+
+## Web Server
+flask
+Flask-HTMLmin
+flask_login

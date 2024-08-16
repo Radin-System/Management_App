@@ -1,0 +1,21 @@
+{% if User %}
+<div class="card bg-light mb-3">
+  {% if Header %}
+    <div class="card-header text-center"><strong>{{ Header }}</strong></div>
+  {% endif %}
+  <div class="card-body">
+    <div class="d-flex flex-column align-items-center text-center">
+      <img src="{{url_for('static',filename=User.avatar_path)}}" alt="Avatar" class="rounded-circle" height="150" width="150">
+      <div class="mt-3">
+        <h5 class="mb-2">{{ User.firstname_en }} {{ User.lastname_en }}</h5>
+        <p class="text-secondary mb-2">{{ User.firstname_fa }} {{ User.lastname_fa }}</p>
+        <p class="text-secondary mb-2">{{ User.position }}</p>
+        <p class="text-muted font-size-sm mb-2">{{ User.userPrincipal }}</p>
+      </div>
+    </div>
+  </div>
+  {% if Footer %}
+    <div class="card-footer text-center"></div><strong>{{ Footer }}</strong></div>
+  {% endif %}
+</div>
+{% endif %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ PageSetting.BaseSetting.Language }}" dir="{{ PageSetting.BaseSetting.Dir }}"> 
+  <head>
+    <meta charset="{{ PageSetting.BaseSetting.Charset }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ PageSetting.BaseSetting.PageTitle }}</title>
+    <!---->
+      {% if PageSetting.BaseSetting.Language == 'fa' %}
+        {% if PageSetting.StaticFile.FontVazirmtn %}
+          <link rel="stylesheet" href="{{url_for('static', filename='vazirmatn/Vazirmatn-font-face.css')}}">
+          <link rel="stylesheet" href="{{url_for('static', filename='vazirmatn/Vazirmatn-Variable-font-face.css')}}">
+        {% endif %}
+        {% if PageSetting.StaticFile.Bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.rtl.min.css')}}">{% endif %}
+      {% elif PageSetting.BaseSetting.Language == 'en' %}
+        {% if PageSetting.StaticFile.Bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.min.css')}}">{% endif %}
+      {% endif %}
+      {% if PageSetting.StaticFile.Main %}<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">{% endif %}
+      {% if PageSetting.StaticFile.FontAwesome %}<link rel="stylesheet" href="{{url_for('static', filename='fontawesome/css/all.min.css')}}">{% endif %}
+      <!-- Custom Styles -->
+      {% block Style %}{% endblock %}
+  </head>
+  <body>
+    {% block Header %}{% include 'Base/Header.html' %}{% endblock %}
+    {% block Content %}<!-- Content Block -->{% endblock %}
+    {% block Footer %}{% include 'Base/Footer.html' %}{% endblock %}
+    <!-- Scripts -->
+    {% if PageSetting.StaticFile.Bootstrap %}<script src="{{url_for('static', filename='bootstrap/bootstrap.bundle.min.js')}}"></script>{% endif %}
+    {% if PageSetting.StaticFile.JQuery %}<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>{% endif %}
+    {% if PageSetting.StaticFile.Main %}<script src="{{url_for('static', filename='main.js')}}"></script>{% endif %}
+    {% block Script %}{% endblock %}
+  </body>
+</html>

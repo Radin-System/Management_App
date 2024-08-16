@@ -1,0 +1,18 @@
+{% if Path and Name %}
+  <button class="btn" id="{{Name}}Button" data-bs-toggle="modal" data-bs-target="#{{Name}}Modal" type="button"><img class="img-thumbnail rounded" src="{{url_for('static',filename=Path)}}" id="{{Name}}ModalImage" style="max-height: 100px;"></button>
+  <div class="modal fade" id="{{Name}}Modal" tabindex="-1" aria-labelledby="{{Name}}ModalLabel" aria-hidden="flase">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{Name}}ModalLabel">
+            {% if Header %}{{Header}}{%else%}{{Name}}{% endif %}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-centerd">
+          <img class="img-fluid mx-auto d-block rounded" src="{{url_for('static',filename=Path)}}" id="{{Name}}ModalImage">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

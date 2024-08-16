@@ -1,0 +1,75 @@
+{% extends 'Base/Base.html' %}
+{% block Header %}<!-- Removed Header -->{% endblock %}
+{% block Footer %}<!-- Removed Footer -->{% endblock %}
+{% block Style %}
+<style>
+/* Set height to 100% for body and html to enable the background image to cover the whole page: */
+body, html {
+  height: 100%
+}
+
+.bgimg {
+  /* Background image */
+  background-image: url('{{url_for("static",filename="asset/images/Construction.jpg")}}');
+  /* Full-screen */
+  height: 100%;
+  /* Center the background image */
+  background-position: center;
+  /* Scale and zoom in the image */
+  background-size: cover;
+  /* Add position: relative to enable absolutely positioned elements inside the image (place text) */
+  position: relative;
+  /* Add a white text color to all elements inside the .bgimg container */
+  color: rgb(0, 0, 0);
+  /* Set the font-size to 25 pixels */
+  font-size: 25px;
+}
+
+/* Position text in the top-left corner */
+.topright {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+/* Position text in the middle */
+.middle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+/* Position text in the bottom-left corner */
+.bottommid {
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  transform: translate(-50%, -50%);
+  left: 50%;
+}
+
+/* Style the <hr> element */
+hr {
+  margin: auto;
+  width: 60%;
+}
+</style>
+{% endblock %}
+
+{% block Content %}
+<div class="bgimg">
+  <div class="topright">
+    <p>پورتال پشتیبانی</p>
+  </div>
+  <div class="middle">
+    <h1>این سایت در حال بازسازی میباشد</h1>
+    <hr>
+    <p>لطفا منتظر بمانید</p>
+  </div>
+  <div class="bottommid">
+    <p>رادین سیستم</p>
+  </div>
+</div>
+{% endblock %}

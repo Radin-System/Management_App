@@ -1,0 +1,103 @@
+{% extends 'base/Base.html' %}
+
+{% block Content %}
+<div class="container" style="min-height: 1000px;">
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1" aria-current="true"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2" class=""></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active" style="height: 350px;">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>عنوان اول</h1>
+            <p class="opacity-75">اینجا قرار است متن قرار گیرد و خیلی هم باید زیاد باشد که در چند خط نوشته شود دارم مینویسم یادگاری تا بماند روزگاری</p>
+            <p><a class="btn btn-lg btn-primary" href="#">دکمه</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item" style="height: 350px;">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>عنوان دوم</h1>
+            <p>اینجا قرار است متن قرار گیرد و خیلی هم باید زیاد باشد که در چند خط نوشته شود دارم مینویسم یادگاری تا بماند روزگاری</p>
+            <p><a class="btn btn-lg btn-primary" href="#">دکمه</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item" style="height: 350px;">
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect></svg>
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>عنوان سوم</h1>
+            <p>اینجا قرار است متن قرار گیرد و خیلی هم باید زیاد باشد که در چند خط نوشته شود دارم مینویسم یادگاری تا بماند روزگاری</p>
+            <p><a class="btn btn-lg btn-primary" href="#">دکمه</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">السابق</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">التالي</span>
+    </button>
+  </div>
+
+  <div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+  <h1 class="display-7 fw-bold text-body-emphasis">خدمات و پشتیبانی IT برای کسب و کار شما</h1>
+  <br>
+  <p class="lead">ما در <strong>رادین سیستم</strong> مفتخریم که با ارائه خدمات جامع و تخصصی IT، به بهبود و ارتقاء عملکرد کسب و کار شما کمک می‌کنیم. تیم ما با بهره‌گیری از دانش و تجربه‌ای گسترده، در زمینه‌های مختلف IT فعالیت می‌کند و خدماتی متنوع ارائه می‌دهد.</p>
+  <p>ما در کنار شما هستیم تا زیرساخت‌های IT شما را بهبود بخشیم و بهره‌وری را افزایش دهیم.</p>
+  </div>
+  <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+  <img class="rounded-lg-3" src="{{ url_for('static',filename='asset/images/ITSupport-1.jpg') }}" alt="" width="720">
+  </div>
+  </div>
+  </div>
+
+  <div class="container col-xl-10 col-xxl-10 px-3 py-5">
+      <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-6 text-center text-lg-start">
+          <h1 class="display-5 fw-bold lh-1 text-body-emphasis mb-3">از آخرین اخبار باخبر شوید</h1>
+          <p class="col-lg-10 fs-4"></p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-6">
+          <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+              <label for="floatingInput">Email address</label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">عضویت</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  <div class="container my-5">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+        <h1 class="display-7 fw-bold text-body-emphasis">خدمات اصلی ما شامل:</h1>
+        <br>
+        <ul>
+          <li><strong>طراحی و دیزاین شبکه:</strong> ایجاد و پیاده‌سازی شبکه‌های کامپیوتری با تمرکز بر امنیت، کارایی و پایداری.</li>
+          <li><strong>پشتیبانی فنی:</strong> رفع مشکلات و بهبود کارایی سیستم‌ها و شبکه‌ها با پشتیبانی سریع و حرفه‌ای.</li>
+          <li><strong>هلپ دسک:</strong> ارائه راهکارهای فوری و موثر برای حل مشکلات کاربران و کارکنان شما.</li>
+          <li><strong>راه‌اندازی سرویس‌ها:</strong> پیاده‌سازی و بهینه‌سازی سرویس‌های مختلف متناسب با نیازهای کسب و کار شما.</li>
+        </ul>
+      </div>
+      <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+        <img class="rounded-lg-3" src="{{ url_for('static',filename='asset/images/ITSupport-2.jpg') }}" alt="" width="720">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+body {
+    font-family: Vazirmatn;
+    direction: rtl;
+  }
+
+.no-border {
+    border: 0 none!important;
+}
+
+.custum-textarea {
+    border: none!important;
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    background: transparent;
+    resize: both;
+    border: none;
+    padding: 0;
+    color: black;
+    min-height: 40px;
+    line-height: 20px;
+}
+
+.no-bg {
+    background: none!important;
+}
+
+.width-machine {
+    /*   Sort of a magic number to add extra space for number spinner */
+    padding: 0 1rem;
+  }
+  

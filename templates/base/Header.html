@@ -1,0 +1,33 @@
+<header class="p-3 mb-3 border-bottom lg-light">
+  <div class="container">
+    <!-- Header -->
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-4 mb-4 border-bottom">
+      <a href="{{url_for('root.index')}}" class="d-flex align-items-center col-md-2 mb-2 mb-md-0 text-dark text-decoration-none"><h5>{{PageSetting.BaseSetting.PageTitleFa}}</h5></a>
+      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="{{url_for('root.under_construction')}}" class="nav-link px-3 link-dark">خانه</a></li>
+        <li><a href="{{url_for('root.under_construction')}}" class="nav-link px-3 link-dark">خدمات</a></li>
+        {% if Current_User.is_authenticated %}<li><a href="{{url_for('root.under_construction')}}" class="nav-link px-3 link-dark">داشبورد</a></li>{%endif%}
+        <li><a href="{{url_for('root.under_construction')}}" class="nav-link px-3 link-dark">درباره ما</a></li>
+      </ul>
+      {% if Current_User.is_authenticated %}
+        {% with User=Current_User , Dropdown=True %}
+          {% include 'base/widget/UserSmall.html' %}
+        {% endwith %}
+      {% else %}
+        <div class="col-md-3 text-end">
+          {% include 'base/modal/Login.html' %}
+        </div>
+      {% endif %}
+    </header>
+    <!-- Breadcrump -->
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-chevron p-1 bg-body-tertiary rounded-3">
+          <li class="breadcrumb-item"><a class="link-body-emphasis" href="#"><i class="fas fa-home"><span class="visually-hidden">NotImplemented</span></i></a></li>
+          <li class="breadcrumb-item"><a class="link-body-emphasis fw-semibold text-decoration-none" href="#"></a></li>
+          <li class="breadcrumb-item active" aria-current="page"></li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</header>
