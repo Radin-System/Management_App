@@ -2,7 +2,7 @@ from flask import Blueprint
 from classes.component.sqlmanager import SQLManager
 from functions.web import Handle_Http_Error
 
-def Error(SQLManager:SQLManager) -> Blueprint:
+def Error(SQL:SQLManager) -> Blueprint:
 
     bp = Blueprint('error', __name__)
 

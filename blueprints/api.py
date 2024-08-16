@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify
 from classes.component.sqlmanager import SQLManager
 from functions.web import Create_Response
 
-def Api(SQLManager:SQLManager) -> Blueprint:
+def Api(SQL:SQLManager) -> Blueprint:
 
     bp = Blueprint('api', __name__, url_prefix='/endpoint/api')
 

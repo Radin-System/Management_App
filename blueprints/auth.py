@@ -3,7 +3,7 @@ from flask_login import logout_user
 
 from classes.component.sqlmanager import SQLManager
 
-def Auth(SQLManager:SQLManager) -> Blueprint:
+def Auth(SQL:SQLManager) -> Blueprint:
 
     bp = Blueprint('auth', __name__, url_prefix='/auth')
 

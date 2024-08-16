@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, url_for
 from flask_login import current_user
 from classes.component.sqlmanager import SQLManager
 
-def Root(SQLManager:SQLManager) -> Blueprint:
+def Root(SQL:SQLManager) -> Blueprint:
 
     bp = Blueprint('root', __name__, url_prefix='/')
 
