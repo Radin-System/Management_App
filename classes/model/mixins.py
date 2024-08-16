@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean, String, T
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from classes.validator import English,EnglishSpecial,Persian,Email,MobileNumber
+from classes.validator import English, EnglishSpecial, Persian, Email, MobileNumber
 from .base import Base
 
 class InfoMixin(Base):
@@ -18,28 +18,40 @@ class InfoMixin(Base):
     last_update  = Column(DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False)
 
     def __setattr__(self, Name, Value):
-        Validating_Column:Column = self.__table__.columns.get(Name)
-        if Validating_Column is not None:
-            Validator = Validating_Column.info.get('Validator',None)
-            if Validator :
-                if isinstance(Validator,tuple): #Validate by tuple
-                    for Item in Validator:
-                        Item(Value)
+        # Getting the Coloumn
+        Seting_Column:Column = self.__table__.columns.get(Name)
 
-                if isinstance(Validator,type):
+        if Seting_Column is not None:
+            # Cheking Flags
+            Flags:dict = Seting_Column.info.get('Flags',None)
+            if Flags :
+                Changeble = Flags.get('Changeble',None)
+                if Changeble == False:
+                    raise PermissionError(f'This coloumn is not changble: {Name}')
+
+            # Applying Validators
+            Validators:list = Seting_Column.info.get('Validators',None) 
+            if Validators:
+                for Validator in Validators:
                     Validator(Value)
+
+            # Applying Convertors
+            Convertors:list = Seting_Column.info.get('Convertors',None)
+            if Convertors:
+                for Covertor in Convertors:
+                    Value = Covertor(Value)
 
         super().__setattr__(Name, Value)
 
 class NameMixin:
     __abstract__  = True
-    en_firstname  = Column(String, nullable=False,info={'Validator':English})
-    en_lastname   = Column(String, nullable=False,info={'Validator':English})
-    fa_firstname  = Column(String, nullable=False,info={'Validator':Persian})
-    fa_lastname   = Column(String, nullable=False,info={'Validator':Persian})
-    email         = Column(String, nullable=True,info={'Validator':(EnglishSpecial,Email)})
+    en_firstname  = Column(String, nullable=False,info={'Validators':[English]})
+    en_lastname   = Column(String, nullable=False,info={'Validators':[English]})
+    fa_firstname  = Column(String, nullable=False,info={'Validators':[Persian]})
+    fa_lastname   = Column(String, nullable=False,info={'Validators':[Persian]})
+    email         = Column(String, nullable=True,info={'Validators':[EnglishSpecial,Email]})
     extension     = Column(Integer, nullable=True)
-    mobile_number = Column(String, nullable=True,info={'Validator':MobileNumber})
+    mobile_number = Column(String, nullable=True,info={'Validators':[MobileNumber]})
 
 class OwnerMixin:
     __abstract__ = True

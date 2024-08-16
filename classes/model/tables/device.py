@@ -6,18 +6,18 @@ from sqlalchemy.orm import relationship
 
 from classes.model.mixins import *
 from classes.connection.base import Connection as Con
-from classes.validator import English, EnglishSpecial, Hostname, FQDN, Ipv4OrFQDN, Port
+from classes.validator import English, EnglishSpecial, Hostname, FQDN, IPv4OrFQDN, Port
 
 class Device(InfoMixin, OwnerMixin):
     ## SQL Table
     __tablename__      = 'devices'
     id                 = Column(Integer, primary_key=True, autoincrement=True)
-    hostname           = Column(String, nullable=False, info={'Validator':(EnglishSpecial,Hostname)})
-    fqdn               = Column(String, nullable=False, unique=True, info={'Validator':(EnglishSpecial,FQDN)})
-    type               = Column(String, nullable=False, info={'Validator':EnglishSpecial})
-    management_address = Column(String, nullable=True, info={'Validator':(EnglishSpecial,Ipv4OrFQDN)})
-    connection_method  = Column(String, nullable=False, info={'Validator':English})
-    connection_port    = Column(Integer, nullable=False, info={'Validator':Port})
+    hostname           = Column(String, nullable=False, info={'Validators':[EnglishSpecial,Hostname]})
+    fqdn               = Column(String, nullable=False, unique=True, info={'Validators':[EnglishSpecial,FQDN]})
+    type               = Column(String, nullable=False, info={'Validators':[EnglishSpecial]})
+    management_address = Column(String, nullable=True, info={'Validators':[EnglishSpecial,IPv4OrFQDN]})
+    connection_method  = Column(String, nullable=False, info={'Validators':[English]})
+    connection_port    = Column(Integer, nullable=False, info={'Validators':[Port]})
 
     company            = relationship("Company", back_populates="devices")
     company_id         = Column(Integer, ForeignKey('companies.id'), nullable=False)
