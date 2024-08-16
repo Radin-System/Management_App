@@ -47,4 +47,4 @@ class WebServer(Component):
 
     def Register_Blueprints(self) -> None:
         for Blueprint in self.Blueprints:
-            self.App.register_blueprint(Blueprint)
+            self.App.register_blueprint(Blueprint(self.SQLManager))
