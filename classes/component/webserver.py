@@ -2,6 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_htmlmin import HTMLMIN
 
+from .base import Component
 from blueprints import Blueprints
 
 App = Flask(__name__, static_folder="static", template_folder="templates")
@@ -25,3 +26,6 @@ for Blueprint in Blueprints:
 
 if __name__ == '__main__' :
     App.run('0.0.0.0', 8080, debug=True)
+
+class WebServer(Component):
+    ...

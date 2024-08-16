@@ -1,7 +1,7 @@
 import time
 import threading
-from Class.component import Component
-from Class.task import Task
+from .base import Component
+from classes.task import Task
 
 class TaskManager(Component):
     def __init__(self,*,
