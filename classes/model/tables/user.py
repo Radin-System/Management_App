@@ -1,7 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from . import InfoMixin,NameMixin
-from flask_login import UserMixin
 
+from classes.model.mixins import *
 from classes.validator import EnglishSpecial,Password,Username
 
 class User(UserMixin, NameMixin, InfoMixin):

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from . import InfoMixin, OwnerMixin
 
+from classes.model.mixins import *
 from classes.validator import English,Domain,EnglishSpecial,Persian,PhoneNumber
 
 class Company(InfoMixin, OwnerMixin):

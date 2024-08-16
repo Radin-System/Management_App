@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from . import InfoMixin,NameMixin,OwnerMixin
 
+from classes.model.mixins import *
 from classes.validator import EnglishSpecial,Username
 
 class Personnel(NameMixin, InfoMixin, OwnerMixin):

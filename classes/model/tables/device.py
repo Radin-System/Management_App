@@ -3,7 +3,8 @@ from typing import Any
 from pyparsing import Word, alphas, alphanums, nums, QuotedString, Suppress, Group, Dict, LineEnd, OneOrMore, ZeroOrMore
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
-from . import InfoMixin, OwnerMixin
+
+from classes.model.mixins import *
 from classes.connection.base import Connection as Con
 from classes.validator import English, EnglishSpecial, Hostname, FQDN, Ipv4OrFQDN, Port
 

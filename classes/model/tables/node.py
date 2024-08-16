@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
-from . import InfoMixin, OwnerMixin
 
+from classes.model.mixins import *
 from classes.validator import FQDN,EnglishSpecial,Hostname
 
 class Node(InfoMixin, OwnerMixin):
