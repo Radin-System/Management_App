@@ -1,7 +1,7 @@
 from ._base import Validator
 from functions.decorator import Return_False_On_Exception
-from username import Username
-from domain import Domain
+from .username import Username
+from .domain import Domain
 
 class Email(Validator):
     def __init__(self, Input:str) -> None:
