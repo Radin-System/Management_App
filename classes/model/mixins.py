@@ -45,11 +45,11 @@ class InfoMixin(Base):
 
 class NameMixin:
     __abstract__  = True
-    en_firstname  = Column(String, nullable=False,info={'Validators':[English]})
-    en_lastname   = Column(String, nullable=False,info={'Validators':[English]})
-    fa_firstname  = Column(String, nullable=False,info={'Validators':[Persian]})
-    fa_lastname   = Column(String, nullable=False,info={'Validators':[Persian]})
-    email         = Column(String, nullable=True,info={'Validators':[EnglishSpecial,Email]})
+    firstname_en  = Column(String, nullable=False, info={'Validators':[English]})
+    lastname_en   = Column(String, nullable=False, info={'Validators':[English]})
+    firstname_en  = Column(String, nullable=False, info={'Validators':[Persian]})
+    lastname_en   = Column(String, nullable=False, info={'Validators':[Persian]})
+    email         = Column(String, nullable=True, info={'Validators':[EnglishSpecial, Email]})
     extension     = Column(Integer, nullable=True)
     mobile_number = Column(String, nullable=True,info={'Validators':[MobileNumber]})
 
