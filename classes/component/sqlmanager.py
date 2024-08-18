@@ -173,7 +173,10 @@ class SQLManager(Component, ModelsTyping):
     def Start_Actions(self) -> None:
         self.Connection = self.Engine.connect()
         self.Connection.begin()
-        self.Session = sqlalchemy.orm.Session(bind=self.Connection, expire_on_commit=False)
+        # expire_on_commit: Keeps the instance values in the models instance and dont remove them after commit !
+        # This will cause memory intensive app and delay in data collection or data incosistancy
+        # Make sure you will implement a way around this
+        self.Session = sqlalchemy.orm.Session(bind=self.Connection, expire_on_commit=False) 
 
     def Stop_Actions(self) -> None:
         self.Session.close()
