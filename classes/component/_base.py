@@ -15,14 +15,12 @@ class Component :
         return self.Running
 
     def Start(self) -> None:
-        if not self.Running :
-            self.Running = True
-            self.Start_Actions()
+        self.Running = True
+        self.Start_Actions()
 
     def Stop(self) -> None:
-        if self.Running :
-            self.Running = False
-            self.Stop_Actions()
+        self.Running = False
+        self.Stop_Actions()
 
     def __enter__(self) -> None :
         self.Start()

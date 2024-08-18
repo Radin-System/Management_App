@@ -7,7 +7,7 @@ Models = [
 
 class ModelsTyping:
     def __typing__(self) -> None:
-        self.User:User
+        self.User = User
 
 __all__ = [
     'Models',

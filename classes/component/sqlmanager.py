@@ -106,6 +106,7 @@ class SQLManager(Component, ModelsTyping):
     @Connection_Required
     def Query(self,Model,*, 
         Eager:bool = False,
+        DictMode:bool = False,
         Sort:list[tuple[str,str]] = [],
         First:bool = False, 
         Limit:int = None, 
@@ -113,19 +114,49 @@ class SQLManager(Component, ModelsTyping):
         **Conditions
         ) -> list|Any|None:
         #Usage : SQLManager.Query(SQLManager.User , Eager=True , Sort=[('name','asc')] , First = False , Limit = 10 , Offset = 12 , email = None)
-
+        
+        # Create the initial query
         Query   = self.Session.query(Model)
-        if Eager      : Query = Query.options(sqlalchemy.orm.joinedload('*'))
-        if Conditions : Query = Query.filter_by(**Conditions)
-        if Sort       :
-            for attr, order in Sort :
-                if   'asc'  in order.lower(): Query = Query.order_by(getattr(Model, attr).asc())
-                elif 'desc' in order.lower(): Query = Query.order_by(getattr(Model, attr).desc())
-                else                        : raise ValueError(f"Invalid sorting order: {order}")
-        if Limit  : Query = Query.limit(Limit)
-        if Offset : Query = Query.offset(Offset)
-        if First  : Result = Query.first()
-        else      : Result = Query.all()
+        
+        # Apply eager loading if requested
+        if Eager: 
+            for Relationship in sqlalchemy.inspect(Model).relationships:
+                Query = Query.options(sqlalchemy.orm.joinedload(Relationship.key))
+        
+        # Apply filtering conditions
+        if Conditions: 
+            Query = Query.filter_by(**Conditions)
+        
+        # Apply sorting
+        if Sort:
+            for attr, order in Sort:
+                if   'asc'  in order.lower():
+                    Query = Query.order_by(getattr(Model, attr).asc())
+                elif 'desc' in order.lower():
+                    Query = Query.order_by(getattr(Model, attr).desc())
+                else:
+                    raise ValueError(f"Invalid sorting order: {order}")
+        
+        # Apply limit and offset
+        if Limit: 
+            Query = Query.limit(Limit)
+        if Offset: 
+            Query = Query.offset(Offset)
+        
+        # Fetch the result
+        if First: 
+            Result = Query.first()
+        else: 
+            Result = Query.all()
+        
+        # Handle detached instances
+        if Result and DictMode:
+            if First:
+                return {col.name: getattr(Result, col.name) for col in Result.__table__.columns}
+            else:
+                return [{col.name: getattr(instance, col.name) for col in instance.__table__.columns} for instance in Result]
+        
+        # Return the result
         return Result
 
     @Transaction
@@ -133,7 +164,10 @@ class SQLManager(Component, ModelsTyping):
     @Connection_Required
     def Count(self, Model, **Conditions) -> int:
         Query = self.Session.query(Model)
-        if Conditions : Query = Query.filter_by(**Conditions)
+        
+        if Conditions: 
+            Query = Query.filter_by(**Conditions)
+        
         return Query.count()
 
     def Start_Actions(self) -> None:

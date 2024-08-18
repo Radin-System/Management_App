@@ -2,6 +2,9 @@ class CustomError(Exception):
     """Base class for custom exceptions."""
     pass
 
+class AuthenticationError(CustomError):
+    pass
+
 class RaiseFromList(CustomError):
     '''Exception raised for specific error conditions.'''
     def __init__(self, error_list:list):
@@ -10,3 +13,9 @@ class RaiseFromList(CustomError):
         for error in self.error_list:
             Message += f'{error.__class__.__name__}: {str(error)} , '
         super().__init__(Message[:-2])
+
+__all__ = [
+    CustomError,
+    AuthenticationError,
+    RaiseFromList,
+]

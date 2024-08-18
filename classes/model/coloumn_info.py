@@ -1,5 +1,6 @@
+from typing import Any, Self
 from classes.validator import *
-from functions.convert import CleanStr, StrToSha
+from functions.convert import CleanStr, LowerCase, StrToSha
 
 class ColoumnInfo:
     def __init__(self,*,
@@ -33,12 +34,6 @@ class ColoumnInfo:
             Visible=Combined_Visible,
         )
 
-    @staticmethod
-    def _combine_bools(First:bool|None, Second:bool|None) -> bool:
-        if Second is None: 
-            return First
-        return Second
-
     def Dict(self) -> dict:
         return {
             'Setattr': {
@@ -50,6 +45,22 @@ class ColoumnInfo:
                 'Changeable':self.Changeable,
                 },
         }
+
+    @staticmethod
+    def _combine_bools(First:bool|None, Second:bool|None) -> bool:
+        if Second is None: 
+            return First
+        return Second
+
+    def Apply(self,Item:Any) -> Any:
+
+        for Validator in self.Validators:
+            Validator(Item)
+
+        for Convertor in self.Convertors:
+            Item = Convertor(Item)
+
+        return Item
 
 # Base Level
 BasePolicy     = ColoumnInfo()
@@ -64,10 +75,10 @@ PasswordPolicy = BasePolicy + ColoumnInfo(Validators=[Password], Convertors=[Str
 # Level Two
 NamePolicy_En  = CleanString + ColoumnInfo(Validators=[English])
 NamePolicy_Fa  = CleanString + ColoumnInfo(Validators=[Persian])
-UsernamePolicy = CleanString + ColoumnInfo(Validators=[EnglishSpecial, Username])
 MobilePolicy   = CleanString + ColoumnInfo(Validators=[MobileNumber])
 
 # Level Three
+UsernamePolicy = CleanString + NotChangeble + ColoumnInfo(Validators=[EnglishSpecial, Username], Convertors=[LowerCase])
 EmailPolicy    = CleanString + NotChangeble + ColoumnInfo(Validators=[EnglishSpecial, Email])
 BaseInfoPolicy = HiddenField + NotChangeble
 

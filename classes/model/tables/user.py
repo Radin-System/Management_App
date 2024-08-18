@@ -11,6 +11,6 @@ class User(UserMixin, NameMixin, InfoMixin):
     username      = Column(String, nullable=False, unique=True, info=(UsernamePolicy).Dict())
     password      = Column(String, nullable=False, info=(PasswordPolicy).Dict())
     position      = Column(String, nullable=True, info=(NamePolicy_En).Dict)
-    avatar_path   = Column(String, nullable=True, info=(CleanString + ColoumnInfo(Validators=[EnglishSpecial])).Dict())
+    avatar_path   = Column(String, default="asset/default/UserAvatar.jpg", nullable=False, info=(CleanString + ColoumnInfo(Validators=[EnglishSpecial])).Dict())
     sarv_id       = Column(String, nullable=True, unique=True, info=(HiddenField).Dict())
     admin         = Column(Boolean, default=False, nullable=False, info={})
