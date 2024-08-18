@@ -173,7 +173,7 @@ class SQLManager(Component, ModelsTyping):
     def Start_Actions(self) -> None:
         self.Connection = self.Engine.connect()
         self.Connection.begin()
-        self.Session = sqlalchemy.orm.Session(bind=self.Connection)
+        self.Session = sqlalchemy.orm.Session(bind=self.Connection, expire_on_commit=False)
 
     def Stop_Actions(self) -> None:
         self.Session.close()
