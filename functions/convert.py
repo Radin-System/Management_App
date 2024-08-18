@@ -1,6 +1,9 @@
 import hashlib
 from cryptography.fernet import Fernet
 
+def CleanStr(String:str) -> str:
+    return String.strip()
+
 def CsvToList(CSV:str) -> list:
     return [Item.strip() for Item in CSV.split(',')]
 
