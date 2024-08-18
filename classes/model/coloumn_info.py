@@ -86,20 +86,7 @@ __all__ = [
     'EmailPolicy',
     'BaseInfoPolicy',
 ]
-"""
-print("BasePolicy",":",BasePolicy.Dict())
-print("CleanString",":",CleanString.Dict())
-print("NotChangeble",":",NotChangeble.Dict())
-print("EnsureInteger",":",EnsureInteger.Dict())
-print("HiddenField",":",HiddenField.Dict())
-print("NamePolicy_En",":",NamePolicy_En.Dict())
-print("NamePolicy_Fa",":",NamePolicy_Fa.Dict())
-print("PasswordPolicy",":",PasswordPolicy.Dict())
-print("UsernamePolicy",":",UsernamePolicy.Dict())
-print("MobilePolicy",":",MobilePolicy.Dict())
-print("EmailPolicy",":",EmailPolicy.Dict())
-print("BaseInfoPolicy",":",BaseInfoPolicy.Dict())
-"""
+## Results
 """
 BasePolicy : {'Setattr': {'Validators': [], 'Convertors': []}, 'Flags': {'Visible': None, 'Changeable': None}}
 CleanString : {'Setattr': {'Validators': [], 'Convertors': [<function CleanStr at 0x0000016D42616660>]}, 'Flags': {'Visible': None, 'Changeable': None}}
