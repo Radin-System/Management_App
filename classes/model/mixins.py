@@ -6,7 +6,7 @@ from datetime import datetime
 
 from classes.validator import English, EnglishSpecial, Persian, Email, MobileNumber
 from ._base import Base
-
+from functions.convert import CleanStr
 class InfoMixin(Base):
     __abstract__ = True
     description  = Column(Text, nullable=True)
@@ -45,13 +45,13 @@ class InfoMixin(Base):
 
 class NameMixin:
     __abstract__  = True
-    firstname_en  = Column(String, nullable=False, info={'Validators':[English]})
-    lastname_en   = Column(String, nullable=False, info={'Validators':[English]})
-    firstname_en  = Column(String, nullable=False, info={'Validators':[Persian]})
-    lastname_en   = Column(String, nullable=False, info={'Validators':[Persian]})
-    email         = Column(String, nullable=True, info={'Validators':[EnglishSpecial, Email]})
-    extension     = Column(Integer, nullable=True)
-    mobile_number = Column(String, nullable=True,info={'Validators':[MobileNumber]})
+    firstname_en  = Column(String, nullable=False, info={'Validators':[English], 'Convertor':[CleanStr]})
+    lastname_en   = Column(String, nullable=False, info={'Validators':[English], 'Convertor':[CleanStr]})
+    firstname_en  = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
+    lastname_en   = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
+    email         = Column(String, nullable=True, info={'Validators':[EnglishSpecial, Email], 'Convertor':[CleanStr]})
+    extension     = Column(Integer, nullable=True, info={'Convertor':[int]})
+    mobile_number = Column(String, nullable=True,info={'Validators':[MobileNumber], 'Convertor':[CleanStr]})
 
 class OwnerMixin:
     __abstract__ = True
