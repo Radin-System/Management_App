@@ -33,6 +33,7 @@ class SQLManager(Component, ModelsTyping):
         self.Connection = None
         self.Session = None
 
+        self.__typing__()
         self.Create_Engine()
         self.Init_Models()
 
