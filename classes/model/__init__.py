@@ -5,6 +5,10 @@ Models = [
     User,
     ]
 
+class ModelsTyping:
+    def __typing__(self) -> None:
+        self.User:User
+
 __all__ = [
     'Models',
     'Base',

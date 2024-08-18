@@ -47,8 +47,8 @@ class NameMixin:
     __abstract__  = True
     firstname_en  = Column(String, nullable=False, info={'Validators':[English], 'Convertor':[CleanStr]})
     lastname_en   = Column(String, nullable=False, info={'Validators':[English], 'Convertor':[CleanStr]})
-    firstname_en  = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
-    lastname_en   = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
+    firstname_fa  = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
+    lastname_fa   = Column(String, nullable=False, info={'Validators':[Persian], 'Convertor':[CleanStr]})
     email         = Column(String, nullable=True, info={'Validators':[EnglishSpecial, Email], 'Convertor':[CleanStr]})
     extension     = Column(Integer, nullable=True, info={'Convertor':[int]})
     mobile_number = Column(String, nullable=True,info={'Validators':[MobileNumber], 'Convertor':[CleanStr]})
