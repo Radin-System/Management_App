@@ -4,6 +4,7 @@ from .english_special import EnglishSpecial
 from .english import English
 from .fqdn import FQDN
 from .hostname import Hostname
+from .integer import Integer
 from .ipv4 import IPv4
 from .ipv4_or_fqdn import IPv4OrFQDN
 from .mac import Mac
@@ -22,6 +23,7 @@ __all__ = [
     'English',
     'FQDN',
     'Hostname',
+    'Integer',
     'IPv4',
     'IPv4OrFQDN',
     'Mac',

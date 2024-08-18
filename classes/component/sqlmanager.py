@@ -78,12 +78,27 @@ class SQLManager(Component, ModelsTyping):
     @Running_Required
     @Connection_Required
     def Update(self, Instance) -> None:
+        if not Instance.changable:
+            raise PermissionError(f'this instance is not changable: {Instance}')
+        
+        for Coloumn in Instance.__class__.__table__.columns:
+            if Coloumn is not None:
+                # Cheking Flags
+                Flags:dict = Coloumn.info.get('Flags',None)
+                if Flags :
+                    Changeble = Flags.get('Changeable',None)
+                    if Changeble == False:
+                        raise PermissionError(f'This coloumn is not changeable: {Coloumn}')
+
         self.Session.merge(Instance)
 
     @Transaction
     @Running_Required
     @Connection_Required
     def Delete(self, Instance) -> None:
+        if not Instance.deletable:
+            raise PermissionError(f'this instance is not Deletable: {Instance}')
+        
         self.Session.delete(Instance)
 
     @Transaction
