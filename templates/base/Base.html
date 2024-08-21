@@ -20,6 +20,7 @@
       {% block Style %}{% endblock %}
   </head>
   <body>
+    {% block Sidebar %}{% include 'base/sidebar.html' %}{% endblock %}
     {% block Header %}{% include 'base/header.html' %}{% endblock %}
     {% block Content %}<!-- Content Block -->{% endblock %}
     {% block Footer %}{% include 'base/footer.html' %}{% endblock %}

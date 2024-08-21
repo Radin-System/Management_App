@@ -1,0 +1,65 @@
+{% if Field %}
+  {% if Field.Type == 'input' %}
+    <!-- Field Input -->
+    <div class="mb-3{% if Field.Row %} Row{% endif %}">
+      <label for="{{Field.Name}}" class="form-label">{{Field.Label}}</label>
+      <input 
+        id="{{ Field.Name }}" 
+        name="{{ Field.Name }}" 
+        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
+        type="{{ Field.Mask }}" 
+        placeholder="{{ Field.Placeholder }}" 
+        {% if Field.Disabled %} disabled{% endif %}
+        {% if Field.Readonly %} readonly{% endif %}
+        >
+    </div>
+  {% elif Field.Type == 'file' %}
+    <!-- Field File -->
+    <div class="mb-3{% if Field.Row %} Row{% endif %}">
+      <label for="{{Field.Name}}" class="form-label">{{Field.Label}}</label>
+      <input 
+        id="{{ Field.Name }}" 
+        name="{{ Field.Name }}" 
+        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
+        type="file" 
+        {% if Field.Disabled %} disabled{% endif %}
+        {% if Field.Readonly %} readonly{% endif %}
+        >
+    </div>
+  {% elif Field.Type == 'list' %}
+    <!-- Field List -->
+    <div class="mb-3{% if Field.Row %} Row{% endif %}">
+      <label for="{{ Field.Name }}" class="form-label">{{ Field.Label }}</label>
+      <input 
+        id="{{ Field.Name }}" 
+        name="{{ Field.Name }}" 
+        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
+        list="{{ Field.Name }}Options" 
+        placeholder="{{ Field.Placeholder }}" 
+        {% if Field.Disabled %} disabled{% endif %}
+        {% if Field.Readonly %} readonly{% endif %}
+        >
+      <datalist id="{{ Field.Name }}Options">
+        {% for Option in Field.Options %}
+          <option value="{{ Option }}">
+        {% endfor %}
+      </datalist>
+    </div>
+  {% elif Field.Type == 'color' %}
+    <!-- Field Color -->
+    <div class="mb-3{% if Field.Row %} Row{% endif %}">
+      <label for="{{ Field.Name }}" class="form-label">{{ Field.Label }}</label>
+      <input 
+        id="{{ Field.Name }}" 
+        name="{{ Field.Name }}" 
+        class="form-control form-control-color" 
+        type="color" 
+        value="{% if Value %}{{ Field.Value }}{% else %}#ffffff{% endif %}" 
+        title="{{ Field.Placeholder }}"
+        {% if Field.Disabled %} disabled{% endif %}
+        {% if Field.Readonly %} readonly{% endif %}
+        >
+    </div>
+  {% endif %}
+{% endif %}
+

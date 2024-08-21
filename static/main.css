@@ -29,4 +29,20 @@ body {
     /*   Sort of a magic number to add extra space for number spinner */
     padding: 0 1rem;
   }
-  
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+.dark-mode .navbar {
+    background-color: #333;
+}
+.dark-mode .btn-dark-mode {
+    color: #ffffff;
+}
+.btn-dark-mode {
+    position: fixed;
+    bottom: 10%;
+    right: 20px;
+    z-index: 1000;
+}
