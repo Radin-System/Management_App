@@ -1,11 +1,9 @@
 import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
-from functools import wraps
-from classes.model import ModelsTyping
 from ._base import Component
-from functions.decorator import Running_Required,Connection_Required,Return_False_On_Exception
+from functions.decorator import Running_Required
 
-class SQLManager(Component, ModelsTyping):
+class SQLManager(Component):
     def __init__(self,*,
             Host:str,
             Port:int,
@@ -30,10 +28,6 @@ class SQLManager(Component, ModelsTyping):
         self.Base        = Base
         self.Models      = Models
 
-        self.Connection = None
-        self.Session = None
-
-        self.__typing__()
         self.Create_Engine()
         self.Init_Models()
 
@@ -50,34 +44,23 @@ class SQLManager(Component, ModelsTyping):
             setattr(self , Model.__name__ , Model)
 
     @Running_Required
-    @Return_False_On_Exception
-    def Is_Connected(self) -> bool:
-        self.Engine.connect()
-        return True
+    def Create(self, Instance,*,
+        Detached:bool = False
+        ) -> None:
 
-    @staticmethod
-    def Transaction(Function) -> callable:
-        @wraps(Function)
-        def Wrapper(*Args,**Kwargs) :
-            try:
-                result = Function(*Args, **Kwargs)
-                Args[0].Session.commit()
-                return result
-            except Exception as e:
-                Args[0].Session.rollback()
-                raise e
-        return Wrapper
+        Session = self.SessionMaker(Detached=Detached)
+        try:
+            Session.add(Instance)
+            Session.commit()
+        except Exception as e:
+            Session.rollback()
+            raise e
 
-    @Transaction
     @Running_Required
-    @Connection_Required
-    def Create(self, Instance) -> None:
-        self.Session.add(Instance)
+    def Update(self, Instance,*,
+        Detached:bool = False,
+        ) -> None:
 
-    @Transaction
-    @Running_Required
-    @Connection_Required
-    def Update(self, Instance) -> None:
         if not Instance.changable:
             raise PermissionError(f'this instance is not changable: {Instance}')
         
@@ -90,21 +73,33 @@ class SQLManager(Component, ModelsTyping):
                     if Changeble == False:
                         raise PermissionError(f'This coloumn is not changeable: {Coloumn}')
 
-        self.Session.merge(Instance)
+        Session = self.SessionMaker(Detached=Detached)
+        try:
+            Session.merge(Instance)
+            Session.commit()
+        except Exception as e:
+            Session.rollback()
+            raise e
 
-    @Transaction
     @Running_Required
-    @Connection_Required
-    def Delete(self, Instance) -> None:
+    def Delete(self, Instance,*,
+        Detached:bool = False,
+        ) -> None:
+
         if not Instance.deletable:
             raise PermissionError(f'this instance is not Deletable: {Instance}')
-        
-        self.Session.delete(Instance)
 
-    @Transaction
+        Session = self.SessionMaker(Detached=Detached)
+        try:        
+            Session.delete(Instance)
+            Session.commit()
+        except Exception as e:
+            Session.rollback()
+            raise e
+
     @Running_Required
-    @Connection_Required
-    def Query(self,Model,*, 
+    def Query(self,Model,*,
+        Detached:bool = False,
         Eager:bool = False,
         DictMode:bool = False,
         Sort:list[tuple[str,str]] = [],
@@ -113,10 +108,11 @@ class SQLManager(Component, ModelsTyping):
         Offset:int = None,
         **Conditions
         ) -> list|Any|None:
-        #Usage : SQLManager.Query(SQLManager.User , Eager=True , Sort=[('name','asc')] , First = False , Limit = 10 , Offset = 12 , email = None)
+        #Usage : SQLManager.Query(SQLManager.User, Session=SQLManager.SessionMaker(), Eager=True ,Sort=[('name','asc')] ,First = False ,Limit = 10 ,Offset = 12 ,email = None)
         
-        # Create the initial query
-        Query   = self.Session.query(Model)
+        # Creating Session and getting Query
+        Session = self.SessionMaker(Detached=Detached)
+        Query = Session.query(Model)
         
         # Apply eager loading if requested
         if Eager: 
@@ -159,25 +155,28 @@ class SQLManager(Component, ModelsTyping):
         # Return the result
         return Result
 
-    @Transaction
     @Running_Required
-    @Connection_Required
-    def Count(self, Model, **Conditions) -> int:
-        Query = self.Session.query(Model)
+    def Count(self, Model,*,
+        Detached:bool = False,
+        **Conditions
+        ) -> int:
+
+        Session = self.SessionMaker(Detached=Detached)
+        Query = Session.query(Model)
         
         if Conditions: 
             Query = Query.filter_by(**Conditions)
         
         return Query.count()
 
+    @Running_Required
+    def SessionMaker(self,*,Detached=False) -> sqlalchemy.orm.Session:
+        Connection = self.Engine.connect()
+        Connection.begin()
+        return sqlalchemy.orm.Session(bind=Connection, expire_on_commit=Detached)
+
     def Start_Actions(self) -> None:
-        self.Connection = self.Engine.connect()
-        self.Connection.begin()
-        # expire_on_commit: Keeps the instance values in the models instance and dont remove them after commit !
-        # This will cause memory intensive app and delay in data collection or data incosistancy
-        # Make sure you will implement a way around this
-        self.Session = sqlalchemy.orm.Session(bind=self.Connection, expire_on_commit=False) 
+        pass
 
     def Stop_Actions(self) -> None:
-        self.Session.close()
-        self.Connection.close()
+        pass

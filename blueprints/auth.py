@@ -21,25 +21,26 @@ def Auth(SQL:SQLManager) -> Blueprint:
             Loging_Pass = request.form.get('password')
             
             # Check for Input policy
-            try   : 
+            try: 
                 Loging_User = UsernamePolicy.Apply(Loging_User)
                 Loging_Pass = PasswordPolicy.Apply(Loging_Pass)
-            except: return abort(401)
+            except: 
+                return abort(401)
 
             # Check if filds are proprly inputed
             if Loging_User and Loging_Pass:
+                print(Loging_User,Loging_Pass)
                 # getting the user
-                with SQL:
-                    User = SQL.Query(SQL.User, First=True, username = Loging_User)
-
+                User = SQL.Query(SQL.User,First=True, username=Loging_User)
+                print(User)
+                if User:
+                    print(User.password)
                     # Comparing password
                     if User.password == Loging_Pass :
                         login_user(User)
                         return redirect(url_for('root.index'))
-                    else:return abort(401)
-                
-            else :
-                return abort(401)
+
+            return abort(401)
 
     @bp.route('/logout' , methods=['GET','POST'])
     def logout():

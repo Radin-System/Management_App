@@ -1,4 +1,4 @@
-from typing import Any, Self
+from typing import Any
 from classes.validator import *
 from functions.convert import CleanStr, LowerCase, StrToSha
 
