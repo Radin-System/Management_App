@@ -1,0 +1,39 @@
+{% if Error_Detail %}
+  <!-- Modal Button -->
+  <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#errorDetailsModal"><i class="bi bi-info-circle"></i>جزئیات</button>
+  <!-- Modal Body -->
+  <div class="modal fade" id="errorDetailsModal" tabindex="-1" aria-labelledby="errorDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorDetailsModalLabel">Error Details</h5>
+        </div>
+        <div class="modal-body" dir="ltr">
+          <h6>Error Name:</h6>
+          <p>{{ Error_Detail.name }}</p>
+          <h6>Error Code:</h6>
+          <p>{{ Error_Detail.code }}</p>
+          <h6>Description:</h6>
+          <p>{{ Error_Detail.description }}</p>
+          <h6>URL Address:</h6>
+          <p>{{ Error_Detail.url }}</p>
+          <h6>Timestamp:</h6>
+          <p>{{ Error_Detail.timestamp }}</p>
+          {% if Current_User.is_authenticated %}
+            <h6>UID:</h6>
+            <p>{{ Error_Detail.uid }}</p>
+            {% if Current_User.admin %}
+              <h6>Form:</h6>
+              <pre>{{ Error_Detail.form }}</pre>
+              <h6>Traceback:</h6>
+              <pre>{{ Error_Detail.traceback }}</pre>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
