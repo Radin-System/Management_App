@@ -15,7 +15,7 @@ def Create_Response(Message:dict|str,Status:str='Response',Code:int=200,**KWargs
 
     return Response
 
-def Create_Error_File(Error_Object:Exception,Status_Code:int ,Response:dict) -> str|None:
+def Create_Error_File(Error_Object:Exception, Status_Code:int ,Response:dict) -> str|None:
     # Ensuring that we dont change the response
     Response_Copy = copy.deepcopy(Response)
 
@@ -44,7 +44,7 @@ def Create_Error_File(Error_Object:Exception,Status_Code:int ,Response:dict) -> 
 
     return Unique_UID
 
-def Handle_Http_Error(Error_Object:Exception, Status_Code:int, Description:str=None):
+def Handle_API_Error(Error_Object:Exception, Status_Code:int, Description:str=None):
     Data = {
         'description':Error_Object.description if Description is None else Description,
         'timestamp': str(datetime.now()),
@@ -53,7 +53,7 @@ def Handle_Http_Error(Error_Object:Exception, Status_Code:int, Description:str=N
         'url':'NotImplementedError', # Implement a way to give access to some clients to see the full log
         'form':'NotImplementedError', # Implement a way to give access to some clients to see the full log
         }
-    Response = Create_Response(Data,'Error',Status_Code,traceback='NotImplementedError')
+    Response = Create_Response(Data, 'Error', Status_Code, traceback='NotImplementedError')
 
     Uid = Create_Error_File(Error_Object, Status_Code, Response)
 

@@ -8,7 +8,7 @@ from .user import User
 Blueprints = [
     Api,
     Auth,
-    #Error,
+    Error,
     Faq,
     Root,
     User,
