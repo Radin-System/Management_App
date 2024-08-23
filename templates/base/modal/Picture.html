@@ -1,5 +1,7 @@
 {% if Path and Name %}
+  <!-- Modal Button -->
   <button class="btn" id="{{Name}}Button" data-bs-toggle="modal" data-bs-target="#{{Name}}Modal" type="button"><img class="img-thumbnail rounded" src="{{url_for('static',filename=Path)}}" id="{{Name}}ModalImage" style="max-height: 100px;"></button>
+  <!-- Modal Body -->
   <div class="modal fade" id="{{Name}}Modal" tabindex="-1" aria-labelledby="{{Name}}ModalLabel" aria-hidden="flase">
     <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
