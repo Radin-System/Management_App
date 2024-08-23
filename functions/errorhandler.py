@@ -1,6 +1,6 @@
-import os, io, uuid, traceback, json
+import os, io, traceback
 from datetime import datetime
-
+from .create_file import ErrorFile
 
 ERROR_LOG_DIR = '.errors/'
 ERROR_LOG_EXTENSION = 'json'
@@ -14,11 +14,6 @@ def Handle_Error(Error:Exception,*,
     # Ensure the directory exists
     os.makedirs(ERROR_LOG_DIR, exist_ok=True)
 
-    # Generate a unique filename
-    Unique_UID = uuid.uuid4()
-    File_Name = f'{Unique_UID}.{Code}.{ERROR_LOG_EXTENSION}'
-    File_Path = os.path.join(ERROR_LOG_DIR, File_Name)
-
     # Extracting the traceback and putting it in a var
     Traceback_Str = io.StringIO()
     traceback.print_exception(type(Error), Error, Error.__traceback__, file=Traceback_Str)
@@ -30,13 +25,10 @@ def Handle_Error(Error:Exception,*,
         code = int(Code),
         traceback = str(Traceback_Content),
         timestamp = str(datetime.now()),
-        uid = str(Unique_UID),
-        filename = str(File_Name),
         **KWargs
         )
 
-    # Write the contents to the file
-    with open(File_Path, 'w') as File:
-        File.write(json.dumps(Dict))
+    UID = ErrorFile(Data=Dict)
+    Dict['uid'] = UID
 
     return Dict

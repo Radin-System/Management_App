@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template
 from classes.component.sqlmanager import SQLManager
-from functions.web import Handle_API_Error
+from functions.web import Create_Response
 from functions.errorhandler import Handle_Error
 
 def Error(SQL: SQLManager) -> Blueprint:
@@ -13,9 +13,12 @@ def Error(SQL: SQLManager) -> Blueprint:
 
         # Handle the error based on the request path
         if request.path.startswith('/endpoint/api'):
-            return Handle_API_Error(error, status_code)
+            Error_Detail['traceback'] = 'NotImplemented' # waiting for Permission implementation
+            Error_Detail['url'] = 'NotImplemented' # waiting for Permission implementation
+            Error_Detail['form'] = 'NotImplemented' # waiting for Permission implementation
+            return Create_Response(Message=Error_Detail, Status='Error', Code=status_code)
         else:
-            return render_template('error.html', Error_Detail=Error_Detail), status_code
+            return render_template('error.html', Error_Detail=Error_Detail), status_code #Permissions handled in template itself
 
     @bp.app_errorhandler(400)
     def bad_request_error(error):
