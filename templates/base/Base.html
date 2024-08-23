@@ -20,6 +20,10 @@
       {% block Style %}{% endblock %}
   </head>
   <body>
+    <!-- Imports -->
+    {% import 'base/elements/button.html' as Button %}
+    {% import 'base/elements/icon.html' as Icon %}
+
     {% block Sidebar %}{% include 'base/sidebar.html' %}{% endblock %}
     {% block Header %}{% include 'base/header.html' %}{% endblock %}
     {% block Content %}<!-- Content Block -->{% endblock %}

@@ -1,0 +1,10 @@
+{% macro Create(Type, Label, Class=None, Icon=None) %}
+  {% if Type == 'Back' %}
+    <button 
+    onclick="window.history.back()" 
+    {% if Class %} class="{{ Class }}"{% endif %}>
+    {% if Icon %}{{ Icon }}{% endif %}
+    {{ Label }} 
+    </button>
+  {% endif %}
+{% endmacro %}

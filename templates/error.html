@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-footer">
                     <!-- Go Back Button -->
-                    <button onclick="window.history.back()" class="btn btn-primary"><i class="bi bi-arrow-left-circle"></i> بازگشت</button>
+                    {{ Button.Create('Back', 'بازگشت', 'btn btn-primary', Icon.Create('fa','fa-chevron-left')) }}
                     <!-- Show Details Button And Modal -->
                     {% with Error_Detail=Error_Detail %}{% include 'base/modal/errordetail.html' %}{% endwith %}
                 </div>
