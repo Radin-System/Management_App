@@ -4,7 +4,7 @@ CONFIGFILE = '.configfiles/config.ini'
 
 if __name__ == '__main__' :
     from classes.component import *
-    from classes.model import Base,Models
+    from classes.model import *
     from blueprints import Blueprints
 
     Main_Config = Config('MainConfig', Config_File=CONFIGFILE)
