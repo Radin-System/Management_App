@@ -1,7 +1,7 @@
 import threading,socket,time
-from ._base import Service
+from ._base import Component
 
-class AMIManager(Service):
+class AMIManager(Component):
     def __init__(self,Name:str) -> None:
         super().__init__(Name)
 

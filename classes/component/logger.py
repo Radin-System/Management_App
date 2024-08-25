@@ -1,6 +1,6 @@
 import os
 import logging
-from ._base import Service, ServiceContainer
+from ._base import Component, ComponentContainer
 
 LOG_LEVELS = {
     'debug': logging.DEBUG,
@@ -20,15 +20,14 @@ LOG_COLORS = {
 
 LOG_RESET_COLOR = '\033[0m'
 
-class Logger(Service):
+class Logger(Component):
     def __init__(self, Name: str) -> None:
         super().__init__(Name)
-        self.logger = None  # Initialize logger as None
-        self.Setup()
 
-    def Init_Dependancy(self) -> None:
-        self.Config = ServiceContainer.Get('MainConfig')
-        ...
+        self.Process_Type: str = 'Static'
+        self.logger = None
+        
+        self.Setup()
 
     def Init_Config(self) -> None:
         self.Header          = self.Config.Get('LOG', 'log_header')
@@ -80,7 +79,6 @@ class Logger(Service):
 
     def Start_Actions(self) -> None:
         self.Check_Folder()
-        self.Setup()
 
     def Stop_Actions(self) -> None:
         pass
@@ -96,3 +94,6 @@ class Logger(Service):
             log_color = LOG_COLORS.get(record.levelname.lower(), LOG_RESET_COLOR)
             log_message = super().format(record)
             return f'{log_color}{log_message}{LOG_RESET_COLOR}'
+
+    def Loop(self) -> None:
+        ...

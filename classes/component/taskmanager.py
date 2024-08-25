@@ -1,9 +1,9 @@
 import time
 import threading
-from ._base import Service
+from ._base import Component
 from classes.task import Task
 
-class TaskManager(Service):
+class TaskManager(Component):
     def __init__(self,*,
             Check_Interval:int|float
             ) -> None:

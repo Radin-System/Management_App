@@ -1,9 +1,9 @@
 import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
-from ._base import Service
+from ._base import Component
 from functions.decorator import Running_Required
 
-class SQLManager(Service):
+class SQLManager(Component):
     def __init__(self,Name:str,*,
             Base:Any,
             Models:list,

@@ -2,7 +2,7 @@ import os
 from typing           import Dict,Any
 from configparser     import ConfigParser
 from functions.convert import CsvToList
-from ._base import Service
+from ._base import Component, ComponentContainer
 
 DEFAULT: Dict[str, Dict[str, Any]] = {}
 
@@ -58,7 +58,6 @@ DEFAULT['AMIMANAGER'] = {
 DEFAULT['WEBSERVER'] = {
     'host': '0.0.0.0',
     'port': 8080,
-    'flask_debug': True,
     'Secret_Key': 'SDy9r3gbFDBjq0urv1398t0gsbuq0',
 }
 
@@ -72,13 +71,14 @@ DEFAULT['TOOL'] = {
 }
 
 
-class Config(Service):
-
+class Config(Component):
     def __init__(self,Name:str,*,
             Config_File:str,
             ) -> None:
 
         super().__init__(Name)
+
+        self.Process_Type: str = 'Static'
 
         self.Config_File = Config_File
         self.Config = ConfigParser()
@@ -89,7 +89,7 @@ class Config(Service):
         ...
 
     def Init_Dependancy(self) -> None:
-        ...
+        self.Logger = ComponentContainer.Get('MainLogger', print)
 
     def Load(self) -> None:
         ## Cheking if file exist
@@ -148,4 +148,7 @@ class Config(Service):
         ...
     
     def Stop_Actions(self) -> None:
+        ...
+
+    def Loop(self) -> None:
         ...
