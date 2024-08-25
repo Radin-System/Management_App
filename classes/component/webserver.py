@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_login import LoginManager, current_user
 from flask_htmlmin import HTMLMIN
-
+from .logger import Logger
 from .sqlmanager import SQLManager
-from ._base import Component
+from ._base import Service, ServiceContainer
 
 class PageSetting :
     class DefaultBaseSetting :
@@ -27,35 +27,44 @@ class PageSetting :
         self.BaseSetting = PageSetting.DefaultBaseSetting()
         self.StaticFile  = PageSetting.DefaultStaticFile()
 
-class WebServer(Component):
-    def __init__(self,App:Flask,*,
-        Host:str,
-        Port:int,
-        Flask_Debug:bool=False,
-        Secret_Key:str,
-        SQLManager:SQLManager,
+class WebServer(Service):
+    def __init__(self,Name:str,*,
+        App:Flask,
         Blueprints:list,
         ) -> None:
+        super().__init__(Name)
 
         self.App = App
-        self.Host = Host
-        self.Port = Port
-        self.Flask_Debug = Flask_Debug
-        self.Secret_Key = Secret_Key
-        self.SQLManager = SQLManager
         self.Blueprints = Blueprints
+
         self.Init_App()
         self.Register_Blueprints()
 
+    def Init_Dependancy(self) -> None:
+        super().Init_Dependancy()
+        self.SQLManager = ServiceContainer.Get('MainSQLManager')
+
+    def Init_Config(self) -> None:
+        self.Host = self.Config.Get('WEBSERVER','host')
+        self.Port = self.Config.Get('WEBSERVER','port')
+        self.Flask_Debug = self.Config.Get('WEBSERVER','flask_debug')
+        self.Secret_Key = self.Config.Get('WEBSERVER','secret_key')
+
     def Start_Actions(self) -> None:
+        self.Logger('Starting Flask Web Server', level='info')
         self.App.run(self.Host, self.Port, debug=self.Flask_Debug)
 
     def Stop_Actions(self) -> None:
-        pass
+        self.Logger('Stopping Flask Web Server', level='info')
 
     def Init_App(self) -> None:
         ## Configs
         self.App.config['SECRET_KEY'] = self.Secret_Key
+
+        # Replace Flask's default logger with your custom logger
+        self.App.logger.handlers = self.Logger.logger.handlers
+        self.App.logger.setLevel(self.Logger.logger.level)
+
         Login_Manager = LoginManager()
 
         ## Add-ins

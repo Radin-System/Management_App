@@ -1,35 +1,33 @@
 import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
-from ._base import Component
+from ._base import Service
 from functions.decorator import Running_Required
 
-class SQLManager(Component):
-    def __init__(self,*,
-            Host:str,
-            Port:int,
-            Username:str,
-            Password:str,
-            DataBase:str,
-            Mode:str,
-            SQLite_Path:str,
-            Verbose:bool,
-            Base,
+class SQLManager(Service):
+    def __init__(self,Name:str,*,
+            Base:Any,
             Models:list,
             ) -> None :
 
-        self.Host        = Host
-        self.Port        = Port
-        self.Username    = Username
-        self.Password    = Password
-        self.DataBase    = DataBase
-        self.Mode        = Mode
-        self.SQLite_Path = SQLite_Path
-        self.Verbose     = Verbose
-        self.Base        = Base
-        self.Models      = Models
+        super().__init__(Name)
 
+        self.Base   = Base
+        self.Models = Models        
         self.Create_Engine()
         self.Init_Models()
+
+    def Init_Dependancy(self) -> None:
+        super().Init_Dependancy()
+
+    def Init_Config(self) -> None:
+        self.Host        = self.Config.Get('SQLMANAGER','host')
+        self.Port        = self.Config.Get('SQLMANAGER','port')
+        self.Username    = self.Config.Get('SQLMANAGER','username')
+        self.Password    = self.Config.Get('SQLMANAGER','password')
+        self.DataBase    = self.Config.Get('SQLMANAGER','database')
+        self.Mode        = self.Config.Get('SQLMANAGER','mode')
+        self.SQLite_Path = self.Config.Get('SQLMANAGER','sqlite_path')
+        self.Verbose     = self.Config.Get('SQLMANAGER','verbose')
 
     def Create_Engine(self):
         if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}',echo=self.Verbose)
