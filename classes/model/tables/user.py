@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, Integer, String
 
 from classes.model.mixins import *
 from classes.model.coloumn_info import *
-from classes.validator import EnglishSpecial
+from classes.validator import EnglishSpecial, Uuid
 
 class User(UserMixin, NameMixin, InfoMixin):
     __tablename__ = 'users'
@@ -11,5 +11,5 @@ class User(UserMixin, NameMixin, InfoMixin):
     password      = Column(String, nullable=False, info=(PasswordPolicy).Dict())
     position      = Column(String, nullable=True, info=(NamePolicy_En).Dict)
     avatar_path   = Column(String, default="asset/default/UserAvatar.jpg", nullable=False, info=(CleanString + ColoumnInfo(Validators=[EnglishSpecial])).Dict())
-    sarv_id       = Column(String, nullable=True, unique=True, info=(HiddenField).Dict())
+    sarv_id       = Column(String, nullable=True, unique=True, info=(HiddenField + ColoumnInfo(Validators=[Uuid])).Dict())
     admin         = Column(Boolean, default=False, nullable=False, info={})
