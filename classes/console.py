@@ -1,6 +1,6 @@
 from classes.component import ComponentContainer
 
-WELCOME = r'''
+WELCOME:str = r'''
 /'\_/`\                                                            ( )_ 
 |     |   _ _   ___     _ _    __     __    ___ ___     __    ___  | ,_)
 | (_) | /'_` )/' _ `\ /'_` ) /'_ `\ /'__`\/' _ ` _ `\ /'__`\/' _ `\| |  
@@ -20,7 +20,7 @@ WELCOME = r'''
     > help
 '''
 
-HELP = '''
+HELP:str = '''
 - Commands:
   > help
       Shows help
@@ -49,7 +49,6 @@ HELP = '''
   > exit or Control-C
       Exits the console
 '''
-
 
 class Console:
     def __init__(self) -> None:
