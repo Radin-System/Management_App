@@ -25,7 +25,7 @@ if __name__ == '__main__' :
     Main_Logger('Starting all Components')
     ComponentContainer.Start_All()
 
-    time.sleep(2)
+    time.sleep(1)
     MainConsole.Start()
 
     Main_Logger('Stopping all Components')
