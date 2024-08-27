@@ -1,5 +1,4 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from functions.convert import StrToSha, CleanStr
 
 from classes.model.mixins import *
 from classes.model.coloumn_info import *
