@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from . import WebBot
-
+from ._base import WebBot
 
 class SarvBot(WebBot):
     def Login(self,Username,Password) -> None:

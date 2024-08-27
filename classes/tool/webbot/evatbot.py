@@ -1,7 +1,6 @@
 from selenium.webdriver.common.by import By
-from Class.tool.imagereader import ImageReader
-from . import WebBot
-
+from classes.tool.imagereader import ImageReader
+from ._base import WebBot
 
 class EvatBot(WebBot):
     def __init__(self, Driver_Path:str, Base_URL:str, ImageReader:ImageReader) -> None:

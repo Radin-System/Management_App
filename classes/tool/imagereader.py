@@ -1,7 +1,7 @@
 import platform
 from pytesseract import pytesseract
 from PIL import Image as img
-from . import Tool
+from ._base import Tool
 
 class ImageReader(Tool):
     def __init__(self,Tesseract_Path:str = None) -> None :
