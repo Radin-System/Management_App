@@ -17,7 +17,7 @@ if __name__ == '__main__' :
 
     Main_SQLManager = SQLManager('MainSQLManager', Base=Base, Models=Models)
 
-    Main_Webserver = WebServer('MainWebServer', Blueprints=Blueprints)
+    #Main_Webserver = WebServer('MainWebServer', Blueprints=Blueprints)
 
     Main_Logger('Reassinging Dependencies')
     ComponentContainer.Reassign_Dependencies()

@@ -25,6 +25,7 @@ class Console:
     def Handle_Command(self, Command:str) -> None:
         if Command == 'exit':
             self.Stop()
+
         elif Command == 'start_all':
             ComponentContainer.Start_All()
 
@@ -32,12 +33,14 @@ class Console:
             ComponentContainer.Stop_All()
 
         elif Command.startswith('start '):
-            service_name = Command[len('start '):].strip()
-            ComponentContainer.Start(service_name)
+            Service_Name = Command[len('start '):].strip()
+            ComponentContainer.Start(Service_Name)
+            del Service_Name
 
         elif Command.startswith('stop '):
-            service_name = Command[len('stop '):].strip()
-            ComponentContainer.Stop(service_name)
+            Service_Name = Command[len('stop '):].strip()
+            ComponentContainer.Stop(Service_Name)
+            del Service_Name
 
         elif Command == 'components':
             print(ComponentContainer._Components)
