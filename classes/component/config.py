@@ -2,80 +2,94 @@ import os
 from typing           import Dict,Any
 from configparser     import ConfigParser
 from functions.convert import CsvToList
+from ._base import Component, ComponentContainer
 
-class Config:
-    DEFAULT: Dict[str, Dict[str, Any]] = {}
+DEFAULT: Dict[str, Dict[str, Any]] = {}
 
-    DEFAULT['ENVIRON'] = {
-        'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA='  # Test Key
-    }
+DEFAULT['ENVIRON'] = {
+    'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA='  # Test Key
+}
 
-    DEFAULT['GLOBALS'] = {
-        'debug': True,
-        'development_mode':True,
-        'log_file': '.log/main.txt',
-        'name': 'RSTO',
-        'version': '1.1b',
-        'language': 'fa',
-        'temp_foldes_csv':'.temp,.error,',
-        'develop_files_csv':'.temp,.log,.db,.error,',
-    }
+DEFAULT['GLOBALS'] = {
+    'debug': True,
+    'development_mode':True,
+    'log_file': '.log/main.txt',
+    'name': 'RSTO',
+    'version': '1.1b',
+    'language': 'fa',
+    'temp_foldes_csv':'.temp,.error,',
+    'develop_files_csv':'.temp,.log,.db,.error,',
+}
 
-    DEFAULT['LOG'] = {
-        'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
-        'log_header': '<>',
-        'log_max_size': '10MB'
-    }
+DEFAULT['LOG'] = {
+    'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
+    'log_header': '<>',
+    'log_max_size': '10MB'
+}
 
-    DEFAULT['TASKMANAGER'] ={
-        'check_interval': 5,
-    }
+DEFAULT['TASKMANAGER'] ={
+    'check_interval': 5,
+}
 
-    DEFAULT['SQLMANAGER'] = {
-        'debug': True,
-        'mode': 'SQLITE3',
-        'host': '',
-        'port': 0,
-        'username': '',
-        'password': '',
-        'database': 'management_app',
-        'sqlite_path': '.db/',
-        'verbose': False,
-    }
+DEFAULT['SQLMANAGER'] = {
+    'debug': True,
+    'mode': 'SQLITE3',
+    'host': '',
+    'port': 0,
+    'username': '',
+    'password': '',
+    'database': 'management_app',
+    'sqlite_path': '.db/',
+    'verbose': False,
+}
 
-    DEFAULT['AMIMANAGER'] = {
-        'debug': False,
-        'host': '',
-        'port': 0,
-        'tls_mode': False,
-        'username': '',
-        'password': '',
-        'timeout': 10,
-        'event_whitelist_csv': 'AgentConnect,AgentComplete',
-        'max_action_id': 4096,
-    }
+DEFAULT['AMIMANAGER'] = {
+    'debug': False,
+    'host': '',
+    'port': 0,
+    'tls_mode': False,
+    'username': '',
+    'password': '',
+    'timeout': 10,
+    'event_whitelist_csv': 'AgentConnect,AgentComplete',
+    'max_action_id': 4096,
+}
 
-    DEFAULT['WEBSERVER'] = {
-        'host': '0.0.0.0',
-        'port': 8080,
-        'flask_debug': True,
-        'Secret_Key': 'SDy9r3gbFDBjq0urv1398t0gsbuq0',
-    }
+DEFAULT['WEBSERVER'] = {
+    'host': '0.0.0.0',
+    'port': 8080,
+    'Secret_Key': 'SDy9r3gbFDBjq0urv1398t0gsbuq0',
+}
 
-    DEFAULT['TOOL'] = {
-        'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
-        'teseract_path': 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
-        'sarv_url': 'https://app.sarvcrm.com/' ,
-        'sarv_username': '',
-        'sarv_password': '',
-        'evat_url': 'https://evat.ir/',
-    }
+DEFAULT['TOOL'] = {
+    'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
+    'teseract_path': 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+    'sarv_url': 'https://app.sarvcrm.com/' ,
+    'sarv_username': '',
+    'sarv_password': '',
+    'evat_url': 'https://evat.ir/',
+}
 
-    def __init__(self, Config_File:str) -> None:
+
+class Config(Component):
+    def __init__(self,Name:str,*,
+            Config_File:str,
+            ) -> None:
+
+        super().__init__(Name)
+
+        self.Process_Type: str = 'Static'
+
         self.Config_File = Config_File
         self.Config = ConfigParser()
         self.Load()
         for K,V in self.Config['ENVIRON'].items(): os.environ.setdefault(K,str(V))
+
+    def Init_Config(self) -> None:
+        ...
+
+    def Init_Dependancy(self) -> None:
+        self.Logger = ComponentContainer.Get('MainLogger', print)
 
     def Load(self) -> None:
         ## Cheking if file exist
@@ -83,7 +97,7 @@ class Config:
             self.Config.read(self.Config_File)
             Updated = False
             ## Cheking if all the sections exists in the config file
-            for Section, Params in self.DEFAULT.items():
+            for Section, Params in DEFAULT.items():
                 if not self.Config.has_section(Section):
                     self.Config.add_section(Section)
                     Updated = True
@@ -97,7 +111,7 @@ class Config:
 
         ## Creates new file if file is missing
         else: 
-            for Section, Parameters in self.DEFAULT.items():
+            for Section, Parameters in DEFAULT.items():
                 Parameters = {K:str(V) for K,V in Parameters.items()}
                 self.Config[Section] = Parameters
 
@@ -129,3 +143,12 @@ class Config:
     def Save(self) -> None:
         with open(self.Config_File, 'w') as Config_File:
             self.Config.write(Config_File)
+    
+    def Start_Actions(self) -> None:
+        ...
+    
+    def Stop_Actions(self) -> None:
+        ...
+
+    def Loop(self) -> None:
+        ...

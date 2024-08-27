@@ -2,23 +2,8 @@ import threading,socket,time
 from ._base import Component
 
 class AMIManager(Component):
-    def __init__(self,*,
-            Host:str,
-            Port:int,
-            Username:str,
-            Password:str,
-            Event_Whitelist:list,
-            Timeout:int,
-            Max_ActionID:int,
-            ) -> None:
-
-        self.Host         = Host
-        self.Port         = Port
-        self.Usename      = Username
-        self.Password     = Password
-        self.Whitelist    = Event_Whitelist
-        self.Timeout      = Timeout
-        self.Max_ActionID = Max_ActionID
+    def __init__(self,Name:str) -> None:
+        super().__init__(Name)
 
         self.Client_Socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -26,6 +11,18 @@ class AMIManager(Component):
 
         self.Connected     = None
         self.Authenticated = None
+
+    def Init_Dependancy(self) -> None:
+        return super().Init_Dependancy()
+
+    def Init_Config(self) -> None:
+        self.Host         = self.Config.Get('AMIMANAGER','host')
+        self.Port         = self.Config.Get('AMIMANAGER','port')
+        self.Usename      = self.Config.Get('AMIMANAGER','username')
+        self.Password     = self.Config.Get('AMIMANAGER','password')
+        self.Whitelist    = self.Config.Get('AMIMANAGER','event_whitelist_csv')
+        self.Timeout      = self.Config.Get('AMIMANAGER','timeout')
+        self.Max_ActionID = self.Config.Get('AMIMANAGER','max_action_id')
 
     def Connect(self) -> None :
         if not self.Connected :
