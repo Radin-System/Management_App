@@ -15,6 +15,7 @@ from .persian import Persian
 from .port import Port
 from .telephone_number import TelephoneNumber
 from .username import Username
+from .uuid import Uuid
 
 __all__ = [
     'Domain',
@@ -34,4 +35,5 @@ __all__ = [
     'Port',
     'TelephoneNumber',
     'Username',
+    'Uuid',
 ]
