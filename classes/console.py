@@ -1,5 +1,56 @@
 from classes.component import ComponentContainer
 
+WELCOME = r'''
+/'\_/`\                                                            ( )_ 
+|     |   _ _   ___     _ _    __     __    ___ ___     __    ___  | ,_)
+| (_) | /'_` )/' _ `\ /'_` ) /'_ `\ /'__`\/' _ ` _ `\ /'__`\/' _ `\| |  
+| | | |( (_| || ( ) |( (_| |( (_) |(  ___/| ( ) ( ) |(  ___/| ( ) || |_ 
+(_) (_)`\__,_)(_) (_)`\__,_)`\__  |`\____)(_) (_) (_)`\____)(_) (_)`\__)
+                            ( )_) |                                     
+                             \___/'                                     
+                       _____  ___    ___                                
+                      (  _  )(  _`\ (  _`\                              
+    ______  ______    | (_) || |_) )| |_) )    ______  ______           
+   (______)(______)   |  _  || ,__/'| ,__/'   (______)(______)          
+                      | | | || |    | |                                 
+                      (_) (_)(_)    (_)                                 
+                                                                        
+- Welcome to the application console
+- For get commands detail type:
+    > help
+'''
+
+HELP = '''
+- Commands:
+  > help
+      Shows help
+
+  > status
+      Shows the status of Components
+
+  > components
+      prints the componnets in dict format
+
+  > processes
+      prints the processes list in dict format
+
+  > start <Componnet Name>
+      starts the mentiond componnet
+
+  > stop <Componnet Name>
+      stops the mentiond componnet
+
+  > start_all
+      Starts all of the componnets
+
+  > stop_all
+      Stops all of the componnets
+
+  > exit or Control-C
+      Exits the console
+'''
+
+
 class Console:
     def __init__(self) -> None:
         self.Running = False
@@ -9,7 +60,7 @@ class Console:
 
     def Start(self) -> None:
         self.Running = True
-        print("\nConsole is now running. Type 'exit' to quit.")
+        print(WELCOME)
         while self.Is_Running():
             try:
                 command = input("> ").strip()
@@ -25,6 +76,9 @@ class Console:
     def Handle_Command(self, Command:str) -> None:
         if Command == 'exit':
             self.Stop()
+
+        elif Command == 'help':
+            print(HELP)
 
         elif Command == 'start_all':
             ComponentContainer.Start_All()
@@ -53,6 +107,7 @@ class Console:
 
         elif Command == '':
             pass
+
         else:
             print(f"\nUnknown command: {Command}")
 
