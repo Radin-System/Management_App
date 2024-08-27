@@ -42,7 +42,6 @@ class Console:
         elif Command == 'components':
             print(ComponentContainer._Components)
 
-
         elif Command == 'processes':
             print(ComponentContainer._Processes)
 
