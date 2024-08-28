@@ -2,7 +2,7 @@
   <div class="container">
     <!-- Header -->
     <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-4 mb-4 border-bottom">
-      <a href="{{url_for('root.index')}}" class="d-flex align-items-center col-md-2 mb-2 mb-md-0 text-dark text-decoration-none"><h5>{{PageSetting.BaseSetting.PageTitleFa}}</h5></a>
+      <a href="{{url_for('root.index')}}" class="d-flex align-items-center col-md-2 mb-2 mb-md-0 text-dark text-decoration-none"><h5>پنل پشتیبانی</h5></a>
       <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
         <li><a href="{{url_for('root.index')}}" class="nav-link px-3 link-dark">خانه</a></li>
         {% if Current_User.is_authenticated %}<li><a href="{{url_for('root.under_construction')}}" class="nav-link px-3 link-dark">داشبورد</a></li>{%endif%}

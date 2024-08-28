@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="{{ PageSetting.BaseSetting.Language }}" dir="{{ PageSetting.BaseSetting.Dir }}"> 
+<html lang="{{ PageSetting.language }}" dir="{{ PageSetting.dir }}"> 
   <head>
-    <meta charset="{{ PageSetting.BaseSetting.Charset }}">
+    <meta charset="{{ PageSetting.charset }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ PageSetting.BaseSetting.PageTitle }}</title>
+    <title>{{ PageSetting.pagetitle }}</title>
     <!---->
-      {% if PageSetting.BaseSetting.Language == 'fa' %}
-        {% if PageSetting.StaticFile.FontVazirmtn %}
+      {% if PageSetting.language == 'fa' %}
+        {% if PageSetting.fontvazirmtn %}
           <link rel="stylesheet" href="{{url_for('static', filename='vazirmatn/Vazirmatn-font-face.css')}}">
           <link rel="stylesheet" href="{{url_for('static', filename='vazirmatn/Vazirmatn-Variable-font-face.css')}}">
         {% endif %}
-        {% if PageSetting.StaticFile.Bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.rtl.min.css')}}">{% endif %}
-      {% elif PageSetting.BaseSetting.Language == 'en' %}
-        {% if PageSetting.StaticFile.Bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.min.css')}}">{% endif %}
+        {% if PageSetting.bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.rtl.min.css')}}">{% endif %}
+      {% elif PageSetting.language == 'en' %}
+        {% if PageSetting.bootstrap %}<link rel="stylesheet" href="{{url_for('static', filename='bootstrap/bootstrap.min.css')}}">{% endif %}
       {% endif %}
-      {% if PageSetting.StaticFile.Main %}<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">{% endif %}
-      {% if PageSetting.StaticFile.FontAwesome %}<link rel="stylesheet" href="{{url_for('static', filename='fontawesome/css/all.min.css')}}">{% endif %}
+      {% if PageSetting.main %}<link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">{% endif %}
+      {% if PageSetting.fontawesome %}<link rel="stylesheet" href="{{url_for('static', filename='fontawesome/css/all.min.css')}}">{% endif %}
       <!-- Custom Styles -->
       {% block Style %}{% endblock %}
   </head>
@@ -29,9 +29,9 @@
     {% block Content %}<!-- Content Block -->{% endblock %}
     {% block Footer %}{% include 'base/footer.html' %}{% endblock %}
     <!-- Scripts -->
-    {% if PageSetting.StaticFile.Bootstrap %}<script src="{{url_for('static', filename='bootstrap/bootstrap.bundle.min.js')}}"></script>{% endif %}
-    {% if PageSetting.StaticFile.JQuery %}<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>{% endif %}
-    {% if PageSetting.StaticFile.Main %}<script src="{{url_for('static', filename='main.js')}}"></script>{% endif %}
+    {% if PageSetting.bootstrap %}<script src="{{url_for('static', filename='bootstrap/bootstrap.bundle.min.js')}}"></script>{% endif %}
+    {% if PageSetting.jquery %}<script src="{{url_for('static', filename='jquery/jquery.min.js')}}"></script>{% endif %}
+    {% if PageSetting.main %}<script src="{{url_for('static', filename='main.js')}}"></script>{% endif %}
     {% block Script %}{% endblock %}
   </body>
 </html>
