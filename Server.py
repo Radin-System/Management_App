@@ -10,8 +10,8 @@ if __name__ == '__main__' :
     from blueprints import Blueprints
 
     MainConsole = Console(
-        Startup=['reassign_dependencies','start_all',],
-        Shutdown=['stop_all',],
+        Startup=['reassign_dependencies', 'start_all'],
+        Shutdown=['stop_all'],
         )
 
     Main_Config = Config('MainConfig', Config_File=CONFIGFILE)
