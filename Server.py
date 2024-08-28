@@ -28,8 +28,4 @@ if __name__ == '__main__' :
         Blueprints = Blueprints,
         )
 
-    time.sleep(1)
     MainConsole.Start()
-
-    Main_Logger('Stopping all Components')
-    ComponentContainer.Stop_All()
