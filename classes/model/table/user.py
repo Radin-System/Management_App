@@ -4,7 +4,7 @@ from classes.model.mixins import *
 from classes.model.column_info import *
 from classes.validator import EnglishSpecial, Uuid
 
-class User(BaseMixin, InfoMixin, UserMixin, NameMixin):
+class User(BaseMixin, IdMixin, NameMixin, FlagMixin, AuditMixin, UserMixin):
     __tablename__ = 'users'
     username      = Column(String, nullable=False, unique=True, info={'Policy':UsernamePolicy})
     password      = Column(String, nullable=False, info={'Policy':PasswordPolicy})

@@ -23,7 +23,7 @@ def CallCenter(CC:ComponentContainer) -> Blueprint:
         SubElement(Root_Element, 'Title').text = f'{Con.Get('GLOBALS','name')} Books'
         SubElement(Root_Element, 'Prompt').text = 'Select address book'
 
-        Books = SQL.Query(SQL.Contact_Book, Detached=True, Sort=[('name','dsc')])
+        Books = SQL.Query(SQL.Contact_Book, Detached=True, Sort=[('name','desc')])
 
         for Book in Books:
             Menu_Item = SubElement(Root_Element, 'MenuItem')
@@ -68,7 +68,7 @@ def CallCenter(CC:ComponentContainer) -> Blueprint:
             if 'name' in request.args:
                 Contacts = SQL.Query(SQL.Contact,
                     Detached = True, 
-                    Sort = [('firstname_en','dsc')],
+                    Sort = [('firstname_en','desc')],
                     contact_book_id = Book.id, 
                     name__like = request.args.get('name')
                     )
@@ -76,7 +76,7 @@ def CallCenter(CC:ComponentContainer) -> Blueprint:
             elif 'number' in request.args:
                 Contacts = SQL.Query(SQL.Contact,
                     Detached = True,
-                    Sort = [('firstname_en','dsc')],
+                    Sort = [('firstname_en','desc')],
                     contact_book_id = Book.id,
                     number__like = request.args.get('number')
                     )

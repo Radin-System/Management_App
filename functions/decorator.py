@@ -5,7 +5,6 @@ from flask import redirect,url_for,abort
 from functools import wraps
 from flask_login import current_user
 
-
 def Return_False_On_Exception(Function) -> callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):

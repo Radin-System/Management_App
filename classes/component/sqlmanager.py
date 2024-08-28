@@ -6,7 +6,7 @@ from functions.decorator import Running_Required
 class SQLManager(Component):
     def __init__(self,Name:str,*,
             Base:Any,
-            Models:list,
+            Models:dict,
             ) -> None :
 
         super().__init__(Name)
@@ -41,8 +41,8 @@ class SQLManager(Component):
         self.Base.metadata.create_all(self.Engine)
 
     def Init_Models(self) -> None:
-        for Model in self.Models :
-            setattr(self , Model.__name__ , Model)
+        for Name, Model in self.Models.items() :
+            setattr(self, Name, Model)
 
     @Running_Required
     def Create(self, Instance,*,
@@ -56,6 +56,8 @@ class SQLManager(Component):
         except Exception as e:
             Session.rollback()
             raise e
+        finally:
+            Session.close()
 
     @Running_Required
     def Update(self, Instance,*,
@@ -81,6 +83,8 @@ class SQLManager(Component):
         except Exception as e:
             Session.rollback()
             raise e
+        finally:
+            Session.close()
 
     @Running_Required
     def Delete(self, Instance,*,
@@ -97,6 +101,8 @@ class SQLManager(Component):
         except Exception as e:
             Session.rollback()
             raise e
+        finally:
+            Session.close()
 
     @Running_Required
     def Query(self,Model,*,
@@ -157,7 +163,7 @@ class SQLManager(Component):
             for attr, order in Sort:
                 if 'asc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).asc())
-                elif 'dsc' in order.lower():
+                elif 'desc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).desc())
                 else:
                     raise ValueError(f"Invalid sorting order: {order}")

@@ -1,7 +1,7 @@
 from typing import Any
 from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean, String, Text
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean, String, Text, func
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -14,24 +14,32 @@ class BaseMixin(Base):
     def __setattr__(self, Name:str, Value:Any):
         # Getting the Coloumn
         Column_Object:Column = self.__table__.columns.get(Name)
-        Policy:ColumnInfo = Column_Object.info.get('Policy', None)
 
         if Column_Object is not None: 
-            Value = Policy.Apply(Value)
+            Policy:ColumnInfo = Column_Object.info.get('Policy', None)
+            
+            if Policy is not None:
+                Value = Policy.Apply(Value)
 
         super().__setattr__(Name, Value)
 
-class InfoMixin:
+class IdMixin:
     __abstract__ = True
     id           = Column(Integer, primary_key=True, autoincrement=True, info={'Policy':BaseInfoPolicy})
     uid          = Column(String, nullable=True, info={'Policy':UuidPolicy})
-    description  = Column(Text, nullable=True)
+
+class FlagMixin:
+    __abstract__ = True
     active       = Column(Boolean, default=True, nullable=False, info={'Policy':HiddenField})
     visible      = Column(Boolean, default=True, nullable=False, info={'Policy':HiddenField})
     deletable    = Column(Boolean, default=True, nullable=False, info={'Policy':HiddenField})
     changable    = Column(Boolean, default=True, nullable=False, info={'Policy':HiddenField})
-    create_date  = Column(DateTime, default=datetime.now(), nullable=False, info={'Policy':BaseInfoPolicy})
-    last_update  = Column(DateTime, default=datetime.now(), onupdate=datetime.now(), nullable=False, info={'Policy':BaseInfoPolicy})
+
+class AuditMixin:
+    __abstract__ = True
+    description  = Column(Text, nullable=True)
+    create_date  = Column(DateTime, default=func.now(), nullable=False, info={'Policy':BaseInfoPolicy})
+    last_update  = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False, info={'Policy':BaseInfoPolicy})
 
 class NameMixin:
     __abstract__  = True
@@ -62,7 +70,9 @@ class OwnerMixin:
 
 __all__ = [
     'BaseMixin',
-    'InfoMixin',
+    'IdMixin',
+    'FlagMixin',
+    'AuditMixin',
     'NameMixin',
     'OwnerMixin',
     'ContactMixin',

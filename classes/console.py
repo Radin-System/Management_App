@@ -1,4 +1,5 @@
-from classes.component import ComponentContainer
+from classes.component import ComponentContainer as CC
+from classes.component import SQLManager
 from constant import CONSOLE_WELCOME, CONSOLE_HELP
 
 class Console:
@@ -44,30 +45,43 @@ class Console:
         elif Command == 'help':
             print(CONSOLE_HELP)
 
+        elif Command == 'reset_admin':
+            SQL:SQLManager = CC.Get('MainSQLManager')
+            Admin_User = SQL.Query(SQL.User, Detached=True, First=True, username='admin')
+            if Admin_User:
+                New_Password = input('Password : ')
+                Admin_User.password = New_Password
+                SQL.Update(Admin_User)
+            else:
+                Admin_User = SQL.User(username='admin', password='asd@1234', firstname_en='Administrator', firstname_fa='ادمین', admin=True)
+                SQL.Create(Admin_User)
+                print('New Admin User Created')
+                print('Password: asd@1234')
+
         elif Command == 'reassign_dependencies':
-            ComponentContainer.Reassign_Dependencies()
+            CC.Reassign_Dependencies()
 
         elif Command == 'start_all':
-            ComponentContainer.Start_All()
+            CC.Start_All()
 
         elif Command == 'stop_all':
-            ComponentContainer.Stop_All()
+            CC.Stop_All()
 
         elif Command.startswith('start '):
             Service_Name = Command[len('start '):].strip()
-            ComponentContainer.Start(Service_Name)
+            CC.Start(Service_Name)
             del Service_Name
 
         elif Command.startswith('stop '):
             Service_Name = Command[len('stop '):].strip()
-            ComponentContainer.Stop(Service_Name)
+            CC.Stop(Service_Name)
             del Service_Name
 
         elif Command == 'components':
-            print(ComponentContainer._Components)
+            print(CC._Components)
 
         elif Command == 'processes':
-            print(ComponentContainer._Processes)
+            print(CC._Processes)
 
         elif Command == 'status':
             self._print_status()
@@ -83,6 +97,6 @@ class Console:
         self.Running = False
 
     def _print_status(self) -> None:
-        for Name, Component in ComponentContainer.Items():
+        for Name, Component in CC.Items():
             status = "Running" if Component.Is_Running() else "Stopped"
             print(f"{Name}: {status}")
