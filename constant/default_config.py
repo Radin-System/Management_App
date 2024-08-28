@@ -72,4 +72,3 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
         'evat_url': 'https://evat.ir/',
         },
     }
-
