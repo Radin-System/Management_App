@@ -64,7 +64,7 @@ class SQLManager(Component):
 
         if not Instance.changable:
             raise PermissionError(f'this instance is not changable: {Instance}')
-        
+
         for Coloumn in Instance.__class__.__table__.columns:
             if Coloumn is not None:
                 # Cheking Flags
@@ -111,24 +111,24 @@ class SQLManager(Component):
         ) -> list | dict | Any | None:
         # Usage: SQLManager.Query(SQLManager.User,
         #   Detached=False,
-        #   Eager = True, 
-        #   DictMode = False, 
-        #   Sort = [('name', 'asc')], 
-        #   First = False, 
-        #   Limit = 10, 
-        #   Offset = 12, 
-        #   email = None, 
+        #   Eager = True,
+        #   DictMode = False,
+        #   Sort = [('name', 'asc')],
+        #   First = False,
+        #   Limit = 10,
+        #   Offset = 12,
+        #   email = None,
         #   name__like = 'mohammad')
-        
+
         # Creating Session and getting Query
         Session = self.SessionMaker(Detached=Detached)
         Query = Session.query(Model)
-        
+
         # Apply eager loading if requested
         if Eager:
             for Relationship in sqlalchemy.inspect(Model).relationships:
                 Query = Query.options(sqlalchemy.orm.joinedload(Relationship.key))
-        
+
         # Apply filtering conditions
         if Conditions:
             Like_Conditions = {}
@@ -141,7 +141,7 @@ class SQLManager(Component):
                     Like_Conditions[Like_Key] = Value
                 else:
                     Exact_Conditions[Key] = Value
-            
+
             # Apply exact match conditions
             if Exact_Conditions:
                 Query = Query.filter_by(**Exact_Conditions)
@@ -152,7 +152,7 @@ class SQLManager(Component):
                     Query = Query.filter(getattr(Model, Key).like(f'%{Value}%'))
                 else:
                     raise AttributeError(f'{Key} is not a valid attribute of {Model}')
-        
+
         # Apply sorting
         if Sort:
             for attr, order in Sort:
@@ -162,26 +162,26 @@ class SQLManager(Component):
                     Query = Query.order_by(getattr(Model, attr).desc())
                 else:
                     raise ValueError(f"Invalid sorting order: {order}")
-        
+
         # Apply limit and offset
         if Limit:
             Query = Query.limit(Limit)
         if Offset:
             Query = Query.offset(Offset)
-        
+
         # Fetch the result
         if First:
             Result = Query.first()
         else:
             Result = Query.all()
-        
+
         # Handle detached instances
         if Result and DictMode:
             if First:
                 return {col.name: getattr(Result, col.name) for col in Result.__table__.columns}
             else:
                 return [{col.name: getattr(instance, col.name) for col in instance.__table__.columns} for instance in Result]
-        
+
         # Return the result
         return Result
 
