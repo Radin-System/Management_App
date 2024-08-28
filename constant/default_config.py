@@ -7,13 +7,8 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
 
     'GLOBALS' : {
         'debug': True,
-        'development_mode':True,
         'log_file': '.log/main.txt',
-        'name': 'RSTO',
-        'version': '1.1b',
         'language': 'fa',
-        'temp_foldes_csv':'.temp,.error,',
-        'develop_files_csv':'.temp,.log,.db,.error,',
         },
 
     'LOG' : {
@@ -68,9 +63,9 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
     'TOOL' : {
         'chrome_driver_path':'C:\\Program Files\\Google\\Chrome\\chromedriver.exe',
         'teseract_path': 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe',
+        'evat_url': 'https://evat.ir/',
         'sarv_url': 'https://app.sarvcrm.com/',
         'sarv_username': '',
         'sarv_password': '',
-        'evat_url': 'https://evat.ir/',
         },
     }
