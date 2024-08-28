@@ -4,6 +4,7 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
     'ENVIRON' : {
         'crypto_key': 'qU-6rPX00wrsGYbmm3ts5Yhu_kByuaAAmD88mmNNhrA=',  # Test Key
         },
+
     'GLOBALS' : {
         'debug': True,
         'development_mode':True,
@@ -14,6 +15,7 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
         'temp_foldes_csv':'.temp,.error,',
         'develop_files_csv':'.temp,.log,.db,.error,',
         },
+
     'LOG' : {
         'log_time_format': '%%Y-%%m-%%d %%H:%%M:%%S',
         'log_header': '<>',
