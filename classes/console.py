@@ -62,8 +62,8 @@ class Console:
         print(WELCOME)
         while self.Is_Running():
             try:
-                command = input("> ").strip()
-                self.Handle_Command(command)
+                Command = input("> ").strip()
+                self.Handle_Command(Command)
             except KeyboardInterrupt:
                 self._exit()
             except Exception as e:

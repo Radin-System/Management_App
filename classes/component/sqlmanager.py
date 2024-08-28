@@ -13,6 +13,9 @@ class SQLManager(Component):
 
         self.Base   = Base
         self.Models = Models        
+
+        self.Process_Type: str = 'Static'
+
         self.Create_Engine()
         self.Init_Models()
 
@@ -172,6 +175,9 @@ class SQLManager(Component):
         Connection = self.Engine.connect()
         Connection.begin()
         return sqlalchemy.orm.Session(bind=Connection, expire_on_commit=Detached)
+
+    def Loop(self) -> None:
+        ...
 
     def Start_Actions(self) -> None:
         pass

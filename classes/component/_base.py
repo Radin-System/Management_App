@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple
 import multiprocessing
 import threading
 
-from classes.exception import ServiceError
+from classes.exception import ComponentError
 
 class Component:
     def __init__(self, Name: str) -> None:
@@ -23,30 +23,28 @@ class Component:
         self.Config: Config = ComponentContainer.Get('MainConfig')
 
     def Init_Config(self) -> None:
-        raise NotImplementedError(f'Please provide an action for configuring the service: {self.Name}')
+        raise NotImplementedError(f'Please provide an action for configuring the component: {self.Name}')
 
     def Start_Actions(self) -> None:
-        raise NotImplementedError(f'Please provide an action for starting the service: {self.Name}')
+        raise NotImplementedError(f'Please provide an action for starting the component: {self.Name}')
 
     def Stop_Actions(self) -> None:
-        raise NotImplementedError(f'Please provide an action for stopping the service: {self.Name}')
+        raise NotImplementedError(f'Please provide an action for stopping the component: {self.Name}')
 
     def Is_Running(self) -> bool:
         return self.Running
 
     def Loop(self) -> None:
-        while self.Is_Running():
-            time.sleep(0.2)
+        raise NotImplementedError(f'Please provide an action for Looping the component: {self.Name}')
 
     def Start(self) -> None:
         self.Running = True
-        
-        self.Logger(f'Starting the Service: {self.Name}')
+        self.Logger(f'Starting the component: {self.Name}')
         self.Start_Actions()
         self.Loop()
 
     def Stop(self) -> None:
-        self.Logger(f'Stopping the Service: {self.Name}')
+        self.Logger(f'Stopping the component: {self.Name}')
         self.Running = False
         self.Stop_Actions()
 
@@ -54,7 +52,7 @@ class Component:
         self.Start()
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback) -> None:
+    def __exit__(self, Exc_Type, Exc_Value, Traceback) -> None:
         self.Stop()
 
     def __bool__(self) -> bool:
@@ -66,7 +64,7 @@ class Component:
     def __repr__(self) -> str:
         return f'{self.__class__.__name__}({self.Name})'
 
-    def _run_service(self) -> None:
+    def _Run_Component(self) -> None:
         self.Start()
 
 class ComponentContainer:
@@ -74,11 +72,11 @@ class ComponentContainer:
     _Processes: Dict[str, Any] = {}  # To keep track of processes or threads
 
     @classmethod
-    def Register(cls, Name: str, Service: Component) -> None:
+    def Register(cls, Name: str, Component: Component) -> None:
         if Name not in cls._Components:
-            cls._Components[Name] = Service
+            cls._Components[Name] = Component
         else:
-            raise ServiceError.Exists(f'Service Already exists: {Name}\n Try another name')
+            raise ComponentError.Exists(f'Component Already exists: {Name}\n Try another name')
 
     @classmethod
     def Get(cls, Name:str, Default:Any = None) -> Component:
@@ -86,7 +84,7 @@ class ComponentContainer:
         if Result is not None: 
             return Result
         else : 
-            raise ServiceError.NotFound(f'The requested service not found: {Name}')
+            raise ComponentError.NotFound(f'The requested Component not found: {Name}')
 
     @classmethod
     def Remove(cls, Name: str) -> Component:
@@ -104,13 +102,13 @@ class ComponentContainer:
 
         if Component.Process_Type == 'Process':
             Component.Logger(f'Creating Proccess for {Name}', 'debug')
-            Process = multiprocessing.Process(target=Component._run_service)
+            Process = multiprocessing.Process(target=Component._Run_Component)
             Process.start()
             cls._Processes[Name] = Process
 
         elif Component.Process_Type == 'Thread':
             Component.Logger(f'Creating Thread for {Name}', 'debug')
-            Thread = threading.Thread(target=Component._run_service)
+            Thread = threading.Thread(target=Component._Run_Component)
             Thread.start()
             cls._Processes[Name] = Thread
 
@@ -122,8 +120,8 @@ class ComponentContainer:
 
     @classmethod
     def Stop(cls, Name: str) -> None:
-        service = cls.Get(Name)
-        service.Stop()
+        component = cls.Get(Name)
+        component.Stop()
         if Name in cls._Processes:
             process_or_thread = cls._Processes.get(Name)
             process_or_thread:threading.Thread|multiprocessing.Process

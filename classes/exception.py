@@ -1,4 +1,4 @@
-class ServiceError:
+class ComponentError:
     class NotFound(Exception):
         ...
 

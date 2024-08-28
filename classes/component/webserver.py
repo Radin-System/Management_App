@@ -29,43 +29,16 @@ class PageSetting :
 
 class WebServer(Component):
     def __init__(self,Name:str,*,
+        App:Flask,
         Blueprints:list[Blueprint],
         ) -> None:
         super().__init__(Name)
 
+        self.App = App
         self.Blueprints = Blueprints
 
-        self.Process_Type: str = 'Process'
+        self.Process_Type: str = 'Static'
 
-    def Init_Dependancy(self) -> None:
-        super().Init_Dependancy()
-        self.SQLManager:SQLManager = ComponentContainer.Get('MainSQLManager')
-
-    def Init_Config(self) -> None:
-        self.Host = self.Config.Get('WEBSERVER','host')
-        self.Port = self.Config.Get('WEBSERVER','port')
-        self.Secret_Key = self.Config.Get('WEBSERVER','secret_key')
-
-    def Loop(self) -> None:
-        self.App.run(self.Host, self.Port)
-
-    def Start_Actions(self) -> None:
-        # Define absolute paths
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        static_path = os.path.join(base_dir, 'static')
-        templates_path = os.path.join(base_dir, 'templates')
-        self.Logger(f'Flask Static Path:{static_path}')
-        self.Logger(f'Flask Template Path:{templates_path}')
-        # Create the Flask App
-        self.App = Flask(__name__, static_folder=static_path, template_folder=templates_path)
-        self.Init_App()
-        self.Register_Blueprints()
-        self.Logger('Starting Flask Web Server')
-
-    def Stop_Actions(self) -> None:
-        self.Logger('Stopping Flask Web Server')
-
-    def Init_App(self) -> None:
         ## Configs
         self.App.config['SECRET_KEY'] = self.Secret_Key
 
@@ -78,6 +51,13 @@ class WebServer(Component):
         ## Add-ins
         HTMLMIN(self.App)
         Login_Manager.init_app(self.App)
+
+        ## Registering Blueprints
+        self.Logger('Registering Blueprints', 'debug')
+        for Blueprint in self.Blueprints:
+            Blueprint = Blueprint(self.SQLManager)
+            self.Logger(f'- Blueprint: {Blueprint} prefix:{Blueprint.url_prefix}', 'debug')
+            self.App.register_blueprint(Blueprint)
 
         ## Adding Functions
         @Login_Manager.user_loader
@@ -93,9 +73,21 @@ class WebServer(Component):
         def Context_Processor() -> dict:
             return dict(Current_User=current_user, PageSetting=PageSetting())
 
-    def Register_Blueprints(self) -> None:
-        self.Logger('Registering Blueprints', 'debug')
-        for Blueprint in self.Blueprints:
-            Blueprint = Blueprint(self.SQLManager)
-            self.Logger(f'- Blueprint: {Blueprint} prefix:{Blueprint.url_prefix}', 'debug')
-            self.App.register_blueprint(Blueprint)
+    def Init_Dependancy(self) -> None:
+        super().Init_Dependancy()
+        self.SQLManager:SQLManager = ComponentContainer.Get('MainSQLManager')
+
+    def Init_Config(self) -> None:
+        self.Host = self.Config.Get('WEBSERVER','host')
+        self.Port = self.Config.Get('WEBSERVER','port')
+        self.Secret_Key = self.Config.Get('WEBSERVER','secret_key')
+
+    def Loop(self) -> None:
+        self.App.run(self.Host, self.Port)
+        self.Stop()
+
+    def Start_Actions(self) -> None:
+        self.Logger('Starting Flask Web Server')
+
+    def Stop_Actions(self) -> None:
+        self.Logger('Stopping Flask Web Server')
