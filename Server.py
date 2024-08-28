@@ -9,7 +9,7 @@ if __name__ == '__main__' :
     from classes.model import *
     from blueprints import Blueprints
 
-    MainConsole = Console()
+    MainConsole = Console(Startup=['reassign_dependencies','start_all',],Shutdown=['stop_all'])
 
     Main_Config = Config('MainConfig', Config_File=CONFIGFILE)
 
@@ -21,12 +21,6 @@ if __name__ == '__main__' :
         App = Flask(__name__, static_folder='static', template_folder='templates'),
         Blueprints = Blueprints,
         )
-
-    Main_Logger('Reassinging Dependencies')
-    ComponentContainer.Reassign_Dependencies()
-
-    Main_Logger('Starting all Components')
-    ComponentContainer.Start_All()
 
     time.sleep(1)
     MainConsole.Start()

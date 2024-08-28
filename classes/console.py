@@ -34,6 +34,9 @@ HELP:str = '''
   > processes
       prints the processes list in dict format
 
+  > reassign_dependencies
+      Refreshes the Dependencies of all components
+
   > start <Componnet Name>
       starts the mentiond componnet
 
@@ -51,7 +54,14 @@ HELP:str = '''
 '''
 
 class Console:
-    def __init__(self) -> None:
+    def __init__(self,*,
+        Startup:list = None,
+        Shutdown:list = None,
+        ) -> None:
+
+        self.Startup = Startup or []
+        self.Shutdown = Shutdown or []
+
         self.Running = False
 
     def Is_Running(self) -> bool:
@@ -60,6 +70,10 @@ class Console:
     def Start(self) -> None:
         self.Running = True
         print(WELCOME)
+
+        ## Handling Startup Commands
+        [self.Handle_Command(Startup_Command) for Startup_Command in self.Startup]
+
         while self.Is_Running():
             try:
                 Command = input("> ").strip()
@@ -70,6 +84,9 @@ class Console:
                 print(f"Error: {e}")
 
     def Stop(self) -> None:
+
+        [self.Handle_Command(Shutdown_Command) for Shutdown_Command in self.Shutdown]
+
         self.Running = False
 
     def Handle_Command(self, Command:str) -> None:
@@ -78,6 +95,9 @@ class Console:
 
         elif Command == 'help':
             print(HELP)
+
+        elif Command == 'reassign_dependencies':
+            ComponentContainer.Reassign_Dependencies()
 
         elif Command == 'start_all':
             ComponentContainer.Start_All()
