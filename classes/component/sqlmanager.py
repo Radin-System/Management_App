@@ -110,7 +110,7 @@ class SQLManager(Component):
         **Conditions
         ) -> list | dict | Any | None:
         # Usage: SQLManager.Query(SQLManager.User,
-        #   Detached=False,
+        #   Detached = False,
         #   Eager = True,
         #   DictMode = False,
         #   Sort = [('name', 'asc')],
