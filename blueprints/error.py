@@ -1,9 +1,9 @@
 from flask import Blueprint, request, render_template
-from classes.component.sqlmanager import SQLManager
+from classes.component import ComponentContainer
 from functions.web import Create_Response
 from functions.errorhandler import Handle_Error
 
-def Error(SQL: SQLManager) -> Blueprint:
+def Error(CC:ComponentContainer) -> Blueprint:
 
     bp = Blueprint('error', __name__)
 

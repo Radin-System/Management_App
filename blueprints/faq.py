@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template
-from flask_login import current_user
-from classes.component.sqlmanager import SQLManager
+from classes.component import ComponentContainer
 
-def Faq(SQL:SQLManager) -> Blueprint:
+def Faq(CC:ComponentContainer) -> Blueprint:
         
     bp = Blueprint('faq', __name__, url_prefix='/faq')
 

@@ -1,10 +1,11 @@
 from flask import Blueprint, abort, request, render_template, redirect, url_for
 from flask_login import logout_user, login_user
 
-from classes.component.sqlmanager import SQLManager
-from classes.model.coloumn_info import PasswordPolicy,UsernamePolicy
+from classes.component import ComponentContainer, SQLManager
+from classes.model.column_info import PasswordPolicy, UsernamePolicy
 
-def Auth(SQL:SQLManager) -> Blueprint:
+def Auth(CC:ComponentContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('MainSQLManager')
 
     bp = Blueprint('auth', __name__, url_prefix='/auth')
 

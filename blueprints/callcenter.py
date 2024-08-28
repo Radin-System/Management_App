@@ -1,63 +1,12 @@
-from flask import Blueprint, Response, render_template, request
-from classes.component.sqlmanager import SQLManager
+from flask import Blueprint, Response, abort, render_template, request
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    extension = db.Column(db.String(50), nullable=False)
+from classes.component import ComponentContainer, SQLManager
+from functions.callcenter import Add_Soft_Key, Show_Contacts
 
-class RingGroup(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(100), nullable=False)
-    grpnum = db.Column(db.String(50), nullable=False)
+def CallCenter(CC:ComponentContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('MainSQLManager')
 
-def create_cisco_phone_error(title, prompt, text):
-    xml = Element('CiscoIPPhoneText')
-    SubElement(xml, 'Title').text = title
-    SubElement(xml, 'Prompt').text = prompt
-    SubElement(xml, 'Text').text = text
-    add_soft_key(xml, 'Exit', 'SoftKey:Exit', 1)
-    return tostring(xml, encoding='utf-8')
-
-def add_soft_key(xml, name, url, position):
-    soft_key = SubElement(xml, 'SoftKeyItem')
-    SubElement(soft_key, 'Name').text = name
-    SubElement(soft_key, 'URL').text = url
-    SubElement(soft_key, 'Position').text = str(position)
-
-def show_addresses(mode, query):
-    if mode == 'number':
-        users = User.query.filter(User.extension.like(query)).all()
-        ringgroups = RingGroup.query.filter(RingGroup.grpnum.like(query)).all()
-    else:  # 'name'
-        users = User.query.filter(User.name.like(query)).all()
-        ringgroups = RingGroup.query.filter(RingGroup.description.like(query)).all()
-
-    if not users and not ringgroups:
-        return create_cisco_phone_error('No results', 'Try again', f'No results found for {query}')
-
-    xml = Element('CiscoIPPhoneDirectory')
-    SubElement(xml, 'Title').text = 'Grace Academy'
-    SubElement(xml, 'Prompt').text = 'Dial selected'
-
-    for user in users:
-        entry = SubElement(xml, 'DirectoryEntry')
-        SubElement(entry, 'Name').text = user.name
-        SubElement(entry, 'Telephone').text = user.extension
-
-    for group in ringgroups:
-        entry = SubElement(xml, 'DirectoryEntry')
-        SubElement(entry, 'Name').text = group.description
-        SubElement(entry, 'Telephone').text = group.grpnum
-
-    add_soft_key(xml, 'Dial', 'SoftKey:Dial', 1)
-    add_soft_key(xml, 'Exit', 'SoftKey:Exit', 2)
-    
-    return tostring(xml, encoding='utf-8')
-
-def CallCenter(SQL:SQLManager) -> Blueprint:
-        
     bp = Blueprint('callcenter', __name__, url_prefix='/callcenter')
 
     @bp.route('/')
@@ -104,24 +53,27 @@ def CallCenter(SQL:SQLManager) -> Blueprint:
         SubElement(item2, 'DefaultValue').text = ''
         SubElement(item2, 'InputFlags').text = 'T'
 
-        add_soft_key(xml, 'Search', 'SoftKey:Submit', 1)
-        add_soft_key(xml, 'Exit', 'SoftKey:Exit', 2)
-        add_soft_key(xml, 'Del', 'SoftKey:<<', 3)
+        Add_Soft_Key(xml, 'Search', 'SoftKey:Submit', 1)
+        Add_Soft_Key(xml, 'Exit', 'SoftKey:Exit', 2)
+        Add_Soft_Key(xml, 'Del', 'SoftKey:<<', 3)
 
         return Response(tostring(xml, encoding='utf-8'), mimetype='text/xml')
 
     @bp.route('/search.xml')
     def search():
-        mode = None
-        query = None
+        Contacts:list = []
 
         if 'name' in request.args:
-            mode = 'name'
-            query = f"%{request.args.get('name')}%"
-        elif 'number' in request.args:
-            mode = 'number'
-            query = f"%{request.args.get('number')}%"
+            Contacts = SQL.Query(SQL.Contact, Detached=True, Sort=[('firstname_en','des')], name__like = request.args.get('name'))
 
-        return Response(show_addresses(mode, query), mimetype='text/xml')
+        elif 'number' in request.args:
+            Contacts = SQL.Query(SQL.Contact, Detached=True, Sort=[('firstname_en','des')], number__like = request.args.get('number'))
+
+        else:
+            return abort(400)
+
+        [Contact.calc_fullname() for Contact in Contacts]
+
+        return Response(Show_Contacts(Contacts), mimetype='text/xml')
 
     return bp

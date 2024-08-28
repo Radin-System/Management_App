@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, render_template, url_for
-from flask_login import current_user
-from classes.component.sqlmanager import SQLManager
+from classes.component import ComponentContainer
 
-def Root(SQL:SQLManager) -> Blueprint:
+def Root(CC:ComponentContainer) -> Blueprint:
 
     bp = Blueprint('root', __name__, url_prefix='/')
 

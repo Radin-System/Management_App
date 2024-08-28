@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify
 
-from classes.component.sqlmanager import SQLManager
+from classes.component import ComponentContainer, SQLManager
 from functions.web import Create_Response
 
-def Api(SQL:SQLManager) -> Blueprint:
+def Api(CC:ComponentContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('MainSQLManager')
 
     bp = Blueprint('api', __name__, url_prefix='/endpoint/api')
 
