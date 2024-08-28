@@ -108,26 +108,55 @@ class SQLManager(Component):
         Limit:int = None, 
         Offset:int = None,
         **Conditions
-        ) -> list|Any|None:
-        #Usage : SQLManager.Query(SQLManager.User, Session=SQLManager.SessionMaker(), Eager=True ,Sort=[('name','asc')] ,First = False ,Limit = 10 ,Offset = 12 ,email = None)
+        ) -> list | dict | Any | None:
+        # Usage: SQLManager.Query(SQLManager.User,
+        #   Detached=False,
+        #   Eager = True, 
+        #   DictMode = False, 
+        #   Sort = [('name', 'asc')], 
+        #   First = False, 
+        #   Limit = 10, 
+        #   Offset = 12, 
+        #   email = None, 
+        #   name__like = 'mohammad')
         
         # Creating Session and getting Query
         Session = self.SessionMaker(Detached=Detached)
         Query = Session.query(Model)
         
         # Apply eager loading if requested
-        if Eager: 
+        if Eager:
             for Relationship in sqlalchemy.inspect(Model).relationships:
                 Query = Query.options(sqlalchemy.orm.joinedload(Relationship.key))
         
         # Apply filtering conditions
-        if Conditions: 
-            Query = Query.filter_by(**Conditions)
+        if Conditions:
+            Like_Conditions = {}
+            Exact_Conditions = {}
+
+            # Separate LIKE conditions from exact conditions
+            for Key, Value in Conditions.items():
+                if '__like' in Key:
+                    Like_Key = Key.replace('__like', '')
+                    Like_Conditions[Like_Key] = Value
+                else:
+                    Exact_Conditions[Key] = Value
+            
+            # Apply exact match conditions
+            if Exact_Conditions:
+                Query = Query.filter_by(**Exact_Conditions)
+            
+            # Apply LIKE conditions
+            for Key, Value in Like_Conditions.items():
+                if hasattr(Model, Key):
+                    Query = Query.filter(getattr(Model, Key).like(f'%{Value}%'))
+                else:
+                    raise AttributeError(f'{Key} is not a valid attribute of {Model}')
         
         # Apply sorting
         if Sort:
             for attr, order in Sort:
-                if   'asc'  in order.lower():
+                if 'asc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).asc())
                 elif 'desc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).desc())
@@ -135,15 +164,15 @@ class SQLManager(Component):
                     raise ValueError(f"Invalid sorting order: {order}")
         
         # Apply limit and offset
-        if Limit: 
+        if Limit:
             Query = Query.limit(Limit)
-        if Offset: 
+        if Offset:
             Query = Query.offset(Offset)
         
         # Fetch the result
-        if First: 
+        if First:
             Result = Query.first()
-        else: 
+        else:
             Result = Query.all()
         
         # Handle detached instances
