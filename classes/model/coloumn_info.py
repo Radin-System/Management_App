@@ -8,16 +8,18 @@ class ColoumnInfo:
         Convertors:list=None,
         Changeable:bool=None,
         Visible:bool=None,
+        First_Convert:bool=None,
         ) -> None:
         
         self.Validators = Validators or []
         self.Convertors = Convertors or []
         self.Changeable = Changeable
         self.Visible = Visible
+        self.First_Convert = First_Convert
 
     def __add__(self, Other):
         if not isinstance(Other, ColoumnInfo):
-            return NotImplemented
+            raise NotImplementedError('You can only add ColoumnInfo with each other')
 
         # Combine lists
         Combined_Validators = self.Validators + (Other.Validators or [])
@@ -26,12 +28,14 @@ class ColoumnInfo:
         # Combine booleans with the custom logic
         Combined_Changeable = self._combine_bools(self.Changeable, Other.Changeable)
         Combined_Visible = self._combine_bools(self.Visible, Other.Visible)
+        Combined_First_Convert = self._combine_bools(self.First_Convert, Other.First_Convert)
 
         return ColoumnInfo(
             Validators=Combined_Validators,
             Convertors=Combined_Convertors,
             Changeable=Combined_Changeable,
             Visible=Combined_Visible,
+            First_Convert=Combined_First_Convert,
         )
 
     def Dict(self) -> dict:
@@ -43,6 +47,7 @@ class ColoumnInfo:
             'Flags':{
                 'Visible':self.Visible,
                 'Changeable':self.Changeable,
+                'First_Convert':self.First_Convert,
                 },
         }
 
@@ -52,20 +57,29 @@ class ColoumnInfo:
             return First
         return Second
 
-    def Apply(self,Item:Any) -> Any:
+    def Apply(self, Input:Any) -> Any:
 
-        for Validator in self.Validators:
-            Validator(Item)
+        if self.First_Convert:
+            for Convertor in self.Convertors:
+                Input = Convertor(Input)
 
-        for Convertor in self.Convertors:
-            Item = Convertor(Item)
+            for Validator in self.Validators:
+                Validator(Input)
 
-        return Item
+        else:
+            for Validator in self.Validators:
+                Validator(Input)
+
+            for Convertor in self.Convertors:
+                Input = Convertor(Input)
+
+        return Input
 
 # Base Level
 BasePolicy     = ColoumnInfo()
 
 # Level One
+FirstConvert   = BasePolicy + ColoumnInfo(First_Convert=True)
 CleanString    = BasePolicy + ColoumnInfo(Convertors=[CleanStr])
 NotChangeble   = BasePolicy + ColoumnInfo(Changeable=False)
 EnsureInteger  = BasePolicy + ColoumnInfo(Convertors=[int])
@@ -78,9 +92,10 @@ NamePolicy_Fa  = CleanString + ColoumnInfo(Validators=[Persian])
 MobilePolicy   = CleanString + ColoumnInfo(Validators=[MobileNumber])
 
 # Level Three
-UsernamePolicy = CleanString + NotChangeble + ColoumnInfo(Validators=[EnglishSpecial, Username], Convertors=[LowerCase])
-EmailPolicy    = CleanString + NotChangeble + ColoumnInfo(Validators=[EnglishSpecial, Email])
+UsernamePolicy = CleanString + NotChangeble + FirstConvert + ColoumnInfo(Validators=[EnglishSpecial, Username], Convertors=[LowerCase])
+EmailPolicy    = CleanString + NotChangeble + FirstConvert + ColoumnInfo(Validators=[EnglishSpecial, Email], Convertors=[LowerCase])
 BaseInfoPolicy = HiddenField + NotChangeble
+UuidPolicy     = HiddenField + NotChangeble + ColoumnInfo(Validators=[Uuid])
 
 __all__ = [
     'ColoumnInfo',
@@ -96,6 +111,7 @@ __all__ = [
     'MobilePolicy',
     'EmailPolicy',
     'BaseInfoPolicy',
+    'UuidPolicy',
 ]
 ## Results
 """
