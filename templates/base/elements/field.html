@@ -1,65 +1,117 @@
-{% if Field %}
-  {% if Field.Type == 'input' %}
-    <!-- Field Input -->
-    <div class="mb-3{% if Field.Row %} Row{% endif %}">
-      <label for="{{Field.Name}}" class="form-label">{{Field.Label}}</label>
-      <input 
-        id="{{ Field.Name }}" 
-        name="{{ Field.Name }}" 
-        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
-        type="{{ Field.Mask }}" 
-        placeholder="{{ Field.Placeholder }}" 
-        {% if Field.Disabled %} disabled{% endif %}
-        {% if Field.Readonly %} readonly{% endif %}
-        >
-    </div>
-  {% elif Field.Type == 'file' %}
-    <!-- Field File -->
-    <div class="mb-3{% if Field.Row %} Row{% endif %}">
-      <label for="{{Field.Name}}" class="form-label">{{Field.Label}}</label>
-      <input 
-        id="{{ Field.Name }}" 
-        name="{{ Field.Name }}" 
-        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
-        type="file" 
-        {% if Field.Disabled %} disabled{% endif %}
-        {% if Field.Readonly %} readonly{% endif %}
-        >
-    </div>
-  {% elif Field.Type == 'list' %}
-    <!-- Field List -->
-    <div class="mb-3{% if Field.Row %} Row{% endif %}">
-      <label for="{{ Field.Name }}" class="form-label">{{ Field.Label }}</label>
-      <input 
-        id="{{ Field.Name }}" 
-        name="{{ Field.Name }}" 
-        class="form-control{% if Field.Size %} form-control-{{ Field.Size }}{% endif %}" 
-        list="{{ Field.Name }}Options" 
-        placeholder="{{ Field.Placeholder }}" 
-        {% if Field.Disabled %} disabled{% endif %}
-        {% if Field.Readonly %} readonly{% endif %}
-        >
-      <datalist id="{{ Field.Name }}Options">
-        {% for Option in Field.Options %}
-          <option value="{{ Option }}">
-        {% endfor %}
-      </datalist>
-    </div>
-  {% elif Field.Type == 'color' %}
-    <!-- Field Color -->
-    <div class="mb-3{% if Field.Row %} Row{% endif %}">
-      <label for="{{ Field.Name }}" class="form-label">{{ Field.Label }}</label>
-      <input 
-        id="{{ Field.Name }}" 
-        name="{{ Field.Name }}" 
-        class="form-control form-control-color" 
-        type="color" 
-        value="{% if Value %}{{ Field.Value }}{% else %}#ffffff{% endif %}" 
-        title="{{ Field.Placeholder }}"
-        {% if Field.Disabled %} disabled{% endif %}
-        {% if Field.Readonly %} readonly{% endif %}
-        >
-    </div>
-  {% endif %}
-{% endif %}
+{% macro render_field(column, label=None, value=None, options=None, disabled=False, readonly=False) %}
+  {% set field_type = column.type.__class__.__name__ %}
+  {% set name = column.key %}
+  {% set label = label or name.replace('_', ' ').title() %}
 
+  <div class="mb-3">
+    <label for="{{ name }}" class="form-label">{{ label }}</label>
+
+    {% if field_type == 'String' %}
+      <!-- String Field (Input) -->
+      <input 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        type="text" 
+        placeholder="Enter {{ label }}" 
+        value="{{ value or '' }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+
+    {% elif field_type == 'Integer' %}
+      <!-- Integer Field (Input) -->
+      <input 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        type="number" 
+        placeholder="Enter {{ label }}" 
+        value="{{ value or '' }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+
+    {% elif field_type == 'Float' %}
+      <!-- Float Field (Input) -->
+      <input 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        type="number" 
+        step="0.01" 
+        placeholder="Enter {{ label }}" 
+        value="{{ value or '' }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+
+    {% elif field_type == 'DateTime' %}
+      <!-- DateTime Field -->
+      <input 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        type="datetime-local" 
+        value="{{ value|datetime('Y-m-d\TH:i:s') }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+
+    {% elif field_type == 'Boolean' %}
+      <!-- Boolean Field (Checkbox) -->
+      <div class="form-check">
+        <input 
+          id="{{ name }}" 
+          name="{{ name }}" 
+          class="form-check-input" 
+          type="checkbox" 
+          {% if value %}checked{% endif %}
+          {% if disabled %} disabled{% endif %}
+          {% if readonly %} readonly{% endif %}
+        >
+        <label class="form-check-label" for="{{ name }}">{{ label }}</label>
+      </div>
+
+    {% elif field_type == 'Enum' %}
+      <!-- Enum Field (Select) -->
+      <select 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-select"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+        {% for option in options %}
+          <option value="{{ option }}" {% if value == option %}selected{% endif %}>
+            {{ option }}
+          </option>
+        {% endfor %}
+      </select>
+
+    {% elif field_type == 'Text' %}
+      <!-- Text Field (Textarea) -->
+      <textarea 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        placeholder="Enter {{ label }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >{{ value or '' }}</textarea>
+
+    {% else %}
+      <!-- Default Field (Input) -->
+      <input 
+        id="{{ name }}" 
+        name="{{ name }}" 
+        class="form-control" 
+        type="text" 
+        placeholder="Enter {{ label }}" 
+        value="{{ value or '' }}"
+        {% if disabled %} disabled{% endif %}
+        {% if readonly %} readonly{% endif %}
+      >
+    {% endif %}
+  </div>
+{% endmacro %}
