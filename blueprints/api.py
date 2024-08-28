@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 
 from classes.component import ComponentContainer, SQLManager
-from functions.web import Create_Response
+from functions.web import Create_API_Response
 
 def Api(CC:ComponentContainer) -> Blueprint:
     SQL:SQLManager = CC.Get('MainSQLManager')
@@ -12,7 +12,7 @@ def Api(CC:ComponentContainer) -> Blueprint:
     def index():
         Data = 'hi, welcome to simple client api'
 
-        return jsonify(Create_Response(Data))
+        return jsonify(Create_API_Response(Data))
 
     @bp.route('/all-tokens',methods=['POST'])
     def all_tokens():

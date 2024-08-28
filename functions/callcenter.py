@@ -1,12 +1,13 @@
+from typing import Any
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-def Add_Soft_Key(xml, name, url, position):
-    Soft_Key = SubElement(xml, 'SoftKeyItem')
-    SubElement(Soft_Key, 'Name').text = name
-    SubElement(Soft_Key, 'URL').text = url
-    SubElement(Soft_Key, 'Position').text = str(position)
+def Add_Soft_Key(Xml, Name, Url, Position) -> None:
+    Soft_Key = SubElement(Xml, 'SoftKeyItem')
+    SubElement(Soft_Key, 'Name').text = Name
+    SubElement(Soft_Key, 'URL').text = Url
+    SubElement(Soft_Key, 'Position').text = str(Position)
 
-def Show_Contacts(Contacts:list):
+def Create_Contacts(Contacts:list) -> Any:
     Xml = Element('CiscoIPPhoneDirectory')
     SubElement(Xml, 'Title').text = 'Grace Academy'
     SubElement(Xml, 'Prompt').text = 'Dial selected'
@@ -18,5 +19,15 @@ def Show_Contacts(Contacts:list):
 
     Add_Soft_Key(Xml, 'Dial', 'SoftKey:Dial', 1)
     Add_Soft_Key(Xml, 'Exit', 'SoftKey:Exit', 2)
+    
+    return tostring(Xml, encoding='utf-8')
+
+def Create_Cisco_Error(Error_Detail:dict) -> Any:
+    Xml = Element('CiscoIPPhoneText')
+    SubElement(Xml, 'Title').text = str(Error_Detail.get('name','UnkhownError'))
+    SubElement(Xml, 'Prompt').text = str(Error_Detail.get('code','NoCode'))
+    SubElement(Xml, 'Text').text = str(Error_Detail.get('description','no more detail'))
+    
+    Add_Soft_Key(Xml, 'Exit', 'SoftKey:Exit', 1)
     
     return tostring(Xml, encoding='utf-8')

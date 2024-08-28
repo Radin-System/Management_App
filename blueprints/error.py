@@ -1,7 +1,8 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, Response, request, render_template
 from classes.component import ComponentContainer
-from functions.web import Create_Response
+from functions.web import Create_API_Response
 from functions.errorhandler import Handle_Error
+from functions.callcenter import Create_Cisco_Error
 
 def Error(CC:ComponentContainer) -> Blueprint:
 
@@ -11,14 +12,21 @@ def Error(CC:ComponentContainer) -> Blueprint:
         # Create detailed error information for the template
         Error_Detail = Handle_Error(error, Code=status_code, Description=str(error), url=request.url, form=dict(request.form))
 
+        #Error_Detail['traceback'] = 'NotImplemented' # waiting for Permission implementation
+        #Error_Detail['url'] = 'NotImplemented' # waiting for Permission implementation
+        #Error_Detail['form'] = 'NotImplemented' # waiting for Permission implementation
+
         # Handle the error based on the request path
         if request.path.startswith('/endpoint/api'):
-            Error_Detail['traceback'] = 'NotImplemented' # waiting for Permission implementation
-            Error_Detail['url'] = 'NotImplemented' # waiting for Permission implementation
-            Error_Detail['form'] = 'NotImplemented' # waiting for Permission implementation
-            return Create_Response(Message=Error_Detail, Status='Error', Code=status_code)
+            API_Response = Create_API_Response(Message=Error_Detail, Status='Error', Code=status_code)
+            return Response(API_Response, mimetype='json/application'), status_code
+
+        if request.path.startswith('/callcenter'):
+            Xml = Create_Cisco_Error(Error_Detail=Error_Detail)
+            return Response(Xml, mimetype='text/xml'), status_code
+
         else:
-            return render_template('error.html', Error_Detail=Error_Detail), status_code #Permissions handled in template itself
+            return render_template('error.html', Error_Detail=Error_Detail), status_code
 
     @bp.app_errorhandler(400)
     def bad_request_error(error):

@@ -14,7 +14,7 @@ class BaseMixin(Base):
     def __setattr__(self, Name:str, Value:Any):
         # Getting the Coloumn
         Column_Object:Column = self.__table__.columns.get(Name)
-        Policy:ColumnInfo = Column_Object.info.get('Policy')
+        Policy:ColumnInfo = Column_Object.info.get('Policy', None)
 
         if Column_Object is not None: 
             Value = Policy.Apply(Value)
@@ -65,5 +65,6 @@ __all__ = [
     'InfoMixin',
     'NameMixin',
     'OwnerMixin',
+    'ContactMixin',
     'UserMixin',
 ]

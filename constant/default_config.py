@@ -8,6 +8,8 @@ DEFAULT_CONFIG: Dict[str, Dict[str, Any]] = {
     'GLOBALS' : {
         'debug': True,
         'log_file': '.log/main.txt',
+        'name': 'RSTO',
+        'version': '1.1b',
         'language': 'fa',
         },
 

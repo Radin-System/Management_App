@@ -126,8 +126,7 @@ class SQLManager(Component):
 
         # Apply eager loading if requested
         if Eager:
-            for Relationship in sqlalchemy.inspect(Model).relationships:
-                Query = Query.options(sqlalchemy.orm.joinedload(Relationship.key))
+            Query = Query.options(sqlalchemy.orm.joinedload('*'))
 
         # Apply filtering conditions
         if Conditions:
@@ -158,7 +157,7 @@ class SQLManager(Component):
             for attr, order in Sort:
                 if 'asc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).asc())
-                elif 'desc' in order.lower():
+                elif 'dsc' in order.lower():
                     Query = Query.order_by(getattr(Model, attr).desc())
                 else:
                     raise ValueError(f"Invalid sorting order: {order}")

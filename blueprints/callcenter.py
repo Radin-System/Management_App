@@ -1,79 +1,94 @@
-from flask import Blueprint, Response, abort, render_template, request
+from flask import Blueprint, Response, abort, redirect, request, url_for
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-from classes.component import ComponentContainer, SQLManager
-from functions.callcenter import Add_Soft_Key, Show_Contacts
+from classes.component import ComponentContainer, SQLManager, Config
+from functions.callcenter import Add_Soft_Key, Create_Contacts
 
 def CallCenter(CC:ComponentContainer) -> Blueprint:
     SQL:SQLManager = CC.Get('MainSQLManager')
+    Con:Config = CC.Get('MainConfig')
 
     bp = Blueprint('callcenter', __name__, url_prefix='/callcenter')
 
     @bp.route('/')
     def index():
-        return render_template('faq/index.html')
+        return redirect(url_for('callcenter.menu'))
 
-    @bp.route('/callcenter/menu.xml')
+    @bp.route('/menu.xml')
     def menu():
         # Create the root element
         Root_Element = Element('CiscoIPPhoneMenu')
 
         # Add children elements
-        SubElement(Root_Element, 'Title').text = 'PartFidar Books'
+        SubElement(Root_Element, 'Title').text = f'{Con.Get('GLOBALS','name')} Books'
         SubElement(Root_Element, 'Prompt').text = 'Select address book'
 
-        # Construct the URL for the contacts XML
-        Contacts_url = 'http://localhost:5000/callcenter/contacts.xml'
+        Books = SQL.Query(SQL.Contact_Book, Detached=True, Sort=[('name','dsc')])
 
-        Menu_Item = SubElement(Root_Element, 'MenuItem')
-        SubElement(Menu_Item, 'Name').text = 'Book 1'
-        SubElement(Menu_Item, 'URL').text = Contacts_url
+        for Book in Books:
+            Menu_Item = SubElement(Root_Element, 'MenuItem')
+            SubElement(Menu_Item, 'Name').text = str(Book.name)
+            SubElement(Menu_Item, 'URL').text = url_for('callcenter.contacts', Book_Name=Book.name, _external=True)
 
         # Convert the ElementTree to a string
         XML_Str = tostring(Root_Element, encoding='unicode')
 
         return Response(XML_Str, mimetype='text/xml')
 
-    @bp.route('/contacts.xml')
-    def contacts():
-        xml = Element('CiscoIPPhoneInput')
-        SubElement(xml, 'Title').text = 'Search for Person'
-        SubElement(xml, 'Prompt').text = 'Enter search criteria'
-        SubElement(xml, 'URL').text = 'http://5.160.100.129:5000/search.xml'
+    @bp.route('/contacts/<Book_Name>.xml')
+    def contacts(Book_Name):
+        Xml = Element('CiscoIPPhoneInput')
+        SubElement(Xml, 'Title').text = 'Search for Contact'
+        SubElement(Xml, 'Prompt').text = 'Enter search criteria'
+        SubElement(Xml, 'URL').text = url_for('callcenter.search', Book_Name=Book_Name, _external=True)
 
-        item1 = SubElement(xml, 'InputItem')
+        item1 = SubElement(Xml, 'InputItem')
         SubElement(item1, 'DisplayName').text = 'Name'
         SubElement(item1, 'QueryStringParam').text = 'name'
         SubElement(item1, 'DefaultValue').text = ''
         SubElement(item1, 'InputFlags').text = 'A'
 
-        item2 = SubElement(xml, 'InputItem')
+        item2 = SubElement(Xml, 'InputItem')
         SubElement(item2, 'DisplayName').text = 'Number'
         SubElement(item2, 'QueryStringParam').text = 'number'
         SubElement(item2, 'DefaultValue').text = ''
         SubElement(item2, 'InputFlags').text = 'T'
 
-        Add_Soft_Key(xml, 'Search', 'SoftKey:Submit', 1)
-        Add_Soft_Key(xml, 'Exit', 'SoftKey:Exit', 2)
-        Add_Soft_Key(xml, 'Del', 'SoftKey:<<', 3)
+        Add_Soft_Key(Xml, 'Search', 'SoftKey:Submit', 1)
+        Add_Soft_Key(Xml, 'Exit', 'SoftKey:Exit', 2)
+        Add_Soft_Key(Xml, 'Del', 'SoftKey:<<', 3)
 
-        return Response(tostring(xml, encoding='utf-8'), mimetype='text/xml')
+        return Response(tostring(Xml, encoding='utf-8'), mimetype='text/xml')
 
-    @bp.route('/search.xml')
-    def search():
+    @bp.route('/search/<Book_Name>.xml')
+    def search(Book_Name):
+        Book = SQL.Query(SQL.Contact_Book, Detached=True, First=True, name=Book_Name)
         Contacts:list = []
+        if Book is not None:
+            if 'name' in request.args:
+                Contacts = SQL.Query(SQL.Contact,
+                    Detached = True, 
+                    Sort = [('firstname_en','dsc')],
+                    contact_book_id = Book.id, 
+                    name__like = request.args.get('name')
+                    )
 
-        if 'name' in request.args:
-            Contacts = SQL.Query(SQL.Contact, Detached=True, Sort=[('firstname_en','des')], name__like = request.args.get('name'))
+            elif 'number' in request.args:
+                Contacts = SQL.Query(SQL.Contact,
+                    Detached = True,
+                    Sort = [('firstname_en','dsc')],
+                    contact_book_id = Book.id,
+                    number__like = request.args.get('number')
+                    )
 
-        elif 'number' in request.args:
-            Contacts = SQL.Query(SQL.Contact, Detached=True, Sort=[('firstname_en','des')], number__like = request.args.get('number'))
+            else:
+                return abort(400)
 
-        else:
-            return abort(400)
-
+        else :
+            return abort(404)
+    
         [Contact.calc_fullname() for Contact in Contacts]
 
-        return Response(Show_Contacts(Contacts), mimetype='text/xml')
+        return Response(Create_Contacts(Contacts), mimetype='text/xml')
 
     return bp
