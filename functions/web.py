@@ -1,5 +1,3 @@
-from flask import jsonify
-
 ERROR_LOG_DIR = '.errors/'
 ERROR_LOG_EXTENSION = 'json'
 
