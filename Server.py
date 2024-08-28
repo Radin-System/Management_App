@@ -9,13 +9,19 @@ if __name__ == '__main__' :
     from classes.model import *
     from blueprints import Blueprints
 
-    MainConsole = Console(Startup=['reassign_dependencies','start_all',],Shutdown=['stop_all'])
+    MainConsole = Console(
+        Startup=['reassign_dependencies','start_all',],
+        Shutdown=['stop_all',],
+        )
 
     Main_Config = Config('MainConfig', Config_File=CONFIGFILE)
 
     Main_Logger = Logger('MainLogger')
 
-    Main_SQLManager = SQLManager('MainSQLManager', Base=Base, Models=Models)
+    Main_SQLManager = SQLManager('MainSQLManager',
+        Base = Base,
+        Models = Models,
+        )
 
     Main_Webserver = WebServer('MainWebServer', 
         App = Flask(__name__, static_folder='static', template_folder='templates'),
