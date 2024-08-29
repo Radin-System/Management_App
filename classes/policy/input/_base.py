@@ -1,8 +1,6 @@
 from typing import Any
-from classes.validator import *
-from functions.convert import CleanStr, LowerCase, StrToSha
 
-class ColumnInfo:
+class InputPolicy:
     def __init__(self,*,
         Validators:list=None,
         Convertors:list=None,
@@ -18,8 +16,8 @@ class ColumnInfo:
         self.First_Convert = First_Convert
 
     def __add__(self, Other):
-        if not isinstance(Other, ColumnInfo):
-            raise NotImplementedError('You can only add ColumnInfo with each other')
+        if not isinstance(Other, InputPolicy):
+            raise NotImplementedError('You can only add ColumnPolicy with each other')
 
         # Combine lists
         Combined_Validators = self.Validators + (Other.Validators or [])
@@ -30,7 +28,7 @@ class ColumnInfo:
         Combined_Visible = self._combine_bools(self.Visible, Other.Visible)
         Combined_First_Convert = self._combine_bools(self.First_Convert, Other.First_Convert)
 
-        return ColumnInfo(
+        return InputPolicy(
             Validators=Combined_Validators,
             Convertors=Combined_Convertors,
             Changeable=Combined_Changeable,
@@ -74,42 +72,3 @@ class ColumnInfo:
                 Input = Convertor(Input)
 
         return Input
-
-# Base Level
-BasePolicy     = ColumnInfo()
-
-# Level One
-FirstConvert   = BasePolicy + ColumnInfo(First_Convert=True)
-CleanString    = BasePolicy + ColumnInfo(Convertors=[CleanStr])
-NotChangeble   = BasePolicy + ColumnInfo(Changeable=False)
-EnsureInteger  = BasePolicy + ColumnInfo(Convertors=[int])
-HiddenField    = BasePolicy + ColumnInfo(Visible=False)
-PasswordPolicy = BasePolicy + ColumnInfo(Validators=[Password], Convertors=[StrToSha])
-
-# Level Two
-NamePolicy_En  = CleanString + ColumnInfo(Validators=[English])
-NamePolicy_Fa  = CleanString + ColumnInfo(Validators=[Persian])
-MobilePolicy   = CleanString + ColumnInfo(Validators=[MobileNumber])
-
-# Level Three
-UsernamePolicy = CleanString + NotChangeble + FirstConvert + ColumnInfo(Validators=[EnglishSpecial, Username], Convertors=[LowerCase])
-EmailPolicy    = CleanString + NotChangeble + FirstConvert + ColumnInfo(Validators=[EnglishSpecial, Email], Convertors=[LowerCase])
-BaseInfoPolicy = HiddenField + NotChangeble
-UuidPolicy     = HiddenField + NotChangeble + ColumnInfo(Validators=[Uuid])
-
-__all__ = [
-    'ColumnInfo',
-    'BasePolicy',
-    'CleanString',
-    'NotChangeble',
-    'EnsureInteger',
-    'HiddenField',
-    'NamePolicy_En',
-    'NamePolicy_Fa',
-    'PasswordPolicy',
-    'UsernamePolicy',
-    'MobilePolicy',
-    'EmailPolicy',
-    'BaseInfoPolicy',
-    'UuidPolicy',
-]

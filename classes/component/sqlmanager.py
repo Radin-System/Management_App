@@ -1,7 +1,7 @@
 import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
 
-from classes.model.column_info import ColumnInfo
+from classes.policy.input import InputPolicy
 from ._base import Component
 from functions.decorator import Running_Required
 
@@ -72,7 +72,7 @@ class SQLManager(Component):
         for Column in Instance.__class__.__table__.columns:
             if Column is not None:
                 # Cheking Flags
-                Policy:ColumnInfo = Column.info.get('Policy',None)
+                Policy:InputPolicy = Column.info.get('Policy',None)
                 if Policy:
                     if Policy.Changeable == False:
                         raise PermissionError(f'This coloumn is not changeable: {Column}')

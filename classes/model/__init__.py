@@ -2,7 +2,7 @@ from .table.user import User
 from .table.contact import Contact
 from .table.contact_book import Contact_Book
 
-from ._base import Base
+from .mixins import Base
 
 Models:dict = {
     'User':User,

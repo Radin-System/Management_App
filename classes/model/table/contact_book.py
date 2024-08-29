@@ -2,7 +2,7 @@ from sqlalchemy import  Column, String
 from sqlalchemy.orm import relationship
 
 from classes.model.mixins import *
-from classes.model.column_info import *
+from classes.policy.input import *
 
 class Contact_Book(BaseMixin, IdMixin, FlagMixin, AuditMixin, OwnerMixin):
     __tablename__ = 'contact_books'
