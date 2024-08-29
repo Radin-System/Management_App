@@ -4,6 +4,7 @@ from .contact_mixin import ContactMixin
 from .flag_mixin import FlagMixin
 from .id_mixin import IdMixin
 from .name_mixin import NameMixin
+from .password_mixin import PasswordMixin
 from .owner_mixin import OwnerMixin
 from .user_mixin import UserMixin
 
@@ -16,5 +17,6 @@ __all__ = [
     'IdMixin',
     'NameMixin',
     'OwnerMixin',
+    'PasswordMixin',
     'UserMixin',
 ]

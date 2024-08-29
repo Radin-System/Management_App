@@ -30,12 +30,9 @@ def Auth(CC:ComponentContainer) -> Blueprint:
 
             # Check if filds are proprly inputed
             if Loging_User and Loging_Pass:
-                print(Loging_User,Loging_Pass)
                 # getting the user
                 User = SQL.Query(SQL.User,First=True, username=Loging_User)
-                print(User)
                 if User:
-                    print(User.password)
                     # Comparing password
                     if User.password == Loging_Pass :
                         login_user(User)

@@ -1,4 +1,4 @@
-from _base import InputPolicy
+from ._base import InputPolicy
 
 from .exampels import (
     BasePolicy,

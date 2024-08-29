@@ -17,3 +17,10 @@ class BaseMixin(Base):
                 Value = Policy.Apply(Value)
 
         super().__setattr__(Name, Value)
+
+    def __str__(self) -> str:
+        self.__tablename__:str
+        return f'<Instance: {self.__tablename__}>'
+
+    def __bool__(self) -> bool:
+        return True

@@ -1,4 +1,4 @@
-import os,sqlalchemy,sqlalchemy.orm
+import os, sqlalchemy, sqlalchemy.orm
 from typing import Any
 
 from classes.policy.input import InputPolicy
@@ -62,29 +62,38 @@ class SQLManager(Component):
                 raise e
 
     @Running_Required
-    def Update(self, Instance,*,
-        Detached:bool = False,
-        ) -> None:
+    def Update(self, Instance, *,
+            Detached: bool = False) -> None:
 
-        if not Instance.changable:
-            raise PermissionError(f'this instance is not changable: {Instance}')
+        if hasattr(Instance, 'changable'):
+            if not Instance.changable:
+                raise PermissionError(f'This instance is not changeable: {Instance}')
 
-        for Column in Instance.__class__.__table__.columns:
-            if Column is not None:
-                # Cheking Flags
-                Policy:InputPolicy = Column.info.get('Policy',None)
-                if Policy:
-                    if Policy.Changeable == False:
-                        raise PermissionError(f'This coloumn is not changeable: {Column}')
+        with self.SessionMaker(Detached=Detached) as session:
+            # Attach the instance to the session if it's not already attached
+            if sqlalchemy.orm.Session.object_session(Instance) is None:
+                session.add(Instance)
+                session.flush()  # Ensure the instance is added to the session
 
-        with self.SessionMaker(Detached=Detached) as Session:
+            # Check for modified columns only
+            state = session.identity_map.get(Instance)
+
+            if state:
+                modified_columns = state.attrs
+
+                for column in Instance.__class__.__table__.columns:
+                    if column.name in modified_columns:
+                        policy: InputPolicy = column.info.get('Policy', None)
+                        if policy and not policy.Changeable:
+                            raise PermissionError(f'This column is not changeable: {column.name}')
+
             try:
-                Session.merge(Instance)
-                Session.commit()
+                session.merge(Instance)
+                session.commit()
                 self.Logger(f'Updating {Instance} in SQL', 'debug')
             except Exception as e:
-                Session.rollback()
-                self.Logger('Transaction rolledback','error')
+                session.rollback()
+                self.Logger('Transaction rolled back', 'error')
                 raise e
 
     @Running_Required
@@ -92,8 +101,9 @@ class SQLManager(Component):
         Detached:bool = False,
         ) -> None:
 
-        if not Instance.deletable:
-            raise PermissionError(f'this instance is not Deletable: {Instance}')
+        if hasattr(Instance, 'deletable'):
+            if not Instance.deletable:
+                raise PermissionError(f'this instance is not Deletable: {Instance}')
 
         with self.SessionMaker(Detached=Detached) as Session:
             try:

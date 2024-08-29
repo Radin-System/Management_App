@@ -16,6 +16,7 @@ class WebServer(Component):
 
         self.Process_Type: str = 'Static'
 
+    def Init_WebApp(self) -> None:
         ## Configs
         self.App.config['SECRET_KEY'] = self.Secret_Key
 
@@ -23,9 +24,8 @@ class WebServer(Component):
         self.App.logger.handlers = self.Logger.logger.handlers
         self.App.logger.setLevel(self.Logger.logger.level)
 
-        Login_Manager = LoginManager()
-
         ## Add-ins
+        Login_Manager = LoginManager()
         HTMLMIN(self.App)
         Login_Manager.init_app(self.App)
 
@@ -34,7 +34,18 @@ class WebServer(Component):
         for BP_Function in self.Blueprints:
             Bp:Blueprint = BP_Function(ComponentContainer)
             self.Logger(f'- Blueprint: {Bp} prefix:{Bp.url_prefix}', 'debug')
-            self.App.register_blueprint(Bp)
+            try:
+                self.App.register_blueprint(Bp)
+
+            except ValueError as e:
+                if 'is already registered' in str(e):
+                    self.Logger(f'- Blueprint: {Bp} prefix:{Bp.url_prefix} Already registered', 'debug')
+                else:
+                    raise e
+
+            except Exception as e:
+                self.Logger(f'{type(e).__name__}: {e}')
+                raise e
 
         ## Adding Functions
         @Login_Manager.user_loader
@@ -65,6 +76,7 @@ class WebServer(Component):
 
     def Start_Actions(self) -> None:
         self.Logger('Starting Flask Web Server')
+        self.Init_WebApp()
 
     def Stop_Actions(self) -> None:
         self.Logger('Stopping Flask Web Server')
