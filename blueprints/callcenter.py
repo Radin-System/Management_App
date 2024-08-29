@@ -68,17 +68,17 @@ def CallCenter(CC:ComponentContainer) -> Blueprint:
             if 'name' in request.args:
                 Contacts = SQL.Query(SQL.Contact,
                     Detached = True, 
-                    Sort = [('firstname_en','desc')],
-                    contact_book_id = Book.id, 
-                    name__like = request.args.get('name')
+                    firstname_en__sort = 'desc',
+                    name__like = request.args.get('name'),
+                    contact_book_id = Book.id,
                     )
 
             elif 'number' in request.args:
                 Contacts = SQL.Query(SQL.Contact,
                     Detached = True,
-                    Sort = [('firstname_en','desc')],
+                    firstname_en__sort = 'desc',
+                    number__like = request.args.get('number'),
                     contact_book_id = Book.id,
-                    number__like = request.args.get('number')
                     )
 
             else:

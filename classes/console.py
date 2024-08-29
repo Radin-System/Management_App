@@ -1,6 +1,8 @@
 from classes.component import ComponentContainer as CC
 from classes.component import SQLManager
 from constant import CONSOLE_WELCOME, CONSOLE_HELP
+from functions.errorhandler import Handle_Error
+from getpass import getpass
 
 class Console:
     def __init__(self,*,
@@ -30,7 +32,9 @@ class Console:
             except KeyboardInterrupt:
                 self._exit()
             except Exception as e:
-                print(f"Error: {e}")
+                Detail = Handle_Error(e)
+                print(f"{str(type(e).__name__)}: {e}")
+                print(f'Error UID: {Detail.get('uid','No UID')}')
 
     def Stop(self) -> None:
 
@@ -46,17 +50,21 @@ class Console:
             print(CONSOLE_HELP)
 
         elif Command == 'reset_admin':
+            New_Password = getpass('Password : ')
+            Confirm_Password = getpass('Confirm  : ')
+            if not New_Password == Confirm_Password:
+                raise ValueError('Provided passwords do not match')
+
             SQL:SQLManager = CC.Get('MainSQLManager')
             Admin_User = SQL.Query(SQL.User, Detached=True, First=True, username='admin')
             if Admin_User:
-                New_Password = input('Password : ')
                 Admin_User.password = New_Password
                 SQL.Update(Admin_User)
+
             else:
-                Admin_User = SQL.User(username='admin', password='asd@1234', firstname_en='Administrator', firstname_fa='ادمین', admin=True)
+                Admin_User = SQL.User(username='admin', password=New_Password, firstname_en='Administrator', firstname_fa='ادمین', admin=True)
                 SQL.Create(Admin_User)
                 print('New Admin User Created')
-                print('Password: asd@1234')
 
         elif Command == 'reassign_dependencies':
             CC.Reassign_Dependencies()

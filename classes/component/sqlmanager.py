@@ -1,5 +1,7 @@
 import os,sqlalchemy,sqlalchemy.orm
 from typing import Any
+
+from classes.model.column_info import ColumnInfo
 from ._base import Component
 from functions.decorator import Running_Required
 
@@ -49,15 +51,15 @@ class SQLManager(Component):
         Detached:bool = False
         ) -> None:
 
-        Session = self.SessionMaker(Detached=Detached)
-        try:
-            Session.add(Instance)
-            Session.commit()
-        except Exception as e:
-            Session.rollback()
-            raise e
-        finally:
-            Session.close()
+        with self.SessionMaker(Detached=Detached) as Session:
+            try:
+                Session.add(Instance)
+                Session.commit()
+                self.Logger(f'Creating {Instance} in SQL', 'debug')
+            except Exception as e:
+                Session.rollback()
+                self.Logger('Transaction rolledback','error')
+                raise e
 
     @Running_Required
     def Update(self, Instance,*,
@@ -67,24 +69,23 @@ class SQLManager(Component):
         if not Instance.changable:
             raise PermissionError(f'this instance is not changable: {Instance}')
 
-        for Coloumn in Instance.__class__.__table__.columns:
-            if Coloumn is not None:
+        for Column in Instance.__class__.__table__.columns:
+            if Column is not None:
                 # Cheking Flags
-                Flags:dict = Coloumn.info.get('Flags',None)
-                if Flags :
-                    Changeble = Flags.get('Changeable',None)
-                    if Changeble == False:
-                        raise PermissionError(f'This coloumn is not changeable: {Coloumn}')
+                Policy:ColumnInfo = Column.info.get('Policy',None)
+                if Policy:
+                    if Policy.Changeable == False:
+                        raise PermissionError(f'This coloumn is not changeable: {Column}')
 
-        Session = self.SessionMaker(Detached=Detached)
-        try:
-            Session.merge(Instance)
-            Session.commit()
-        except Exception as e:
-            Session.rollback()
-            raise e
-        finally:
-            Session.close()
+        with self.SessionMaker(Detached=Detached) as Session:
+            try:
+                Session.merge(Instance)
+                Session.commit()
+                self.Logger(f'Updating {Instance} in SQL', 'debug')
+            except Exception as e:
+                Session.rollback()
+                self.Logger('Transaction rolledback','error')
+                raise e
 
     @Running_Required
     def Delete(self, Instance,*,
@@ -94,101 +95,108 @@ class SQLManager(Component):
         if not Instance.deletable:
             raise PermissionError(f'this instance is not Deletable: {Instance}')
 
-        Session = self.SessionMaker(Detached=Detached)
-        try:        
-            Session.delete(Instance)
-            Session.commit()
-        except Exception as e:
-            Session.rollback()
-            raise e
-        finally:
-            Session.close()
+        with self.SessionMaker(Detached=Detached) as Session:
+            try:
+                Session.delete(Instance)
+                Session.commit()
+                self.Logger(f'Deleting {Instance} in SQL', 'debug')
+            except Exception as e:
+                Session.rollback()
+                self.Logger('Transaction rolledback','error')
+                raise e
 
     @Running_Required
     def Query(self,Model,*,
         Detached:bool = False,
         Eager:bool = False,
         DictMode:bool = False,
-        Sort:list[tuple[str,str]] = [],
         First:bool = False, 
         Limit:int = None, 
         Offset:int = None,
-        **Conditions
+        **Conditions,
         ) -> list | dict | Any | None:
-        # Usage: SQLManager.Query(SQLManager.User,
-        #   Detached = False,
-        #   Eager = True,
-        #   DictMode = False,
-        #   Sort = [('name', 'asc')],
-        #   First = False,
-        #   Limit = 10,
-        #   Offset = 12,
-        #   email = None,
-        #   name__like = 'mohammad')
-
+        """
+        Usage: SQLManager.Query(SQLManager.User,
+            Detached = False,
+            Eager = True,
+            DictMode = False,
+            First = False,
+            Limit = 10,
+            Offset = 12,
+            name__sort = 'asc',
+            name__like = 'mohammad',
+            email = None,
+            )
+        """
         # Creating Session and getting Query
-        Session = self.SessionMaker(Detached=Detached)
-        Query = Session.query(Model)
+        with self.SessionMaker(Detached=Detached) as Session:
+            try:
+                Query = Session.query(Model)
 
-        # Apply eager loading if requested
-        if Eager:
-            Query = Query.options(sqlalchemy.orm.joinedload('*'))
+                # Apply eager loading if requested
+                if Eager:
+                    Query = Query.options(sqlalchemy.orm.joinedload('*'))
 
-        # Apply filtering conditions
-        if Conditions:
-            Like_Conditions = {}
-            Exact_Conditions = {}
+                # Apply filtering conditions
+                if Conditions:
+                    Like_Conditions = {}
+                    Exact_Conditions = {}
+                    Sort_Conditions = {}
 
-            # Separate LIKE conditions from exact conditions
-            for Key, Value in Conditions.items():
-                if '__like' in Key:
-                    Like_Key = Key.replace('__like', '')
-                    Like_Conditions[Like_Key] = Value
+                    # Separate LIKE conditions from exact conditions
+                    for Key, Value in Conditions.items():
+                        if '__sort' in Key:
+                            Sort_Key = Key.replace('__sort', '')
+                            Sort_Conditions[Sort_Key] = Value
+
+                        elif '__like' in Key:
+                            Like_Key = Key.replace('__like', '')
+                            Like_Conditions[Like_Key] = Value
+
+                        else:
+                            if hasattr(Model, Key): Exact_Conditions[Key] = Value
+                            else: self.Logger(f'the model {Model} does not contain this key: {Key}','warning')
+
+                    # Apply SORT conditions
+                    for Key, Value in Sort_Conditions.items():
+                        if Value == 'asc': Query = Query.order_by(getattr(Model, Key).asc())
+                        if Value == 'desc': Query = Query.order_by(getattr(Model, Key).desc())
+                        else: raise ValueError(f"Invalid sorting order: {Value}")
+
+                    # Apply LIKE conditions
+                    for Key, Value in Like_Conditions.items():
+                        if hasattr(Model, Key): Query = Query.filter(getattr(Model, Key).like(f'%{Value}%'))
+                        else: raise AttributeError(f'{Key} is not a valid attribute of {Model}')
+
+                    # Apply EQUAL match conditions
+                    if Exact_Conditions:
+                        Query = Query.filter_by(**Exact_Conditions)
+
+                # Apply limit and offset
+                if Limit:
+                    Query = Query.limit(Limit)
+                if Offset:
+                    Query = Query.offset(Offset)
+
+                # Fetch the result
+                if First:
+                    Result = Query.first()
                 else:
-                    Exact_Conditions[Key] = Value
+                    Result = Query.all()
 
-            # Apply exact match conditions
-            if Exact_Conditions:
-                Query = Query.filter_by(**Exact_Conditions)
+                # Handle detached instances
+                if Result and DictMode:
+                    if First:
+                        return {col.name: getattr(Result, col.name) for col in Result.__table__.columns}
+                    else:
+                        return [{col.name: getattr(instance, col.name) for col in instance.__table__.columns} for instance in Result]
+
+                # Return the result
+                return Result
             
-            # Apply LIKE conditions
-            for Key, Value in Like_Conditions.items():
-                if hasattr(Model, Key):
-                    Query = Query.filter(getattr(Model, Key).like(f'%{Value}%'))
-                else:
-                    raise AttributeError(f'{Key} is not a valid attribute of {Model}')
-
-        # Apply sorting
-        if Sort:
-            for attr, order in Sort:
-                if 'asc' in order.lower():
-                    Query = Query.order_by(getattr(Model, attr).asc())
-                elif 'desc' in order.lower():
-                    Query = Query.order_by(getattr(Model, attr).desc())
-                else:
-                    raise ValueError(f"Invalid sorting order: {order}")
-
-        # Apply limit and offset
-        if Limit:
-            Query = Query.limit(Limit)
-        if Offset:
-            Query = Query.offset(Offset)
-
-        # Fetch the result
-        if First:
-            Result = Query.first()
-        else:
-            Result = Query.all()
-
-        # Handle detached instances
-        if Result and DictMode:
-            if First:
-                return {col.name: getattr(Result, col.name) for col in Result.__table__.columns}
-            else:
-                return [{col.name: getattr(instance, col.name) for col in instance.__table__.columns} for instance in Result]
-
-        # Return the result
-        return Result
+            except Exception as e:
+                self.Logger('unable executing the query','error')
+                raise e
 
     @Running_Required
     def Count(self, Model,*,
@@ -206,9 +214,7 @@ class SQLManager(Component):
 
     @Running_Required
     def SessionMaker(self,*,Detached=False) -> sqlalchemy.orm.Session:
-        Connection = self.Engine.connect()
-        Connection.begin()
-        return sqlalchemy.orm.Session(bind=Connection, expire_on_commit=Detached)
+        return sqlalchemy.orm.Session(bind=self.Engine, expire_on_commit=Detached)
 
     def Loop(self) -> None:
         ...
