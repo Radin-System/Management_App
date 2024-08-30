@@ -1,5 +1,5 @@
 import sys, time, importlib
-from typing import Callable
+from typing import Any, Callable
 
 from constant import CONSOLE_BANNER, CONSOLE_WELCOME
 from functions.errorhandler import Handle_Error
@@ -60,7 +60,8 @@ class Console:
         else:
             print(f"\nUnknown command: {Cmd}")
 
-    def Respond(self, Text:str) -> None:
+    def Respond(self, Text:Any) -> None:
+        Text:str = str(Text)
         for Line in Text.splitlines():
             print('-', Line)
 
