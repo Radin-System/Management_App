@@ -26,5 +26,6 @@ pytube
 
 ## Web Server
 flask
-Flask-HTMLmin
+flask_wtf
 flask_login
+flask_htmlmin
