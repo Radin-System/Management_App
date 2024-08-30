@@ -1,14 +1,15 @@
 from typing import Any
 
 class InputPolicy:
-    def __init__(self,*,
+    def __init__(self,Name:str,*,
         Validators:list=None,
         Convertors:list=None,
         Changeable:bool=None,
         Visible:bool=None,
         First_Convert:bool=None,
         ) -> None:
-        
+
+        self.Name = Name
         self.Validators = Validators or []
         self.Convertors = Convertors or []
         self.Changeable = Changeable
@@ -29,25 +30,13 @@ class InputPolicy:
         Combined_First_Convert = self._combine_bools(self.First_Convert, Other.First_Convert)
 
         return InputPolicy(
-            Validators=Combined_Validators,
-            Convertors=Combined_Convertors,
-            Changeable=Combined_Changeable,
-            Visible=Combined_Visible,
-            First_Convert=Combined_First_Convert,
+            Name = Other.Name,
+            Validators = Combined_Validators,
+            Convertors = Combined_Convertors,
+            Changeable = Combined_Changeable,
+            Visible = Combined_Visible,
+            First_Convert = Combined_First_Convert,
         )
-
-    def Dict(self) -> dict:
-        return {
-            'Setattr': {
-                'Validators':self.Validators,
-                'Convertors':self.Convertors,
-                },
-            'Flags':{
-                'Visible':self.Visible,
-                'Changeable':self.Changeable,
-                'First_Convert':self.First_Convert,
-                },
-        }
 
     @staticmethod
     def _combine_bools(First:bool|None, Second:bool|None) -> bool:
