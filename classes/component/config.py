@@ -58,12 +58,16 @@ class Config(Component):
             Raise_On_Missing:bool=True
             ) -> str | int | float | bool | list | None:
 
+        # this part check if the Section or Parameter is missing Raises Error or returns Fallback 
+        # based on the Raise_On_Missing parameter
         if Raise_On_Missing:
             if not self.Parser.has_section(Sec): raise KeyError(f'Provided config file does not have this section :{Sec}')
             if not self.Parser.has_option(Sec, Parm): raise KeyError(f'Provided config file does not have this parameter :{Sec}-{Parm}')
+        
         elif (not Raise_On_Missing) and (not self.Parser.has_section(Sec) or not self.Parser.has_option(Sec, Parm)):
-            return None
+            return Fallback
 
+        # getting the value from config file
         Value = self.Parser.get(Sec, Parm)
 
         # Return a list if Parm is CSV
@@ -75,7 +79,7 @@ class Config(Component):
             return StringTool.GetNumber(Value)
         except ValueError:
             try:
-                # Returns bool if the value in (true,false,yes,no) if in (none,null) returns Fallback
+                # Returns bool if the value is in (true,false,yes,no) if in (none,null) returns Fallback
                 return Fallback if StringTool.GetBool(Value) is None else StringTool.GetBool(Value)
             except ValueError:
                 pass

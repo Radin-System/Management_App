@@ -12,13 +12,31 @@ class StringTool:
 
     @staticmethod
     def MD5(Raw:str) -> str:
-        MD5 = hashlib.md5()
-        MD5.update(Raw.encode())
-        return MD5.hexdigest()
+        Md5 = hashlib.md5()
+        Md5.update(Raw.encode())
+        return Md5.hexdigest()
+
+    @staticmethod
+    def Sha224(Raw:str) -> str:
+        Sha = hashlib.sha224()
+        Sha.update(Raw.encode())
+        return Sha.hexdigest
 
     @staticmethod
     def Sha256(Raw:str) -> str:
         Sha = hashlib.sha256()
+        Sha.update(Raw.encode())
+        return Sha.hexdigest()
+
+    @staticmethod
+    def Sha384(Raw:str) -> str:
+        Sha = hashlib.sha384()
+        Sha.update(Raw.encode())
+        return Sha.hexdigest
+
+    @staticmethod
+    def Sha512(Raw:str) -> str:
+        Sha = hashlib.sha512()
         Sha.update(Raw.encode())
         return Sha.hexdigest()
 
