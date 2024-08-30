@@ -5,15 +5,26 @@ class InputField:
         Label:str = None,
         Description:str = None,
         Placeholder:str = None,
-        Value:str = None,
         Wtf_Validators = None,
-        **KWargs,
         ) -> None:
         
         self.Type = Type
         self.Label = Label
         self.Description = Description
         self.Placeholder = Placeholder
-        self.Value = Value
         self.WTF_Validators = Wtf_Validators or []
-        self.Extra = KWargs
+
+    def __add__(self, Other):
+        if not isinstance(Other, InputField):
+            raise NotImplementedError('You can only add InputField with each other')
+
+        # Combine lists
+        Combined_Validators = self.WTF_Validators + (Other.WTF_Validators or [])
+        
+        return InputField(
+            Type = Other.Type or self.Type,
+            Label = Other.Placeholder or self.Label,
+            Description = Other.Description or self.Description,
+            Placeholder = Other.Placeholder or self.Placeholder,
+            Wtf_Validators = Combined_Validators,
+        )

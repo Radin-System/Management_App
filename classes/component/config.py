@@ -1,9 +1,11 @@
 import os
-from typing           import Dict,Any
-from configparser     import ConfigParser
-from functions.convert import CsvToList
-from ._base import Component, ComponentContainer
+from typing import Dict,Any
+from configparser import ConfigParser
+
+from classes.convert import StringTool
 from constant import DEFAULT_CONFIG
+
+from ._base import Component, ComponentContainer
 
 class Config(Component):
     def __init__(self,Name:str,*,
@@ -54,21 +56,32 @@ class Config(Component):
     def Get(self,Sec:str,Parm:str,*,
             Fallback:Any=None, 
             Raise_On_Missing:bool=True
-            ) -> Any:
+            ) -> str | int | float | bool | list | None:
 
         if Raise_On_Missing:
             if not self.Parser.has_section(Sec): raise KeyError(f'Provided config file does not have this section :{Sec}')
             if not self.Parser.has_option(Sec, Parm): raise KeyError(f'Provided config file does not have this parameter :{Sec}-{Parm}')
+        elif (not Raise_On_Missing) and (not self.Parser.has_section(Sec) or not self.Parser.has_option(Sec, Parm)):
+            return None
 
         Value = self.Parser.get(Sec, Parm)
 
-        if Parm.endswith('_csv') : return CsvToList(Value)
+        # Return a list if Parm is CSV
+        if Parm.endswith('_csv'): 
+            return StringTool.CsvToList(Value)
 
-        if   Value.lower() in ['none','null','']: return Fallback
-        elif Value.lower() in ['true','yes']: return True
-        elif Value.lower() in ['false','no']: return False
-        elif Value.isdigit(): return int(Value)
-        else: return Value
+        try:
+            # Return int or float if is digit
+            return StringTool.GetNumber(Value)
+        except ValueError:
+            try:
+                # Returns bool if the value in (true,false,yes,no) if in (none,null) returns Fallback
+                return Fallback if StringTool.GetBool(Value) is None else StringTool.GetBool(Value)
+            except ValueError:
+                pass
+
+        # if None of the above conditions met returns str
+        return Value
 
     def Set(self, Section, Parameter, Value) -> None:
         self.Parser.set(Section, Parameter, str(Value))

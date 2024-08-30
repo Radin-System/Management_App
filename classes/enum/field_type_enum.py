@@ -9,16 +9,27 @@ class FieldTypeEnum(enum):
     Email = 'Email'
     Color = 'Color'
 
-    ## DateTime
-    Date = 'Date'
-    Time = 'Time'
-    DateTime = 'DateTime'
-
     ## Integer
     Integer = 'Integer'
     Percent = 'Percent'
     Temp_C = 'Temp_C'
     Temp_F = 'Temp_F'
+
+    ## Bool
+    CheckBox = 'CheckBox'
+
+    ## MultiSelect
+    Radio = 'Radio'
+    DropDown = 'DropDown'
+
+    ## Rel
+    Select = 'Select'
+    MultiSelect = 'MultiSelect'
+
+    ## DateTime
+    Date = 'Date'
+    Time = 'Time'
+    DateTime = 'DateTime'
 
     ## File
     FileUpload = 'FileUpload'
