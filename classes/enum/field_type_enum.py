@@ -1,6 +1,6 @@
-import enum
+from enum import Enum
 
-class FieldTypeEnum(enum):
+class FieldTypeEnum(Enum):
     ## String
     Input = 'Input'
     Text = 'Text'
