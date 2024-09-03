@@ -32,7 +32,7 @@ class Username(Validator):
         if len(self.Input) <= 2:
             self.Error_Message = f'Provided username must contain at least 2 charecters: {self.Input}'
             return False
-        
+
         if len(self.Input) > 64:
             self.Error_Message = f'Provided username can not contain two dots in a row: {self.Input}'
             return False
