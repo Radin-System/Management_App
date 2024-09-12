@@ -1,18 +1,18 @@
 import tracemalloc
 from functools import wraps
 from time import perf_counter
-from flask import redirect,url_for,abort
-from functools import wraps
+from typing import Callable
+from flask import redirect, url_for, abort
 from flask_login import current_user
 
-def Return_False_On_Exception(Function) -> callable:
+def Return_False_On_Exception(Function) -> Callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         try : return Function(*Args, **Kwargs)
         except : return False
     return Wrapper
 
-def Do_Log(Before:str = '', After:str = '') -> callable:
+def Do_Log(Before:str = '', After:str = '') -> Callable:
     def Inner (Function):
         @wraps(Function)
         def Wrapper(*Args, **Kwargs):
@@ -23,7 +23,7 @@ def Do_Log(Before:str = '', After:str = '') -> callable:
         return Wrapper
     return Inner
 
-def Running_Required(Function) -> callable :
+def Running_Required(Function) -> Callable :
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         if not Args[0].Is_Running(): raise Exception(f'The component must be started to preform this action<{Function.__name__}>')
@@ -31,7 +31,7 @@ def Running_Required(Function) -> callable :
         return Result
     return Wrapper
 
-def Connection_Required(Function) -> callable :
+def Connection_Required(Function) -> Callable :
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         if not Args[0].Is_Connected(): raise ConnectionError(f'no connection to preform this action <{Function.__name__}>')
@@ -39,7 +39,7 @@ def Connection_Required(Function) -> callable :
         return Result
     return Wrapper
 
-def Do_Performance(Function) -> callable:
+def Do_Performance(Function) -> Callable:
     @wraps(Function)
     def Wrapper(*Args, **Kwargs):
         tracemalloc.start()
