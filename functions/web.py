@@ -1,5 +1,17 @@
 from sqlalchemy import Column
-from wtforms import RadioField, SelectField, StringField, IntegerField, BooleanField, DateTimeField, PasswordField, ColorField, FileField, TextAreaField, MultipleChoiceField
+from wtforms import (
+    RadioField,
+    SelectField,
+    StringField,
+    IntegerField,
+    BooleanField,
+    DateTimeField,
+    PasswordField,
+    ColorField,
+    FileField,
+    TextAreaField,
+    #MultipleChoiceField,
+    )
 from wtforms.validators import DataRequired, Email
 
 from classes.enum import FieldTypeEnum
@@ -108,9 +120,9 @@ def Create_Flask_WTF_Field(Column):
         choices = Field.Value if Field.Value else []
         return SelectField(**field_args, choices=choices)
 
-    elif Field.Type == FieldTypeEnum.MultiSelect.value:
-        choices = Field.Value if Field.Value else []
-        return MultipleChoiceField(**field_args, choices=choices)
+    #elif Field.Type == FieldTypeEnum.MultiSelect.value:
+    #    choices = Field.Value if Field.Value else []
+    #    return MultipleChoiceField(**field_args, choices=choices)
 
     elif Field.Type in [FieldTypeEnum.FileUpload.value, FieldTypeEnum.PictureUpload.value, FieldTypeEnum.CompactUpload.value, FieldTypeEnum.DocUpload.value, FieldTypeEnum.MusicUpload.value]:
         return FileField(**field_args)  # Adjust as needed for specific file types
