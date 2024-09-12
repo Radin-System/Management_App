@@ -62,37 +62,37 @@ class SQLManager(Component):
                 raise e
 
     @Running_Required
-    def Update(self, Instance, *,
+    def Update(self,Instance,*,
             Detached: bool = False) -> None:
 
         if hasattr(Instance, 'changable'):
             if not Instance.changable:
                 raise PermissionError(f'This instance is not changeable: {Instance}')
 
-        with self.SessionMaker(Detached=Detached) as session:
+        with self.SessionMaker(Detached=Detached) as Session:
             # Attach the instance to the session if it's not already attached
             if sqlalchemy.orm.Session.object_session(Instance) is None:
-                session.add(Instance)
-                session.flush()  # Ensure the instance is added to the session
+                Session.add(Instance)
+                Session.flush()  # Ensure the instance is added to the session
 
             # Check for modified columns only
-            state = session.identity_map.get(Instance)
+            State = Session.identity_map.get(Instance)
 
-            if state:
-                modified_columns = state.attrs
+            if State:
+                Modified_Columns = State.attrs
 
-                for column in Instance.__class__.__table__.columns:
-                    if column.name in modified_columns:
-                        policy: InputPolicy = column.info.get('Policy', None)
+                for Column in Instance.__class__.__table__.columns:
+                    if Column.name in Modified_Columns:
+                        policy: InputPolicy = Column.info.get('Policy', None)
                         if policy and not policy.Changeable:
-                            raise PermissionError(f'This column is not changeable: {column.name}')
+                            raise PermissionError(f'This column is not changeable: {Column.name}')
 
             try:
-                session.merge(Instance)
-                session.commit()
+                Session.merge(Instance)
+                Session.commit()
                 self.Logger(f'Updating {Instance} in SQL', 'debug')
             except Exception as e:
-                session.rollback()
+                Session.rollback()
                 self.Logger('Transaction rolled back', 'error')
                 raise e
 
@@ -106,6 +106,11 @@ class SQLManager(Component):
                 raise PermissionError(f'this instance is not Deletable: {Instance}')
 
         with self.SessionMaker(Detached=Detached) as Session:
+            # Attach the instance to the session if it's not already attached
+            if sqlalchemy.orm.Session.object_session(Instance) is None:
+                Session.add(Instance)
+                Session.flush()  # Ensure the instance is added to the session
+
             try:
                 Session.delete(Instance)
                 Session.commit()
@@ -125,19 +130,18 @@ class SQLManager(Component):
         Offset:int = None,
         **Conditions,
         ) -> list | dict | Any | None:
-        """
-        Usage: SQLManager.Query(SQLManager.User,
-            Detached = False,
-            Eager = True,
-            DictMode = False,
-            First = False,
-            Limit = 10,
-            Offset = 12,
-            name__sort = 'asc',
-            name__like = 'mohammad',
-            email = None,
-            )
-        """
+        #Usage: SQLManager.Query(SQLManager.User,
+        #    Detached = False,
+        #    Eager = True,
+        #    DictMode = False,
+        #    First = False,
+        #    Limit = 10,
+        #    Offset = 12,
+        #    name__sort = 'asc',
+        #    name__like = 'mohammad',
+        #    email = None,
+        #    )
+        
         # Creating Session and getting Query
         with self.SessionMaker(Detached=Detached) as Session:
             try:
@@ -199,7 +203,7 @@ class SQLManager(Component):
                     if First:
                         return {col.name: getattr(Result, col.name) for col in Result.__table__.columns}
                     else:
-                        return [{col.name: getattr(instance, col.name) for col in instance.__table__.columns} for instance in Result]
+                        return [{col.name: getattr(Instance, col.name) for col in Instance.__table__.columns} for Instance in Result]
 
                 # Return the result
                 return Result
@@ -214,12 +218,43 @@ class SQLManager(Component):
         **Conditions
         ) -> int:
 
-        Session = self.SessionMaker(Detached=Detached)
-        Query = Session.query(Model)
-        
-        if Conditions: 
-            Query = Query.filter_by(**Conditions)
-        
+        with self.SessionMaker(Detached=Detached) as Session:
+            Query = Session.query(Model)
+            
+            if Conditions:
+                Like_Conditions = {}
+                Exact_Conditions = {}
+                Sort_Conditions = {}
+
+                # Separate LIKE conditions from exact conditions
+                for Key, Value in Conditions.items():
+                    if '__sort' in Key:
+                        Sort_Key = Key.replace('__sort', '')
+                        Sort_Conditions[Sort_Key] = Value
+
+                    elif '__like' in Key:
+                        Like_Key = Key.replace('__like', '')
+                        Like_Conditions[Like_Key] = Value
+
+                    else:
+                        if hasattr(Model, Key): Exact_Conditions[Key] = Value
+                        else: self.Logger(f'the model {Model} does not contain this key: {Key}','warning')
+
+                # Apply SORT conditions
+                for Key, Value in Sort_Conditions.items():
+                    if Value == 'asc': Query = Query.order_by(getattr(Model, Key).asc())
+                    if Value == 'desc': Query = Query.order_by(getattr(Model, Key).desc())
+                    else: raise ValueError(f"Invalid sorting order: {Value}")
+
+                # Apply LIKE conditions
+                for Key, Value in Like_Conditions.items():
+                    if hasattr(Model, Key): Query = Query.filter(getattr(Model, Key).like(f'%{Value}%'))
+                    else: raise AttributeError(f'{Key} is not a valid attribute of {Model}')
+
+                # Apply EQUAL match conditions
+                if Exact_Conditions:
+                    Query = Query.filter_by(**Exact_Conditions)
+
         return Query.count()
 
     @Running_Required
