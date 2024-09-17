@@ -1,4 +1,5 @@
 ## Global
+pip_system_certs #for letting request lib access local certificates
 pyOpenSSL
 cryptography
 pillow
