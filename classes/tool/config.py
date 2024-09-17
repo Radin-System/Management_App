@@ -5,9 +5,10 @@ from configparser import ConfigParser
 from classes.convert import StringTool
 from constant import DEFAULT_CONFIG
 
-from ._base import Component, ComponentContainer
+from ._base import Tool
+from ._container import ToolContainer
 
-class Config(Component):
+class Config(Tool):
     def __init__(self,Name:str,*,
             Config_File:str,
             ) -> None:
@@ -19,13 +20,13 @@ class Config(Component):
         self.Config_File = Config_File
         self.Parser = ConfigParser()
         self.Load()
-        for K,V in self.Parser['ENVIRON'].items(): os.environ.setdefault(K,str(V))
+        for K, V in self.Parser['ENVIRON'].items(): os.environ.setdefault(K,str(V))
 
     def Init_Config(self) -> None:
         ...
 
     def Init_Dependancy(self) -> None:
-        self.Logger = ComponentContainer.Get('MainLogger', print)
+        self.Logger = ToolContainer.Get('MainLogger', print)
 
     def Load(self) -> None:
         ## Cheking if file exist

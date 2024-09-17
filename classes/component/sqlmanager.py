@@ -23,9 +23,6 @@ class SQLManager(Component, CRUD):
         self.Create_Engine()
         self.Init_Models()
 
-    def Init_Dependancy(self) -> None:
-        super().Init_Dependancy()
-
     def Init_Config(self) -> None:
         self.Host        = self.Config.Get('SQLMANAGER','host')
         self.Port        = self.Config.Get('SQLMANAGER','port')

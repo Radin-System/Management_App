@@ -79,7 +79,7 @@ def reassign_dependencies(Self:Console, *Args:str):
         None
     """
     from classes.component import ComponentContainer as CC
-    
+
     CC.Reassign_Dependencies()
 
 @Register_Command('start_all')
@@ -148,6 +148,19 @@ def components(Self:Console, *Args:str):
 
     for Component_Name in CC._Components.keys():
         Self.Respond(Component_Name)
+
+@Register_Command('tools')
+def tools(Self:Console, *Args:str):
+    """
+      Prints tools names
+
+      args:
+        None
+    """
+    from classes.tool import ToolContainer as TC
+
+    for Tool_Name in TC._Tools.keys():
+        Self.Respond(Tool_Name)
 
 @Register_Command('status')
 def status(Self:Console, *Args:str):

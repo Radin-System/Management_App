@@ -1,4 +1,4 @@
-class ComponentError:
+class ContainerError:
     class NotFound(Exception):
         ...
 

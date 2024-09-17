@@ -12,9 +12,6 @@ class AMIManager(Component):
         self.Connected     = None
         self.Authenticated = None
 
-    def Init_Dependancy(self) -> None:
-        return super().Init_Dependancy()
-
     def Init_Config(self) -> None:
         self.Host         = self.Config.Get('AMIMANAGER','host')
         self.Port         = self.Config.Get('AMIMANAGER','port')

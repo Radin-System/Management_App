@@ -1,6 +1,6 @@
 import os
 import logging
-from ._base import Component, ComponentContainer
+from ..component._base import Component
 
 LOG_LEVELS = {
     'debug': logging.DEBUG,

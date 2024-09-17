@@ -4,6 +4,7 @@ CONFIGFILE = '.configfiles/config.ini'
 
 if __name__ == '__main__' :
     from classes.console import Console
+    from classes.tool import *
     from classes.component import *
     from classes.model import *
     from blueprints import Blueprints
@@ -13,9 +14,9 @@ if __name__ == '__main__' :
         Shutdown = ['stop_all'],
         )
 
-    Main_Config = Config('MainConfig', Config_File=CONFIGFILE)
+    Main_Config = Config('Main_Config', Config_File=CONFIGFILE)
 
-    Main_Logger = Logger('MainLogger')
+    Main_Logger = Logger('Main_Logger')
 
     Main_SQLManager = SQLManager('MainSQLManager',
         Base = Base,
