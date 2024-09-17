@@ -1,11 +1,13 @@
 import os, sqlalchemy, sqlalchemy.orm
 from typing import Any
 
+from classes.abstract.crud import CRUD
 from classes.policy.input import InputPolicy
 from ._base import Component
 from functions.decorator import Running_Required
 
-class SQLManager(Component):
+
+class SQLManager(Component, CRUD):
     def __init__(self,Name:str,*,
             Base:Any,
             Models:dict,
