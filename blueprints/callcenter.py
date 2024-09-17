@@ -23,7 +23,7 @@ def CallCenter(CC:ComponentContainer) -> Blueprint:
         SubElement(Root_Element, 'Title').text = f'{Con.Get('GLOBALS','name')} Books'
         SubElement(Root_Element, 'Prompt').text = 'Select address book'
 
-        Books = SQL.Query(SQL.Contact_Book, Detached=True, Sort=[('name','desc')])
+        Books = SQL.Query(SQL.Contact_Book, Detached=True, name__sort='desc')
 
         for Book in Books:
             Menu_Item = SubElement(Root_Element, 'MenuItem')
