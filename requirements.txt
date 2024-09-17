@@ -18,14 +18,18 @@ sqlalchemy
 pymysql
 pyodbc
 
-## Web Automation
-selenium
-pytesseract
-requests
-pytube
-
 ## Web Server
 flask
 flask_wtf
 flask_login
 flask_htmlmin
+
+## Web Client
+netbox_python
+zabbix_utils
+
+## Web Bot
+selenium
+pytesseract
+requests
+pytube
