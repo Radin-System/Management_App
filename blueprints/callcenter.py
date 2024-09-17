@@ -1,12 +1,13 @@
 from flask import Blueprint, Response, abort, redirect, request, url_for
 from xml.etree.ElementTree import Element, SubElement, tostring
 
-from classes.component import ComponentContainer, SQLManager, Config
+from classes.component import ComponentContainer, SQLManager
+from classes.tool import ToolContainer, Config
 from functions.callcenter import Add_Soft_Key, Create_Contacts
 
-def CallCenter(CC:ComponentContainer) -> Blueprint:
-    SQL:SQLManager = CC.Get('MainSQLManager')
-    Con:Config = CC.Get('MainConfig')
+def CallCenter(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('Main_SQLManager')
+    Con:Config = TC.Get('Main_Config')
 
     bp = Blueprint('callcenter', __name__, url_prefix='/callcenter')
 

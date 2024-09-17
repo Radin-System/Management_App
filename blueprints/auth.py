@@ -3,9 +3,10 @@ from flask_login import logout_user, login_user
 
 from classes.component import ComponentContainer, SQLManager
 from classes.policy.input import PasswordPolicy, UsernamePolicy
+from classes.tool import ToolContainer
 
-def Auth(CC:ComponentContainer) -> Blueprint:
-    SQL:SQLManager = CC.Get('MainSQLManager')
+def Auth(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('Main_SQLManager')
 
     bp = Blueprint('auth', __name__, url_prefix='/auth')
 

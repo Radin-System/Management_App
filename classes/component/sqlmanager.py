@@ -24,14 +24,14 @@ class SQLManager(Component, CRUD):
         self.Init_Models()
 
     def Init_Config(self) -> None:
-        self.Host        = self.Config.Get('SQLMANAGER','host')
-        self.Port        = self.Config.Get('SQLMANAGER','port')
-        self.Username    = self.Config.Get('SQLMANAGER','username')
-        self.Password    = self.Config.Get('SQLMANAGER','password')
-        self.DataBase    = self.Config.Get('SQLMANAGER','database')
-        self.Mode        = self.Config.Get('SQLMANAGER','mode')
-        self.SQLite_Path = self.Config.Get('SQLMANAGER','sqlite_path')
-        self.Verbose     = self.Config.Get('SQLMANAGER','verbose')
+        self.Host        = self.Config.Get('SQLMANAGER', 'host')
+        self.Port        = self.Config.Get('SQLMANAGER', 'port')
+        self.Username    = self.Config.Get('SQLMANAGER', 'username')
+        self.Password    = self.Config.Get('SQLMANAGER', 'password')
+        self.DataBase    = self.Config.Get('SQLMANAGER', 'database')
+        self.Mode        = self.Config.Get('SQLMANAGER', 'mode')
+        self.SQLite_Path = self.Config.Get('SQLMANAGER', 'sqlite_path')
+        self.Verbose     = self.Config.Get('SQLMANAGER', 'verbose')
 
     def Create_Engine(self):
         if   self.Mode == 'MYSQL'   : self.Engine = sqlalchemy.create_engine(f'mysql+mysqlconnector://{self.Username}:{self.Password}@{self.Host}:{self.Port}/{self.DataBase}',echo=self.Verbose)

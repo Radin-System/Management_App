@@ -1,7 +1,7 @@
-from ._base import WebClient
+from ._base import Tool
 from zabbix_utils import ZabbixAPI
 
-class ZabbixClient(ZabbixAPI, WebClient):
+class ZabbixClient(ZabbixAPI, Tool):
     def __init__(self, Base_Url:str|None=None, Token:str|None = None,*,
         User:str|None=None, 
         Password:str|None=None,

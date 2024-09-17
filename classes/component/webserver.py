@@ -2,6 +2,8 @@ from flask import Flask,Blueprint
 from flask_login import LoginManager, current_user
 from flask_htmlmin import HTMLMIN
 
+from classes.tool import ToolContainer
+
 from ._base import Component
 from ._container import ComponentContainer
 from .sqlmanager import SQLManager
@@ -34,7 +36,7 @@ class WebServer(Component):
         ## Registering Blueprints
         self.Logger('Registering Blueprints', 'debug')
         for BP_Function in self.Blueprints:
-            Bp:Blueprint = BP_Function(ComponentContainer)
+            Bp:Blueprint = BP_Function(ComponentContainer, ToolContainer)
             self.Logger(f'- Blueprint: {Bp} prefix:{Bp.url_prefix}', 'debug')
             try:
                 self.App.register_blueprint(Bp)
@@ -65,11 +67,11 @@ class WebServer(Component):
 
     def Init_Dependancy(self) -> None:
         super().Init_Dependancy()
-        self.SQLManager:SQLManager = ComponentContainer.Get('MainSQLManager')
+        self.SQLManager:SQLManager = ComponentContainer.Get('Main_SQLManager')
 
     def Init_Config(self) -> None:
-        self.Host = self.Config.Get('WEBSERVER','host')
-        self.Port = self.Config.Get('WEBSERVER','port')
+        self.Host = self.Config.Get('WEBSERVER', 'host')
+        self.Port = self.Config.Get('WEBSERVER', 'port')
         self.Secret_Key = self.Config.Get('WEBSERVER','secret_key')
 
     def Loop(self) -> None:

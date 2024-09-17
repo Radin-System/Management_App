@@ -1,6 +1,6 @@
 import os
 import logging
-from ..component._base import Component
+from ._base import Tool
 
 LOG_LEVELS = {
     'debug': logging.DEBUG,
@@ -20,7 +20,7 @@ LOG_COLORS = {
 
 LOG_RESET_COLOR = '\033[0m'
 
-class Logger(Component):
+class Logger(Tool):
     def __init__(self, Name: str) -> None:
         super().__init__(Name)
 

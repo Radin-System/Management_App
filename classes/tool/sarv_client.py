@@ -1,4 +1,4 @@
-from ._base import WebClient
+from ._base import Tool
 
-class SarvClient(WebClient):
+class SarvClient(Tool):
     ...

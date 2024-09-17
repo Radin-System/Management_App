@@ -18,12 +18,12 @@ if __name__ == '__main__' :
 
     Main_Logger = Logger('Main_Logger')
 
-    Main_SQLManager = SQLManager('MainSQLManager',
+    Main_SQLManager = SQLManager('Main_SQLManager',
         Base = Base,
         Models = Models,
         )
 
-    Main_Webserver = WebServer('MainWebServer', 
+    Main_Webserver = WebServer('Main_WebServer', 
         App = Flask(__name__, static_folder='static', template_folder='templates'),
         Blueprints = Blueprints,
         )

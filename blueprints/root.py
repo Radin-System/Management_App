@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, render_template, url_for
 from classes.component import ComponentContainer
+from classes.tool import ToolContainer
 
-def Root(CC:ComponentContainer) -> Blueprint:
+def Root(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
 
     bp = Blueprint('root', __name__, url_prefix='/')
 

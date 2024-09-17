@@ -13,13 +13,13 @@ class AMIManager(Component):
         self.Authenticated = None
 
     def Init_Config(self) -> None:
-        self.Host         = self.Config.Get('AMIMANAGER','host')
-        self.Port         = self.Config.Get('AMIMANAGER','port')
-        self.Usename      = self.Config.Get('AMIMANAGER','username')
-        self.Password     = self.Config.Get('AMIMANAGER','password')
-        self.Whitelist    = self.Config.Get('AMIMANAGER','event_whitelist_csv')
-        self.Timeout      = self.Config.Get('AMIMANAGER','timeout')
-        self.Max_ActionID = self.Config.Get('AMIMANAGER','max_action_id')
+        self.Host         = self.Config.Get('AMIMANAGER', 'host')
+        self.Port         = self.Config.Get('AMIMANAGER', 'port')
+        self.Usename      = self.Config.Get('AMIMANAGER', 'username')
+        self.Password     = self.Config.Get('AMIMANAGER', 'password')
+        self.Whitelist    = self.Config.Get('AMIMANAGER', 'event_whitelist_csv')
+        self.Timeout      = self.Config.Get('AMIMANAGER', 'timeout')
+        self.Max_ActionID = self.Config.Get('AMIMANAGER', 'max_action_id')
 
     def Connect(self) -> None :
         if not self.Connected :

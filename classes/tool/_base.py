@@ -7,7 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.chrome.service import Service
-from classes.tool._base import Tool
 
 class Tool :
     def __init__(self,Name) -> None:
@@ -16,13 +15,16 @@ class Tool :
         self.Name = Name
         ToolContainer.Register(Name, self)
 
+        self.Init_Dependancy()
+        self.Init_Config()
+
     def Init_Dependancy(self) -> None:
         from classes.tool import ToolContainer
         from classes.tool import Logger
         from classes.tool import Config
 
-        self.Logger:Logger = ToolContainer.Get(f'{self.Name}_Logger', ToolContainer.Get('Main_Logger', print))
-        self.Config:Config = ToolContainer.Get(f'{self.Name}_Config', ToolContainer.Get('Main_Config'))
+        self.Logger:Logger = ToolContainer.Get('Main_Logger', print)
+        self.Config:Config = ToolContainer.Get('Main_Config')
 
     @abstractmethod
     def Init_Config(self) -> None:

@@ -3,11 +3,10 @@ from flask_login import current_user
 
 from classes.component import ComponentContainer, SQLManager
 from classes.convert import StringTool
-from functions.decorator import login_required
+from classes.tool import ToolContainer
 
-@login_required
-def DataBase(CC: ComponentContainer) -> Blueprint:
-    SQL:SQLManager = CC.Get('MainSQLManager')
+def DataBase(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
+    SQL:SQLManager = CC.Get('Main_SQLManager')
 
     bp = Blueprint('database', __name__, url_prefix='/database')
 

@@ -17,8 +17,8 @@ class Component:
 
         from classes.tool import Logger
         from classes.tool import Config
-        self.Logger:Logger = ToolContainer.Get(f'{self.Name}_Logger', ToolContainer.Get('Main_Logger', print))
-        self.Config:Config = ToolContainer.Get(f'{self.Name}_Config', ToolContainer.Get('Main_Config'))
+        self.Logger:Logger = ToolContainer.Get('Main_Logger')
+        self.Config:Config = ToolContainer.Get('Main_Config')
 
     @abstractmethod
     def Init_Config(self):

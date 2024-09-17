@@ -55,16 +55,16 @@ def Do_Performance(Function) -> Callable:
 
 def login_required(Func):
     @wraps(Func)
-    def Decorate(*args, **kwargs):
+    def Wrapper(*args, **kwargs):
         if not current_user.is_authenticated :
             return redirect(url_for('Auth.Login'))
         return Func(*args, **kwargs)
-    return Decorate
+    return Wrapper
 
 def admin_required(Func):
     @wraps(Func)
-    def Decorate(*args, **kwargs):
+    def Wrapper(*args, **kwargs):
         if not (current_user.is_authenticated and current_user.admin) :
             return abort(401) ,401
         return Func(*args, **kwargs)
-    return Decorate
+    return Wrapper

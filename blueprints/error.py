@@ -1,10 +1,11 @@
 from flask import Blueprint, Response, request, render_template
 from classes.component import ComponentContainer
+from classes.tool._container import ToolContainer
 from functions.web import Create_API_Response
 from functions.errorhandler import Handle_Error
 from functions.callcenter import Create_Cisco_Error
 
-def Error(CC:ComponentContainer) -> Blueprint:
+def Error(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
 
     bp = Blueprint('error', __name__)
 
