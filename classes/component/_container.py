@@ -2,9 +2,10 @@ from typing import Any, Dict
 
 from ._base import Component
 
+from classes.abstract.container import Container
 from classes.exception import ContainerError
 
-class ComponentContainer:
+class ComponentContainer(Container):
     _Components: Dict[str, Component] = {}
 
     @classmethod
@@ -50,8 +51,3 @@ class ComponentContainer:
     def Stop_All(cls) -> None:
         for Name in cls._Components.keys():
             cls.Stop(Name)
-
-__all__ = [
-    'Component',
-    'ComponentContainer',
-]

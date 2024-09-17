@@ -1,18 +1,18 @@
 from abc import abstractmethod
 
-class CRUD:
+class Container:
     @abstractmethod
-    def Query() -> None:
+    def Register():
         ...
 
     @abstractmethod
-    def Create() -> None:
+    def Get():
         ...
 
     @abstractmethod
-    def Update() -> None:
+    def Remove():
         ...
-    
+
     @abstractmethod
-    def Delete() -> None:
+    def Reassign_Dependencies():
         ...
