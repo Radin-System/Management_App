@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 class Tool :
     def __init__(self,Name) -> None:
         from classes.tool import ToolContainer
@@ -13,8 +15,9 @@ class Tool :
         self.Logger:Logger = ToolContainer.Get(f'{self.Name}_Logger', ToolContainer.Get('Main_Logger', print))
         self.Config:Config = ToolContainer.Get(f'{self.Name}_Config', ToolContainer.Get('Main_Config'))
 
+    @abstractmethod
     def Init_Config(self) -> None:
-        raise NotImplementedError(f'Please provide an action for configuring the component: {self.Name}')
+        ...
 
     def __str__(self) -> str :
         return f'<Tool :{self.__name__}>'

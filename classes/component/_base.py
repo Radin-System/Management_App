@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 class Component:
     def __init__(self, Name: str) -> None:
         self.Name = Name
@@ -18,20 +20,24 @@ class Component:
         self.Logger:Logger = ToolContainer.Get(f'{self.Name}_Logger', ToolContainer.Get('Main_Logger', print))
         self.Config:Config = ToolContainer.Get(f'{self.Name}_Config', ToolContainer.Get('Main_Config'))
 
-    def Init_Config(self) -> None:
-        raise NotImplementedError(f'Please provide an action for configuring the component: {self.Name}')
+    @abstractmethod
+    def Init_Config(self):
+        ...
 
+    @abstractmethod
     def Start_Actions(self) -> None:
-        raise NotImplementedError(f'Please provide an action for starting the component: {self.Name}')
+        ...
 
+    @abstractmethod
     def Stop_Actions(self) -> None:
-        raise NotImplementedError(f'Please provide an action for stopping the component: {self.Name}')
+        ...
 
     def Is_Running(self) -> bool:
         return self.Running
 
+    @abstractmethod
     def Loop(self) -> None:
-        raise NotImplementedError(f'Please provide an action for Looping the component: {self.Name}')
+        ...
 
     def Start(self) -> None:
         self.Running = True

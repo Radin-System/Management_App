@@ -1,21 +1,27 @@
+from abc import abstractmethod
 from typing import Self
 
 class Connection:
 
+    @abstractmethod
     def Connect(self) -> None :
-        raise NotImplementedError('Please provide an action for connecting with this method')
+        ...
 
+    @abstractmethod
     def Receive(self) -> str :
-        raise NotImplementedError('Please provide an action for getting data')
+        ...
 
+    @abstractmethod
     def Send(self, Message:str, Wait:float = 0.2) -> str:
-        raise NotImplementedError('Please provide an action for sending data')
+        ...
 
+    @abstractmethod
     def Disconnect(self) -> None :
-        raise NotImplementedError('Please provide an action for disconnecting')
+        ...
 
+    @abstractmethod
     def Is_Connected(self) -> bool:
-        raise NotImplementedError('Please provide an action for getting connection status')
+        ...
 
     def __bool__(self) -> bool :
         return self.Is_Connected()
