@@ -8,5 +8,4 @@ from ._base import WebClient
 class NetboxClient(NetBoxClient, CRUD, WebClient):
 
     def __init__(self, Base_URL: str, Token: str, Headers: Dict[str, str] = None):
-        super().__init__(Base_URL, Token, Headers)    
-
+        super().__init__(Base_URL, Token, Headers)
