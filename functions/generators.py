@@ -2,8 +2,8 @@ import random
 import string
 
 def Generate_Password(Length:int=10,*,
-        Ascii:bool = True, 
-        Digits:bool = True, 
+        Ascii:bool = True,
+        Digits:bool = True,
         Special:bool = True,
         ) -> str:
 
