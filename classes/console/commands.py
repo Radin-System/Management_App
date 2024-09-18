@@ -1,5 +1,7 @@
+from classes.enum import RespondHeader
+from classes.enum.console import InputType
+from classes.exception import ConsoleError
 from ._base import Console
-from getpass import getpass
 
 COMMAND_REGISTRY = {}
 
@@ -10,17 +12,16 @@ def Register_Command(name:str):
     return decorator
 
 @Register_Command('help')
-def help(Self:Console, *Args:str):
+def help(Self:Console, Command_Name:str=None, *Args:str):
     """
       Prints out the help for that commands
       or all off the commands if there is no
-      Commands_Name specified
+      "Commands_Name" specified
 
       args:
         Command_Name -Optional
     """
-    if Args:
-        Command_Name = Args[0]
+    if Command_Name:
         Command_Function = COMMAND_REGISTRY.get(Command_Name)
 
         if Command_Function:
@@ -29,11 +30,11 @@ def help(Self:Console, *Args:str):
             print(f"  > {Command_Name}{Doc}")
 
         else:
-            Self.Respond(f"Command '{Command_Name}' not found.")
+            raise ConsoleError.Command.NotFound(f'Command not found: {Command_Name}')
 
     else:
         # No specific command requested, print general help and all commands
-        Self.Respond("Commands:")
+        Self.Output("Commands:")
 
         for Command_Name, Command_Function in COMMAND_REGISTRY.items():
             Doc = Command_Function.__doc__ or "No documentation available."
@@ -52,9 +53,10 @@ def reset_admin(Self:Console, *Args:str):
     from classes.component import ComponentContainer as CC
     from classes.component import SQLManager
 
-    New_Password = getpass('- Password : ')
-    Confirm_Password = getpass('- Confirm  : ')
-    SQL:SQLManager = CC.Get('MainSQLManager')
+    New_Password = Self.Input(f'{RespondHeader.Input.value} Password : ', InputType.Password)
+    Confirm_Password = Self.Input(f'{RespondHeader.Input.value} Confirm  : ', InputType.Password)
+
+    SQL:SQLManager = CC.Get('Main_SQLManager')
     Admin_User = SQL.Query(SQL.User, Detached=True, First=True, username='admin')
     if Admin_User:
         Admin_User.reset_password(
@@ -68,7 +70,7 @@ def reset_admin(Self:Console, *Args:str):
     else:
         Admin_User = SQL.User(username='admin', password=New_Password, firstname_en='Administrator', firstname_fa='ادمین', admin=True, deletable=False)
         SQL.Create(Admin_User)
-        Self.Respond('New Admin User Created')
+        Self.Output('New Admin User Created')
 
 @Register_Command('reassign_dependencies')
 def reassign_dependencies(Self:Console, *Args:str):
@@ -107,39 +109,40 @@ def stop_all(Self:Console, *Args:str):
     CC.Stop_All()
 
 @Register_Command('start')
-def start(Self:Console, *Args:str):
+def start(Self:Console, Component_Name:str=None, *Args:str):
     """
-      Starts the specified Component/s
+      Starts the specified Component
 
       args:
-        Component_Name -or list sperated by space
+        Component_Name
     """
     from classes.component import ComponentContainer as CC
 
-    for Component_Name in Args:
-        CC.Start(Component_Name)
-    
-    del Component_Name
+    if not Component_Name:
+        ConsoleError.Command.MissingArg('No componnent specified')
+
+    CC.Start(Component_Name)
 
 @Register_Command('stop')
-def stop(Self:Console, *Args:str):
+def stop(Self:Console, Component_Name, *Args:str):
     """
-      Stops the specified Component/s
+      Stops the specified Component
 
       args:
-        Component_Name -or list sperated by space
+        Component_Name
     """
     from classes.component import ComponentContainer as CC
 
-    for Component_Name in Args:
-        CC.Stop(Component_Name)
+    if not Component_Name:
+        ConsoleError.Command.MissingArg('No componnent specified')
 
-    del Component_Name
+    CC.Stop(Component_Name)
+
 
 @Register_Command('components')
 def components(Self:Console, *Args:str):
     """
-      Prints component names
+      Prints components names
 
       args:
         None
@@ -147,7 +150,7 @@ def components(Self:Console, *Args:str):
     from classes.component import ComponentContainer as CC
 
     for Component_Name in CC._Components.keys():
-        Self.Respond(Component_Name)
+        Self.Output(Component_Name)
 
 @Register_Command('tools')
 def tools(Self:Console, *Args:str):
@@ -160,35 +163,40 @@ def tools(Self:Console, *Args:str):
     from classes.tool import ToolContainer as TC
 
     for Tool_Name in TC._Tools.keys():
-        Self.Respond(Tool_Name)
+        Self.Output(Tool_Name)
 
 @Register_Command('status')
-def status(Self:Console, *Args:str):
+def status(Self:Console, Component_Name=None, *Args:str):
     """
       Prints the Component status if there is
-      no Component_Name it will print all of them
+      no "Component_Name" it will print all of them
 
       args:
         Component_Name -optional
     """
     from classes.component import ComponentContainer as CC
 
-    for Key, Component in CC._Components.items():
-        Self.Respond(f'{Key}: {'Running' if Component.Is_Running() else 'Stopped'}')
+    if not Component_Name:
+        for Key, Component in CC._Components.items():
+            Self.Output(f'{Key}: {'Running' if Component.Is_Running() else 'Stopped'}')
+    
+    else :
+        Component = CC.Get(Component_Name)
+        Self.Output(f'{Component_Name}: {'Running' if Component.Is_Running() else 'Stopped'}')
 
 @Register_Command('exit')
-def exit(Self:Console, *Args:str):
+def exit(Self:Console, Code:str='0', *Args:str):
     """
-      it exits the program with 0 code
-      if not specified
+      exits the program with 0 code
+      if "Code" not specified
 
       args:
         Code -optional
     """
     from classes.component import ComponentContainer as CC
-    
-    if Args: Code = Args[0]
-    else: Code = 0
 
+    if Code.isdigit():
+        Code:int = int(Code)
+
+    Self.Output(Code)
     Self.Stop(Code)
-    Self.Respond(Code)

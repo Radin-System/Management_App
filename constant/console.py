@@ -15,7 +15,6 @@ CONSOLE_BANNER:str = r'''
 '''
 
 CONSOLE_WELCOME:str = r'''
-- Welcome to the application console
-- For get commands detail type:
-    > help
+Welcome to the application console
+you can get commands detail by typeing "help"
 '''

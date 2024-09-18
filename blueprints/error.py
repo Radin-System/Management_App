@@ -7,7 +7,7 @@ from functions.callcenter import Create_Cisco_Error
 
 def Error(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
 
-    bp = Blueprint('error', __name__)
+    bp = Blueprint('error', __name__, url_prefix='/')
 
     def Base_HTTP_Error_Handling(error, status_code):
         # Create detailed error information for the template

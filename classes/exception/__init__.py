@@ -1,12 +1,15 @@
 class ContainerError:
-    class NotFound(Exception):
-        ...
+    class NotFound(Exception):...
 
-    class Exists(Exception):
-        ...
+    class Exists(Exception):...
 
-class AuthenticationError(Exception):
-    ...
+class ConsoleError:
+    class Command:
+        class NotFound(Exception):...
+
+        class MissingArg(Exception):...
+
+class AuthenticationError(Exception):...
 
 class RaiseFromList(Exception):
     '''Exception raised for specific error conditions.'''
@@ -18,7 +21,8 @@ class RaiseFromList(Exception):
         super().__init__(Message[:-2])
 
 __all__ = [
+    'ContainerError',
+    'ConsoleError',
     'AuthenticationError',
     'RaiseFromList',
-    'ServiceNotFoundError',
 ]
