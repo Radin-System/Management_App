@@ -1,7 +1,7 @@
 from .console import RespondHeader
-from .field_type_enum import FieldTypeEnum
+from .field import FieldType
 
 __all__ = [
     'RespondHeader',
-    'FieldTypeEnum',
+    'FieldType',
 ]

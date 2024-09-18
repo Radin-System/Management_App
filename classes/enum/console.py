@@ -1,5 +1,4 @@
-import getpass
-from enum import Enum
+from enum import Enum, auto
 
 class RespondHeader(Enum):
     Info = '+ '
@@ -10,5 +9,5 @@ class RespondHeader(Enum):
     Nothing = ''
 
 class InputType(Enum):
-    Raw = input
-    Password = getpass
+    Raw = auto()
+    Password = auto()

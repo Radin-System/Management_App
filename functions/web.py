@@ -14,7 +14,7 @@ from wtforms import (
     )
 from wtforms.validators import DataRequired, Email
 
-from classes.enum import FieldTypeEnum
+from classes.enum import FieldType
 from classes.field.input import InputField
 from classes.policy.input import InputPolicy
 
@@ -22,7 +22,7 @@ from classes.policy.input import InputPolicy
 ERROR_LOG_DIR = '.errors/'
 ERROR_LOG_EXTENSION = 'json'
 
-def Create_API_Response(Message:dict|str,Status:str='Response',Code:int=200,**KWargs) -> dict:
+def Create_API_Response(Message:dict|str, Status:str='Response', Code:int=200, **KWargs) -> dict:
     # Creating Base Response
     API_Response = dict(**KWargs)
 
@@ -57,7 +57,7 @@ def Create_Flask_WTF_Field(Column):
     validators = []
     if not Column.nullable:
         validators.append(DataRequired())
-    if Field.Type == FieldTypeEnum.Email.value:
+    if Field.Type == FieldType.Email.value:
         validators.append(Email())
 
     validators.extend(Field.WTF_Validators)
@@ -66,65 +66,65 @@ def Create_Flask_WTF_Field(Column):
     field_args['validators'] = validators
 
     # Map field type to WTForms field
-    if Field.Type == FieldTypeEnum.Input.value:
+    if Field.Type == FieldType.Input.value:
         return StringField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Text.value:
+    elif Field.Type == FieldType.Text.value:
         return TextAreaField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Username.value:
+    elif Field.Type == FieldType.Username.value:
         return StringField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Password.value:
+    elif Field.Type == FieldType.Password.value:
         return PasswordField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Email.value:
+    elif Field.Type == FieldType.Email.value:
         return StringField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Color.value:
+    elif Field.Type == FieldType.Color.value:
         return ColorField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Date.value:
+    elif Field.Type == FieldType.Date.value:
         return DateTimeField(format='%Y-%m-%d', **field_args)
 
-    elif Field.Type == FieldTypeEnum.Time.value:
+    elif Field.Type == FieldType.Time.value:
         return DateTimeField(format='%H:%M:%S', **field_args)
 
-    elif Field.Type == FieldTypeEnum.DateTime.value:
+    elif Field.Type == FieldType.DateTime.value:
         return DateTimeField(format='%Y-%m-%d %H:%M:%S', **field_args)
 
-    elif Field.Type == FieldTypeEnum.Integer.value:
+    elif Field.Type == FieldType.Integer.value:
         return IntegerField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Percent.value:
+    elif Field.Type == FieldType.Percent.value:
         return IntegerField(**field_args)  # Add specific validation for percentage if needed
 
-    elif Field.Type == FieldTypeEnum.Temp_C.value:
+    elif Field.Type == FieldType.Temp_C.value:
         return IntegerField(**field_args)  # Add specific validation for temperature in Celsius if needed
 
-    elif Field.Type == FieldTypeEnum.Temp_F.value:
+    elif Field.Type == FieldType.Temp_F.value:
         return IntegerField(**field_args)  # Add specific validation for temperature in Fahrenheit if needed
 
-    elif Field.Type == FieldTypeEnum.CheckBox.value:
+    elif Field.Type == FieldType.CheckBox.value:
         return BooleanField(**field_args)
 
-    elif Field.Type == FieldTypeEnum.Radio.value:
+    elif Field.Type == FieldType.Radio.value:
         choices = Field.Value if Field.Value else []
         return RadioField(**field_args, choices=choices)
 
-    elif Field.Type == FieldTypeEnum.DropDown.value:
+    elif Field.Type == FieldType.DropDown.value:
         choices = Field.Value if Field.Value else []
         return SelectField(**field_args, choices=choices)
 
-    elif Field.Type == FieldTypeEnum.Select.value:
+    elif Field.Type == FieldType.Select.value:
         choices = Field.Value if Field.Value else []
         return SelectField(**field_args, choices=choices)
 
-    #elif Field.Type == FieldTypeEnum.MultiSelect.value:
+    #elif Field.Type == FieldType.MultiSelect.value:
     #    choices = Field.Value if Field.Value else []
     #    return MultipleChoiceField(**field_args, choices=choices)
 
-    elif Field.Type in [FieldTypeEnum.FileUpload.value, FieldTypeEnum.PictureUpload.value, FieldTypeEnum.CompactUpload.value, FieldTypeEnum.DocUpload.value, FieldTypeEnum.MusicUpload.value]:
+    elif Field.Type in [FieldType.FileUpload.value, FieldType.PictureUpload.value, FieldType.CompactUpload.value, FieldType.DocUpload.value, FieldType.MusicUpload.value]:
         return FileField(**field_args)  # Adjust as needed for specific file types
 
     else:

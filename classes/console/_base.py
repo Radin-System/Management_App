@@ -1,4 +1,5 @@
 import sys, time, importlib
+from getpass import getpass
 from typing import Any, Callable
 
 from classes.enum.console import RespondHeader, InputType
@@ -76,7 +77,14 @@ class Console:
         return Command_Function
 
     def Input(self, Prompt, Method=InputType.Raw) -> str:
-        return Method.value(Prompt).strip()
+        if Method == InputType.Raw:
+            return input(Prompt).strip()
+        
+        if Method == InputType.Password:
+            return getpass(Prompt).strip()
+        
+        else:
+            raise ConsoleError.Input.NotFound(f'Wrong input method: {Method}')
 
     def Output(self, Text:Any, Type=RespondHeader.Info) -> None:
         Text:str = str(Text)
