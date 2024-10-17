@@ -18,5 +18,6 @@ if __name__ == '__main__' :
         Main_Config.Get('TOOL', 'zabbix_token'),
     )
 
-    users = zb.user.get()
-    print(users)
+    Data = nc.core.data_sourcess.get(id=4)
+    print(Data)
+    
