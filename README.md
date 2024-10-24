@@ -18,6 +18,13 @@ This project is a Flask web application designed to manage various aspects of ou
 - **Zabbix Integration**: View and manage monitoring alerts, system statuses, and performance metrics.
 - **Dashboard**: Overview of system status, recent activities, and alerts.
 
+## Dependencies
+
+1. **Install system dependencies for Python and C extensions**
+    ```sh
+    sudo apt install python3-dev build-essential libssl-dev libjpeg-dev libpng-dev zlib1g-dev libldap2-dev libsasl2-dev libmysqlclient-dev libpq-dev libxml2-dev libxslt1-dev tesseract-ocr tesseract-ocr-eng libtesseract-dev odbcinst unixodbc-dev pkg-config
+    ```
+
 ## Installation
 
 1. **Clone the repository**:

@@ -1,8 +1,0 @@
-# Install system dependencies for Python and C extensions
-sudo apt install python3-dev build-essential libssl-dev libjpeg-dev libpng-dev zlib1g-dev libldap2-dev libsasl2-dev libmysqlclient-dev libpq-dev libxml2-dev libxslt1-dev tesseract-ocr tesseract-ocr-eng libtesseract-dev odbcinst unixodbc-dev
-
-# Install OpenSSL and PostgreSQL dependencies
-sudo apt install libssl-dev libpq-dev
-
-# Install MySQL dependencies
-sudo apt install pkg-config libmysqlclient-dev
