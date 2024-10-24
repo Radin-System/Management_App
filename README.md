@@ -10,6 +10,7 @@ This project is a Flask web application designed to manage various aspects of ou
 - Integrate with Asterisk to control telephony services.
 - Interface with Zabbix for monitoring and management tasks.
 - Ensure secure and efficient operations within the application.
+- Make the application to run as a Service in linux
 
 ## Features
 
@@ -21,22 +22,37 @@ This project is a Flask web application designed to manage various aspects of ou
 ## Dependencies
 
 1. **Install system dependencies for Python and C extensions**
-    ```sh
-    sudo apt install python3-dev build-essential libssl-dev libjpeg-dev libpng-dev zlib1g-dev libldap2-dev libsasl2-dev libmysqlclient-dev libpq-dev libxml2-dev libxslt1-dev tesseract-ocr tesseract-ocr-eng libtesseract-dev odbcinst unixodbc-dev pkg-config
-    ```
+    - **Base**: `Reqired`
+        ```sh
+        sudo apt install libssl-dev libjpeg-dev libpng-dev zlib1g-dev libldap2-dev libsasl2-dev libpq-dev libxml2-dev libxslt1-dev unixodbc-dev odbcinst
+        ```
+
+    - **Python**: `Reqired`
+        ```sh
+        sudo apt install python3-dev build-essential 
+        ```
+
+    - **MySQL**: `If Using Mysql`
+        ```sh
+        sudo apt install libmysqlclient-dev pkg-config
+        ```
+
+    - **Tesseract**: `For Image Reading`
+        ```sh
+        sudo apt install tesseract-ocr tesseract-ocr-eng libtesseract-dev
+        ```
 
 ## Installation
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/yourusername/company-management-app.git
-    cd company-management-app
+    git clone https://github.com/radin-system/Management_App.git
     ```
 
 2. **Set up a virtual environment**:
     ```sh
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    python3 -m venv .venv
+    source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
     ```
 
 3. **Install dependencies**:
@@ -46,7 +62,12 @@ This project is a Flask web application designed to manage various aspects of ou
 
 ## Change Configs
 
- Make sure to change the configurations on the config.ini in .configfiles folder after running the app once.
+    Make sure to change the configurations on the config.ini in .configfiles folder after running the app once.
+
+## Run Application
+    ```sh
+    python3 server.py 
+    ```
 
 ## Contributing
 
