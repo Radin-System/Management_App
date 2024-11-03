@@ -1,9 +1,9 @@
-from sqlalchemy import Column, DateTime, Text, func
+from sqlalchemy import Column, DateTime, Text, text
 
 from classes.policy.input import *
 
 class AuditMixin:
     __abstract__ = True
     description  = Column(Text, nullable=True)
-    create_date  = Column(DateTime, default=func.now(), nullable=False, info={'Policy':BaseInfoPolicy})
-    last_update  = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False, info={'Policy':BaseInfoPolicy})
+    create_date  = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), nullable=False, info={'Policy':BaseInfoPolicy})
+    last_update  = Column(DateTime, server_default=text("CURRENT_TIMESTAMP"), server_onupdate=text("CURRENT_TIMESTAMP"), nullable=False, info={'Policy':BaseInfoPolicy})

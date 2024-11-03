@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, String
+from sqlalchemy import Boolean, Column, String, text
 
 from classes.model.mixins import *
 from classes.policy.input import *
@@ -10,4 +10,4 @@ class User(BaseMixin, PasswordMixin, IdMixin, NameMixin, FlagMixin, AuditMixin, 
     position      = Column(String(255), nullable=True, info={'Policy':NamePolicy_En})
     avatar_path   = Column(String(255), default="asset/default/UserAvatar.jpg", nullable=False, info={'Policy':(CleanString + InputPolicy(Name='PathPolicy', Validators=[EnglishSpecial]))})
     sarv_id       = Column(String(255), nullable=True, unique=True, info={'Policy':(HiddenField + InputPolicy(Name='SarvIdPolicy', Validators=[Uuid]))})
-    admin         = Column(Boolean, default=False, nullable=False, info={'Policy':None})
+    admin         = Column(Boolean, server_default=text('false'), nullable=False, info={'Policy':None})
