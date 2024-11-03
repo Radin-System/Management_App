@@ -54,12 +54,16 @@ class WebServer(Component):
         ## Adding Functions
         @Login_Manager.user_loader
         def User_Loader(ID:int):
-            return self.SQLManager.Query(self.SQLManager.User, 
-                Detached=True,
+            Loaded_User = self.SQLManager.Query(self.SQLManager.User, 
+                Detached = True,
                 Eager = True,
                 First = True,
                 id = ID
                 )
+
+            Loaded_User.calc_fullname()
+
+            return Loaded_User
 
         @self.App.context_processor
         def Context_Processor() -> dict:

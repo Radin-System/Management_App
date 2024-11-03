@@ -1,11 +1,11 @@
 {% if User %}
   <div class="flex-shrink-0 {% if Dropdown %}dropdown{% endif %}">
     <a href="{% if not Dropdown %}{{url_for('User.Profile',id=User.id)}}{% endif %}" class="d-block link-dark text-decoration-none {% if Dropdown %}dropdown-toggle{% endif %}" id="UserProfile" {% if Dropdown %}data-bs-toggle="dropdown"{% endif %} aria-expanded="false">
-      <img src="{{url_for('static',filename=User.avatar_path)}}" alt="Avatar" width="45" height="45" class="rounded-circle"> {{User.firstname_fa}} {{User.lastname_fa}}
+      <img src="{{url_for('static',filename=User.avatar_path)}}" alt="Avatar" width="45" height="45" class="rounded-circle"> {{ User.fullname_fa }}
     </a>
     {% if Dropdown %}
       <ul class="dropdown-menu text-small shadow" aria-labelledby="UserDropdown">
-        <li class="dropdown-item"> {{User.firstname_en}} {{User.lastname_en}}</li>
+        <li class="dropdown-item"> {{ User.fullname_en }}</li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="{{url_for('root.under_construction')}}">تیکت ها</a></li>
         <li><a class="dropdown-item" href="{{url_for('user.profile')}}">پروفایل</a></li>
