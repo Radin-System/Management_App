@@ -4,7 +4,7 @@ from classes.policy.input import *
 
 class PasswordMixin:
     __abstract__ = True
-    password     = Column(String, nullable=False, info={'Policy':PasswordPolicy})
+    password     = Column(String(255), nullable=False, info={'Policy':PasswordPolicy})
     expired_password = Column(Boolean, default=True, nullable=False, info={'Policy':HiddenField})
 
     def reset_password(self,*,

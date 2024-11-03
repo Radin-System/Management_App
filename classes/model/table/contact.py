@@ -6,7 +6,7 @@ from classes.policy.input import *
 
 class Contact(BaseMixin, IdMixin, NameMixin, FlagMixin, AuditMixin, OwnerMixin):
     __tablename__ = 'contacts'
-    number = Column(String(50), nullable=False, info={'Policy':CleanString})
+    number = Column(String(255), nullable=False, info={'Policy':CleanString})
 
     # Foreign key to reference the contact_books table
     contact_book_id = Column(Integer, ForeignKey('contact_books.id'), nullable=False)

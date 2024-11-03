@@ -5,4 +5,4 @@ from classes.policy.input import *
 class IdMixin:
     __abstract__ = True
     id           = Column(Integer, primary_key=True, autoincrement=True, info={'Policy':BaseInfoPolicy})
-    uid          = Column(String, nullable=True, info={'Policy':UuidPolicy})
+    uid          = Column(String(36), nullable=True, info={'Policy':UuidPolicy})
