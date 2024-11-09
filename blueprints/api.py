@@ -26,5 +26,5 @@ def Api(CC:ComponentContainer, TC:ToolContainer) -> Blueprint:
     @bp.route('/register-vnc')
     def register_vnc():
         raise NotImplementedError('route not implemented yet')
-    
+
     return bp
